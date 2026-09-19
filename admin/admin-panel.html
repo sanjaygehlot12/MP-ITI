@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>
+        Admin Dashboard | Maharana Pratap Private ITI Sehore
+    </title>
+
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+    >
+
+    <link rel="stylesheet" href="admin.css">
+
+</head>
+
+
+<body class="admin-page dashboard-page">
+
+
+<div class="dashboard-shell">
+
+
+    <!-- =====================================
+         SIDEBAR
+    ====================================== -->
+
+    <aside
+        class="admin-sidebar"
+        id="adminSidebar"
+    >
+
+
+        <!-- BRAND -->
+
+        <div class="sidebar-brand">
+
+            <div class="brand-icon">
+                <i class="fa-solid fa-building-columns"></i>
+            </div>
+
+            <div>
+
+                <strong>
+                    MP ITI
+                </strong>
+
+                <small>
+                    Admin Panel
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <!-- NAVIGATION -->
+
+        <nav class="admin-nav">
+
+
+            <button
+                class="admin-nav-item active"
+                data-section="dashboard"
+            >
+
+                <i class="fa-solid fa-chart-pie"></i>
+
+                <span>
+                    Dashboard
+                </span>
+
+            </button>
+
+
+            <button
+                class="admin-nav-item"
+                data-section="submissions"
+            >
+
+                <i class="fa-solid fa-inbox"></i>
+
+                <span>
+                    All Submissions
+                </span>
+
+            </button>
+
+
+            <button
+                class="admin-nav-item"
+                data-section="admissions"
+            >
+
+                <i class="fa-solid fa-user-graduate"></i>
+
+                <span>
+                    Admissions
+                </span>
+
+            </button>
+
+
+            <button
+                class="admin-nav-item"
+                data-section="contacts"
+            >
+
+                <i class="fa-solid fa-envelope"></i>
+
+                <span>
+                    Contact Enquiries
+                </span>
+
+            </button>
+
+
+            <button
+                class="admin-nav-item"
+                data-section="feedback"
+            >
+
+                <i class="fa-solid fa-comment-dots"></i>
+
+                <span>
+                    Feedback
+                </span>
+
+            </button>
+
+
+        </nav>
+
+
+        <!-- SIDEBAR BOTTOM -->
+
+        <div class="sidebar-bottom">
+
+
+            <a
+                href="../index.html"
+                class="sidebar-link"
+            >
+
+                <i class="fa-solid fa-globe"></i>
+
+                <span>
+                    View Website
+                </span>
+
+            </a>
+
+
+            <button
+                class="sidebar-link logout-btn"
+                id="logoutBtn"
+            >
+
+                <i class="fa-solid fa-right-from-bracket"></i>
+
+                <span>
+                    Logout
+                </span>
+
+            </button>
+
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =====================================
+         MAIN
+    ====================================== -->
+
+    <main class="admin-main">
+
+
+        <!-- TOP BAR -->
+
+        <header class="admin-topbar glass-card">
+
+
+            <!-- MOBILE MENU -->
+
+            <button
+                class="mobile-sidebar-btn"
+                id="sidebarToggle"
+                aria-label="Open menu"
+            >
+
+                <i class="fa-solid fa-bars"></i>
+
+            </button>
+
+
+            <div>
+
+                <p class="eyebrow">
+                    ADMINISTRATION
+                </p>
+
+                <h1 id="sectionTitle">
+                    Dashboard
+                </h1>
+
+            </div>
+
+
+            <!-- ADMIN USER -->
+
+            <div class="admin-user">
+
+                <div class="user-avatar">
+
+                    <i class="fa-solid fa-user-shield"></i>
+
+                </div>
+
+                <div>
+
+                    <strong>
+                        Administrator
+                    </strong>
+
+                    <small>
+                        Website Manager
+                    </small>
+
+                </div>
+
+            </div>
+
+
+        </header>
+
+
+
+        <!-- =====================================
+             CONTENT
+        ====================================== -->
+
+        <section class="admin-content">
+
+
+            <!-- =================================
+                 DASHBOARD
+            ================================== -->
+
+            <div
+                class="dashboard-section active"
+                id="section-dashboard"
+            >
+
+
+                <!-- WELCOME -->
+
+                <div class="welcome-card glass-card">
+
+                    <div>
+
+                        <p class="eyebrow">
+                            WELCOME BACK
+                        </p>
+
+                        <h2>
+                            Website Data Overview
+                        </h2>
+
+                        <p>
+                            All collected website submissions
+                            will appear here after the
+                            backend/database is connected.
+                        </p>
+
+                    </div>
+
+
+                    <div class="welcome-icon">
+
+                        <i class="fa-solid fa-database"></i>
+
+                    </div>
+
+                </div>
+
+
+
+                <!-- STAT CARDS -->
+
+                <div class="stats-grid">
+
+
+                    <div class="stat-card glass-card">
+
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-inbox"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Total Submissions
+                            </span>
+
+                            <strong id="totalCount">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="stat-card glass-card">
+
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-user-graduate"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Admissions
+                            </span>
+
+                            <strong id="admissionCount">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="stat-card glass-card">
+
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-envelope"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Enquiries
+                            </span>
+
+                            <strong id="contactCount">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+
+                    <div class="stat-card glass-card">
+
+                        <div class="stat-icon">
+                            <i class="fa-solid fa-comment-dots"></i>
+                        </div>
+
+                        <div>
+
+                            <span>
+                                Feedback
+                            </span>
+
+                            <strong id="feedbackCount">
+                                0
+                            </strong>
+
+                        </div>
+
+                    </div>
+
+
+                </div>
+
+
+
+                <!-- RECENT -->
+
+                <div class="panel-card glass-card">
+
+
+                    <div class="panel-heading">
+
+                        <div>
+
+                            <p class="eyebrow">
+                                RECENT ACTIVITY
+                            </p>
+
+                            <h2>
+                                Latest Submissions
+                            </h2>
+
+                        </div>
+
+
+                        <button
+                            class="outline-btn"
+                            data-section-target="submissions"
+                        >
+                            View All
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        id="recentTable"
+                        class="table-wrap"
+                    ></div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================
+                 ALL SUBMISSIONS
+            ================================== -->
+
+            <div
+                class="dashboard-section"
+                id="section-submissions"
+            >
+
+                <div class="panel-card glass-card">
+
+
+                    <div class="panel-heading">
+
+                        <div>
+
+                            <p class="eyebrow">
+                                DATABASE
+                            </p>
+
+                            <h2>
+                                All Submissions
+                            </h2>
+
+                        </div>
+
+
+                        <button
+                            class="danger-btn"
+                            id="clearDemoData"
+                        >
+                            Clear Demo Data
+                        </button>
+
+                    </div>
+
+
+                    <div
+                        id="allSubmissionsTable"
+                        class="table-wrap"
+                    ></div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================
+                 ADMISSIONS
+            ================================== -->
+
+            <div
+                class="dashboard-section"
+                id="section-admissions"
+            >
+
+                <div class="panel-card glass-card">
+
+
+                    <div class="panel-heading">
+
+                        <div>
+
+                            <p class="eyebrow">
+                                ADMISSION
+                            </p>
+
+                            <h2>
+                                Admission Applications
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="admissionsTable"
+                        class="table-wrap"
+                    ></div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================
+                 CONTACT
+            ================================== -->
+
+            <div
+                class="dashboard-section"
+                id="section-contacts"
+            >
+
+                <div class="panel-card glass-card">
+
+
+                    <div class="panel-heading">
+
+                        <div>
+
+                            <p class="eyebrow">
+                                CONTACT
+                            </p>
+
+                            <h2>
+                                Contact Enquiries
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="contactsTable"
+                        class="table-wrap"
+                    ></div>
+
+
+                </div>
+
+            </div>
+
+
+
+            <!-- =================================
+                 FEEDBACK
+            ================================== -->
+
+            <div
+                class="dashboard-section"
+                id="section-feedback"
+            >
+
+                <div class="panel-card glass-card">
+
+
+                    <div class="panel-heading">
+
+                        <div>
+
+                            <p class="eyebrow">
+                                FEEDBACK
+                            </p>
+
+                            <h2>
+                                Feedback & Suggestions
+                            </h2>
+
+                        </div>
+
+                    </div>
+
+
+                    <div
+                        id="feedbackTable"
+                        class="table-wrap"
+                    ></div>
+
+
+                </div>
+
+            </div>
+
+
+        </section>
+
+    </main>
+
+</div>
+
+
+<script src="admin.js"></script>
+
+</body>
+</html>

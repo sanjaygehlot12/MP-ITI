@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Login | Maharana Pratap Private ITI Sehore</title>
+
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+
+    <link rel="stylesheet" href="admin.css">
+</head>
+
+<body class="admin-page login-page">
+
+    <div class="glass-bg"></div>
+
+    <div class="login-card glass-card">
+
+        <div class="admin-logo">
+            <i class="fa-solid fa-shield-halved"></i>
+        </div>
+
+        <p class="eyebrow">
+            MAHARANA PRATAP PRIVATE ITI SEHORE
+        </p>
+
+        <h1>Admin Panel</h1>
+
+        <p class="login-subtitle">
+            Secure administrator login
+        </p>
+
+
+        <form id="adminLoginForm" autocomplete="off">
+
+            <!-- USERNAME -->
+
+            <label for="adminUsername">
+                Username
+            </label>
+
+            <div class="input-wrap">
+
+                <i class="fa-solid fa-user"></i>
+
+                <input
+                    type="text"
+                    id="adminUsername"
+                    placeholder="Enter username"
+                    required
+                >
+
+            </div>
+
+
+            <!-- PASSWORD -->
+
+            <label for="adminPassword">
+                Password
+            </label>
+
+            <div class="input-wrap">
+
+                <i class="fa-solid fa-lock"></i>
+
+                <input
+                    type="password"
+                    id="adminPassword"
+                    placeholder="Enter password"
+                    required
+                >
+
+                <button
+                    type="button"
+                    class="password-toggle"
+                    id="passwordToggle"
+                    aria-label="Show password"
+                >
+                    <i class="fa-solid fa-eye"></i>
+                </button>
+
+            </div>
+
+
+            <!-- LOGIN BUTTON -->
+
+            <button
+                type="submit"
+                class="login-btn"
+            >
+
+                <span>
+                    Login to Admin Panel
+                </span>
+
+                <i class="fa-solid fa-arrow-right"></i>
+
+            </button>
+
+
+            <p
+                id="loginMessage"
+                class="login-message"
+            ></p>
+
+        </form>
+
+
+        <!-- BACK -->
+
+        <a
+            href="../index.html"
+            class="back-link"
+        >
+            <i class="fa-solid fa-arrow-left"></i>
+            Back to Website
+        </a>
+
+
+        <!-- INFO -->
+
+        <div class="demo-note">
+
+            <i class="fa-solid fa-circle-info"></i>
+
+            <span>
+                Frontend demo login only.
+                Real authentication will be connected with
+                the backend later.
+            </span>
+
+        </div>
+
+    </div>
+
+
+    <script src="admin.js"></script>
+
+</body>
+</html>
