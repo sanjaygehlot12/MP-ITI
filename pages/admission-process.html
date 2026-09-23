@@ -822,7 +822,44 @@
 
                     </div>
 
+                    <!-- MOBILE NUMBER -->
+<div class="admission-form-group">
 
+    <label for="mobile">
+        Mobile Number <span>*</span>
+    </label>
+
+    <input
+        type="tel"
+        id="mobile"
+        name="mobile"
+        placeholder="Enter 10-digit mobile number"
+        maxlength="10"
+        pattern="[0-9]{10}"
+        inputmode="numeric"
+        required
+    >
+
+</div>
+
+
+<!-- EMAIL -->
+<div class="admission-form-group">
+
+    <label for="email">
+        Email Address
+    </label>
+
+    <input
+        type="email"
+        id="email"
+        name="email"
+        placeholder="Enter email address"
+        autocomplete="email"
+        required
+    >
+
+</div>
 
                     <!-- DOB -->
 
@@ -1240,7 +1277,7 @@
                     <button
                         type="button"
                         class="admission-pay-button"
-                        onclick="showPaymentMessage()"
+                        onclick="openPaymentPopup()"
                     >
 
                         <i class="fa-solid fa-credit-card"></i>

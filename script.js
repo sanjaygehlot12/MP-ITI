@@ -2719,8 +2719,9 @@ document.addEventListener("DOMContentLoaded", function () {
     updateSlider();
 
 });
+
 /* =========================================================
-   FEEDBACK THANK YOU POPUP
+   FEEDBACK FORM + SUPABASE + THANK YOU POPUP
    ========================================================= */
 
 document.addEventListener("DOMContentLoaded", function () {
@@ -2732,32 +2733,310 @@ document.addEventListener("DOMContentLoaded", function () {
         return;
     }
 
-    feedbackForm.addEventListener("submit", function (event) {
+
+    feedbackForm.addEventListener("submit", async function (event) {
 
         event.preventDefault();
         event.stopPropagation();
 
-        /* Prevent page from jumping */
-        const currentScrollPosition = window.scrollY;
 
-        /* Show popup */
-        feedbackPopup.classList.add("show");
+        /* =========================================
+           GET FORM DATA
+           ========================================= */
 
-        /* Keep current page position */
-        window.scrollTo(0, currentScrollPosition);
+        const name = document.getElementById("feedbackName").value.trim();
+        const mobile = document.getElementById("feedbackMobile").value.trim();
+        const email = document.getElementById("feedbackEmail").value.trim();
+        const rating = document.getElementById("feedbackRating").value;
+        const message = document.getElementById("feedbackMessage").value.trim();
 
-        /* Reset form */
-        feedbackForm.reset();
 
-        /* Close after exactly 3 seconds */
-        setTimeout(function () {
+        /* =========================================
+           BASIC VALIDATION
+           ========================================= */
 
-            feedbackPopup.classList.remove("show");
+        if (!name || !message) {
 
+            alert("Please fill in your Name and Feedback.");
+
+            return;
+        }
+
+
+        /* =========================================
+           DISABLE BUTTON
+           ========================================= */
+
+        const submitButton =
+            feedbackForm.querySelector(".feedback-submit-btn");
+
+        const originalButtonText = submitButton.innerHTML;
+
+        submitButton.disabled = true;
+
+        submitButton.innerHTML =
+            '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+
+
+        try {
+
+            /* =========================================
+               SAVE TO SUPABASE
+               ========================================= */
+
+            const { error } = await feedbackSupabase
+                .from("feedback")
+                .insert([
+                    {
+                        name: name,
+                        mobile: mobile || null,
+                        email: email || null,
+                        rating: rating ? Number(rating) : null,
+                        message: message,
+                        status: "New"
+                    }
+                ]);
+
+
+            /* =========================================
+               CHECK ERROR
+               ========================================= */
+
+            if (error) {
+
+                console.error("Feedback submission error:", error);
+
+                alert(
+                    "Unable to submit your feedback right now. Please try again."
+                );
+
+                submitButton.disabled = false;
+
+                submitButton.innerHTML = originalButtonText;
+
+                return;
+            }
+
+
+            /* =========================================
+               SUCCESS
+               ========================================= */
+
+            feedbackForm.reset();
+
+            const currentScrollPosition = window.scrollY;
+
+            feedbackPopup.classList.add("show");
+
+            /*
+             * Keep page at the same position.
+             * It will NOT jump to the top.
+             */
             window.scrollTo(0, currentScrollPosition);
 
-        }, 3000);
+
+            /* =========================================
+               AUTO CLOSE AFTER 3 SECONDS
+               ========================================= */
+
+            setTimeout(function () {
+
+                feedbackPopup.classList.remove("show");
+
+                window.scrollTo(0, currentScrollPosition);
+
+                submitButton.disabled = false;
+
+                submitButton.innerHTML = originalButtonText;
+
+            }, 3000);
+
+
+        } catch (error) {
+
+            console.error("Feedback error:", error);
+
+            alert(
+                "Something went wrong. Please try again."
+            );
+
+            submitButton.disabled = false;
+
+            submitButton.innerHTML = originalButtonText;
+
+        }
 
     });
 
 });
+
+/* =========================================================
+   SUPABASE FEEDBACK CONFIG
+   ========================================================= */
+
+const SUPABASE_URL = "https://zxgpekuluewytbxtebvy.supabase.co";
+const SUPABASE_PUBLISHABLE_KEY = "sb_publishable_Xnh5RRUBqQDkBbhNsy8E_Q_l8T_h8LT";
+
+const feedbackSupabase = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY
+);
+
+/* =========================================================
+   CONTACT ENQUIRY → SUPABASE
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const contactForm = document.getElementById("contactForm");
+
+    if (!contactForm) {
+        return;
+    }
+
+    contactForm.addEventListener("submit", async function (event) {
+
+        event.preventDefault();
+
+        const name = document.getElementById("contactName").value.trim();
+        const mobile = document.getElementById("contactMobile").value.trim();
+        const email = document.getElementById("contactEmail").value.trim();
+        const subject = document.getElementById("contactSubject").value;
+        const message = document.getElementById("contactMessage").value.trim();
+
+        if (!name || !mobile || !subject || !message) {
+            alert("Please fill all required fields.");
+            return;
+        }
+
+        const submitButton =
+            contactForm.querySelector(".contact-submit-button");
+
+        const originalButtonText = submitButton.innerHTML;
+
+        submitButton.disabled = true;
+
+        submitButton.innerHTML =
+            '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
+
+        try {
+
+            const contactSupabase =
+                window.supabase.createClient(
+                    SUPABASE_URL,
+                    SUPABASE_PUBLISHABLE_KEY
+                );
+
+            const { error } = await contactSupabase
+                .from("enquiries")
+                .insert([
+                    {
+                        name: name,
+                        mobile: mobile,
+                        email: email || null,
+                        subject: subject,
+                        message: message,
+                        status: "New"
+                    }
+                ]);
+
+            if (error) {
+
+                console.error("Enquiry submission error:", error);
+
+                alert(
+                    "Unable to submit your enquiry right now. Please try again."
+                );
+
+                submitButton.disabled = false;
+                submitButton.innerHTML = originalButtonText;
+
+                return;
+            }
+
+            /* ================= SUCCESS ================= */
+
+            contactForm.reset();
+
+            showContactThankYouPopup();
+
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
+
+        } catch (error) {
+
+            console.error("Contact enquiry error:", error);
+
+            alert("Something went wrong. Please try again.");
+
+            submitButton.disabled = false;
+            submitButton.innerHTML = originalButtonText;
+        }
+
+    });
+
+
+    /* =====================================================
+       THANK YOU POPUP
+       ===================================================== */
+
+    function showContactThankYouPopup() {
+
+        const oldPopup =
+            document.getElementById("contactThankYouPopup");
+
+        if (oldPopup) {
+            oldPopup.remove();
+        }
+
+        const popup = document.createElement("div");
+
+        popup.id = "contactThankYouPopup";
+
+        popup.innerHTML = `
+            <div class="contact-thankyou-card">
+
+                <div class="contact-thankyou-icon">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+
+                <h2>Thank You!</h2>
+
+                <p>
+                    Your enquiry has been submitted successfully.
+                    We will get back to you soon.
+                </p>
+
+            </div>
+        `;
+
+        document.body.appendChild(popup);
+
+        requestAnimationFrame(function () {
+            popup.classList.add("show");
+        });
+
+        setTimeout(function () {
+
+            popup.classList.remove("show");
+
+            setTimeout(function () {
+                popup.remove();
+            }, 300);
+
+        }, 3000);
+    }
+
+});
+function getCurrentSession() {
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = today.getMonth() + 1;
+
+    if (month >= 4) {
+        return `${year}-${String(year + 1).slice(-2)}`;
+    } else {
+        return `${year - 1}-${String(year).slice(-2)}`;
+    }
+}
+

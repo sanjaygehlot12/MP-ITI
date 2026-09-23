@@ -1019,106 +1019,12 @@
 
 </footer>
 
+<!-- links -->
 
-
-<!-- =========================================
-     JAVASCRIPT
-     ========================================= -->
-
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../script.js"></script>
 
 
-<!-- =========================================
-     ACTIVE NAVIGATION
-     ========================================= -->
-
-<script>
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    const currentPage =
-        window.location.pathname
-        .split("/")
-        .pop()
-        .toLowerCase();
-
-
-    const navLinks =
-        document.querySelectorAll(".nav-link");
-
-
-    const dropdownLinks =
-        document.querySelectorAll(".dropdown-menu a");
-
-
-    /* Remove existing active classes */
-
-    navLinks.forEach(function (link) {
-
-        link.classList.remove("active");
-
-    });
-
-
-    dropdownLinks.forEach(function (link) {
-
-        link.classList.remove("active");
-
-    });
-
-
-    /* Activate current dropdown page */
-
-    dropdownLinks.forEach(function (link) {
-
-        const href =
-            link.getAttribute("href");
-
-
-        if (!href || href === "#") {
-            return;
-        }
-
-
-        const linkedPage =
-            href
-            .split("/")
-            .pop()
-            .toLowerCase();
-
-
-        if (linkedPage === currentPage) {
-
-            link.classList.add("active");
-
-
-            const parentDropdown =
-                link.closest(".nav-dropdown");
-
-
-            if (parentDropdown) {
-
-                const parentLink =
-                    parentDropdown.querySelector(
-                        ":scope > .nav-link"
-                    );
-
-
-                if (parentLink) {
-
-                    parentLink.classList.add("active");
-
-                }
-
-            }
-
-        }
-
-    });
-
-});
-
-</script>
  <!-- Floating WhatsApp Button -->
 
 <a

@@ -13432,3 +13432,115 @@ body {
     }
 
 }
+/* =========================================================
+   CONTACT ENQUIRY THANK YOU POPUP
+   ========================================================= */
+
+#contactThankYouPopup {
+    position: fixed;
+    inset: 0;
+    z-index: 999999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    background: rgba(7, 26, 49, 0.35);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition: opacity 0.3s ease,
+                visibility 0.3s ease;
+}
+
+#contactThankYouPopup.show {
+    opacity: 1;
+    visibility: visible;
+}
+
+.contact-thankyou-card {
+    width: 100%;
+    max-width: 400px;
+
+    padding: 32px 28px;
+
+    text-align: center;
+
+    background: #ffffff;
+
+    border: 1px solid #e2e8ef;
+    border-radius: 16px;
+
+    box-shadow: 0 15px 45px rgba(0, 0, 0, 0.18);
+
+    transform: translateY(20px) scale(0.96);
+
+    transition: transform 0.3s ease;
+}
+
+#contactThankYouPopup.show .contact-thankyou-card {
+    transform: translateY(0) scale(1);
+}
+
+.contact-thankyou-icon {
+    width: 58px;
+    height: 58px;
+
+    margin: 0 auto 16px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #eaf7ef;
+    color: #218838;
+
+    font-size: 25px;
+}
+
+.contact-thankyou-card h2 {
+    margin: 0 0 8px;
+
+    color: #0b1f3a;
+
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.contact-thankyou-card p {
+    margin: 0;
+
+    color: #666;
+
+    font-size: 14px;
+    line-height: 1.7;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 480px) {
+
+    .contact-thankyou-card {
+        max-width: 340px;
+        padding: 28px 20px;
+    }
+
+    .contact-thankyou-card h2 {
+        font-size: 21px;
+    }
+
+    .contact-thankyou-card p {
+        font-size: 13px;
+    }
+
+}
+/* Gap before Address field */
+#admissionForm .admission-form-group:has(#address) {
+    margin-top: 18px;
+}
