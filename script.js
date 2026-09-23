@@ -2172,3 +2172,592 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
+/* =========================================================
+   OUR SUCCESS STORIES SLIDER
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const slider =
+        document.getElementById("successStoriesSlider");
+
+    const track =
+        document.getElementById("successStoriesTrack");
+
+    const prevButton =
+        document.getElementById("successPrev");
+
+    const nextButton =
+        document.getElementById("successNext");
+
+    const dotsContainer =
+        document.getElementById("successSliderDots");
+
+
+    /* =====================================================
+       SAFETY CHECK
+       ===================================================== */
+
+    if (
+        !slider ||
+        !track ||
+        !prevButton ||
+        !nextButton ||
+        !dotsContainer
+    ) {
+        return;
+    }
+
+
+    let currentPage = 0;
+
+
+    /* =====================================================
+       GET ALL CARDS
+       ===================================================== */
+
+    function getCards() {
+
+        return Array.from(
+            track.querySelectorAll(
+                ".success-story-card"
+            )
+        );
+
+    }
+
+
+    /* =====================================================
+       CARDS PER PAGE
+       
+       DESKTOP = 3
+       TABLET  = 3
+       MOBILE  = 2
+       ===================================================== */
+
+    function getCardsPerPage() {
+
+        if (window.innerWidth <= 700) {
+            return 2;
+        }
+
+        return 3;
+    }
+
+
+    /* =====================================================
+       SET EXACT CARD WIDTH
+       
+       This is the important part.
+       Card width is calculated from the ACTUAL
+       visible slider width.
+       ===================================================== */
+
+    function setCardWidths() {
+
+        const cards =
+            getCards();
+
+        if (cards.length === 0) {
+            return;
+        }
+
+
+        const cardsPerPage =
+            getCardsPerPage();
+
+
+        const sliderWidth =
+            slider.getBoundingClientRect().width;
+
+
+        const trackStyle =
+            window.getComputedStyle(track);
+
+
+        const gap =
+            parseFloat(trackStyle.gap) || 0;
+
+
+        /*
+         * Example desktop:
+         *
+         * slider = 1200px
+         * gap = 24px
+         *
+         * 3 cards:
+         *
+         * (1200 - 48) / 3
+         *
+         * = 384px each
+         */
+
+        const cardWidth =
+            (
+                sliderWidth -
+                (
+                    gap *
+                    (cardsPerPage - 1)
+                )
+            ) /
+            cardsPerPage;
+
+
+        cards.forEach(
+            function (card) {
+
+                card.style.flex =
+                    "0 0 " +
+                    cardWidth +
+                    "px";
+
+                card.style.width =
+                    cardWidth +
+                    "px";
+
+            }
+        );
+
+    }
+
+
+    /* =====================================================
+       TOTAL PAGES
+       ===================================================== */
+
+    function getTotalPages() {
+
+        const cards =
+            getCards();
+
+
+        const cardsPerPage =
+            getCardsPerPage();
+
+
+        if (cards.length === 0) {
+            return 0;
+        }
+
+
+        return Math.ceil(
+            cards.length /
+            cardsPerPage
+        );
+
+    }
+
+
+    /* =====================================================
+       CREATE DOTS
+       ===================================================== */
+
+    function createDots() {
+
+        dotsContainer.innerHTML = "";
+
+
+        const totalPages =
+            getTotalPages();
+
+
+        /*
+         * If only one page,
+         * no dots are required.
+         */
+
+        if (totalPages <= 1) {
+
+            dotsContainer.style.display =
+                "none";
+
+            return;
+        }
+
+
+        dotsContainer.style.display =
+            "flex";
+
+
+        for (
+            let i = 0;
+            i < totalPages;
+            i++
+        ) {
+
+            const dot =
+                document.createElement(
+                    "button"
+                );
+
+
+            dot.type = "button";
+
+            dot.className =
+                "success-slider-dot";
+
+
+            dot.setAttribute(
+                "aria-label",
+                "Go to success stories slide " +
+                (i + 1)
+            );
+
+
+            dot.addEventListener(
+                "click",
+                function () {
+
+                    currentPage = i;
+
+                    updateSlider();
+
+                }
+            );
+
+
+            dotsContainer.appendChild(
+                dot
+            );
+
+        }
+
+    }
+
+
+    /* =====================================================
+       UPDATE SLIDER
+       ===================================================== */
+
+    function updateSlider() {
+
+        const totalPages =
+            getTotalPages();
+
+
+        if (totalPages <= 0) {
+            return;
+        }
+
+
+        /*
+         * Keep current page valid.
+         */
+
+        if (
+            currentPage >= totalPages
+        ) {
+
+            currentPage =
+                totalPages - 1;
+
+        }
+
+
+        if (
+            currentPage < 0
+        ) {
+
+            currentPage = 0;
+
+        }
+
+
+        /*
+         * Move exactly one viewport.
+         *
+         * Page 0:
+         * Card 1 + Card 2 + Card 3
+         *
+         * Page 1:
+         * Card 4 + Card 5 + Card 6
+         */
+
+        const sliderWidth =
+            slider.getBoundingClientRect().width;
+
+
+        track.style.transform =
+            "translate3d(" +
+            (
+                -(currentPage * sliderWidth)
+            ) +
+            "px, 0, 0)";
+
+
+        /* =================================================
+           ACTIVE DOT
+           ================================================= */
+
+        const dots =
+            dotsContainer.querySelectorAll(
+                ".success-slider-dot"
+            );
+
+
+        dots.forEach(
+            function (dot, index) {
+
+                dot.classList.toggle(
+                    "active",
+                    index === currentPage
+                );
+
+            }
+        );
+
+
+        /* =================================================
+           BUTTON STATES
+           ================================================= */
+
+        prevButton.disabled =
+            currentPage === 0;
+
+
+        nextButton.disabled =
+            currentPage ===
+            totalPages - 1;
+
+    }
+
+
+    /* =====================================================
+       NEXT BUTTON
+       ===================================================== */
+
+    nextButton.addEventListener(
+        "click",
+        function () {
+
+            const totalPages =
+                getTotalPages();
+
+
+            if (
+                currentPage <
+                totalPages - 1
+            ) {
+
+                currentPage++;
+
+                updateSlider();
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       PREVIOUS BUTTON
+       ===================================================== */
+
+    prevButton.addEventListener(
+        "click",
+        function () {
+
+            if (
+                currentPage > 0
+            ) {
+
+                currentPage--;
+
+                updateSlider();
+
+            }
+
+        }
+    );
+
+
+    /* =====================================================
+       TOUCH SWIPE
+       ===================================================== */
+
+    let touchStartX = 0;
+
+    let touchEndX = 0;
+
+
+    slider.addEventListener(
+        "touchstart",
+        function (event) {
+
+            touchStartX =
+                event.touches[0].clientX;
+
+        },
+        {
+            passive: true
+        }
+    );
+
+
+    slider.addEventListener(
+        "touchend",
+        function (event) {
+
+            touchEndX =
+                event.changedTouches[0].clientX;
+
+
+            const difference =
+                touchStartX -
+                touchEndX;
+
+
+            /*
+             * Swipe left
+             */
+
+            if (
+                difference > 50
+            ) {
+
+                const totalPages =
+                    getTotalPages();
+
+
+                if (
+                    currentPage <
+                    totalPages - 1
+                ) {
+
+                    currentPage++;
+
+                    updateSlider();
+
+                }
+
+            }
+
+
+            /*
+             * Swipe right
+             */
+
+            if (
+                difference < -50
+            ) {
+
+                if (
+                    currentPage > 0
+                ) {
+
+                    currentPage--;
+
+                    updateSlider();
+
+                }
+
+            }
+
+        },
+        {
+            passive: true
+        }
+    );
+
+
+    /* =====================================================
+       RESIZE
+       ===================================================== */
+
+    let resizeTimer;
+
+
+    window.addEventListener(
+        "resize",
+        function () {
+
+            clearTimeout(
+                resizeTimer
+            );
+
+
+            resizeTimer =
+                setTimeout(
+                    function () {
+
+                        /*
+                         * Recalculate card width
+                         */
+
+                        setCardWidths();
+
+
+                        /*
+                         * Recalculate dots
+                         */
+
+                        createDots();
+
+
+                        /*
+                         * Reposition slider
+                         */
+
+                        updateSlider();
+
+                    },
+                    150
+                );
+
+        }
+    );
+
+
+    /* =====================================================
+       INITIALIZE
+       ===================================================== */
+
+    setCardWidths();
+
+    createDots();
+
+    updateSlider();
+
+});
+/* =========================================================
+   FEEDBACK THANK YOU POPUP
+   ========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const feedbackForm = document.getElementById("feedbackForm");
+    const feedbackPopup = document.getElementById("feedbackThankYouPopup");
+
+    if (!feedbackForm || !feedbackPopup) {
+        return;
+    }
+
+    feedbackForm.addEventListener("submit", function (event) {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        /* Prevent page from jumping */
+        const currentScrollPosition = window.scrollY;
+
+        /* Show popup */
+        feedbackPopup.classList.add("show");
+
+        /* Keep current page position */
+        window.scrollTo(0, currentScrollPosition);
+
+        /* Reset form */
+        feedbackForm.reset();
+
+        /* Close after exactly 3 seconds */
+        setTimeout(function () {
+
+            feedbackPopup.classList.remove("show");
+
+            window.scrollTo(0, currentScrollPosition);
+
+        }, 3000);
+
+    });
+
+});

@@ -1,11 +1,7 @@
 /* =========================================================
    MAHARANA PRATAP PRIVATE ITI SEHORE
-   ADMIN PANEL JAVASCRIPT
-
-   FRONTEND VERSION
-
-   BACKEND DATABASE BAAD ME CONNECT HOGA.
-========================================================= */
+   ADMIN PANEL - SUPABASE VERSION
+   ========================================================= */
 
 (function () {
 
@@ -13,120 +9,362 @@
 
 
     /* =====================================================
-       DEMO LOGIN DETAILS
+       SUPABASE CONFIGURATION
+       ===================================================== */
 
-       IMPORTANT:
-       Backend connect hone ke baad ye remove hoga.
-    ===================================================== */
+    const SUPABASE_URL = "https://zxgpekuluewytbxtebvy.supabase.co";
 
-    const ADMIN_USERNAME = "admin";
-
-    const ADMIN_PASSWORD = "Admin@12345";
+    const SUPABASE_PUBLISHABLE_KEY =
+        "sb_publishable_Xnh5RRUBqQDkBbhNsy8E_Q_l8T_h8LT";
 
 
     /* =====================================================
-       CHECK LOGIN PAGE
-    ===================================================== */
+       LOAD SUPABASE
+       ===================================================== */
 
-    const loginForm =
-        document.getElementById("adminLoginForm");
+    const supabaseScript = document.createElement("script");
 
+    supabaseScript.src =
+        "https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2";
 
-    if (loginForm) {
+    supabaseScript.onload = initializeSupabase;
 
-        const usernameInput =
-            document.getElementById("adminUsername");
-
-        const passwordInput =
-            document.getElementById("adminPassword");
-
-        const passwordToggle =
-            document.getElementById("passwordToggle");
-
-        const loginMessage =
-            document.getElementById("loginMessage");
+    document.head.appendChild(supabaseScript);
 
 
-        /* ================================================
-           SHOW / HIDE PASSWORD
-        ================================================= */
+    let supabaseClient = null;
 
-        passwordToggle.addEventListener(
-            "click",
-            function () {
 
-                if (
-                    passwordInput.type === "password"
-                ) {
+    /* =====================================================
+       INITIALIZE
+       ===================================================== */
 
-                    passwordInput.type = "text";
+    function initializeSupabase() {
 
-                    passwordToggle.innerHTML =
-                        '<i class="fa-solid fa-eye-slash"></i>';
+        if (
+            SUPABASE_URL.includes("PASTE_YOUR") ||
+            SUPABASE_PUBLISHABLE_KEY.includes("PASTE_YOUR")
+        ) {
 
-                } else {
+            console.error(
+                "Supabase URL or Publishable Key is missing."
+            );
 
-                    passwordInput.type = "password";
+            showLoginError(
+                "Supabase configuration missing."
+            );
 
-                    passwordToggle.innerHTML =
-                        '<i class="fa-solid fa-eye"></i>';
+            return;
+        }
 
-                }
 
-            }
+        const {
+            createClient
+        } = window.supabase;
+
+
+        supabaseClient = createClient(
+            SUPABASE_URL,
+            SUPABASE_PUBLISHABLE_KEY
         );
 
 
-        /* ================================================
-           LOGIN
-        ================================================= */
+        initializeApplication();
+    }
+
+
+    /* =====================================================
+       LOGIN PAGE
+       ===================================================== */
+
+    async function initializeApplication() {
+
+        const loginForm =
+            document.getElementById("adminLoginForm");
+
+
+        if (loginForm) {
+
+            initializeLogin();
+
+            return;
+        }
+
+
+        /* =================================================
+           DASHBOARD PAGE
+           ================================================= */
+
+        const dashboardSection =
+            document.getElementById("section-dashboard");
+
+
+        if (!dashboardSection) {
+            return;
+        }
+
+
+        const {
+            data: {
+                session
+            },
+            error
+        } =
+            await supabaseClient.auth.getSession();
+
+
+        if (
+            error ||
+            !session
+        ) {
+
+            window.location.href =
+                "admin-login.html";
+
+            return;
+        }
+
+
+        /* =================================================
+           VERIFY ADMIN
+           ================================================= */
+
+        const isAdmin =
+            await verifyAdminUser(
+                session.user.id
+            );
+
+
+        if (!isAdmin) {
+
+            await supabaseClient.auth.signOut();
+
+            window.location.href =
+                "admin-login.html";
+
+            return;
+        }
+
+
+        initializeDashboard();
+    }
+
+
+
+    /* =====================================================
+       LOGIN
+       ===================================================== */
+
+    function initializeLogin() {
+
+        const loginForm =
+            document.getElementById(
+                "adminLoginForm"
+            );
+
+
+        const emailInput =
+            document.getElementById(
+                "adminEmail"
+            );
+
+
+        const passwordInput =
+            document.getElementById(
+                "adminPassword"
+            );
+
+
+        const passwordToggle =
+            document.getElementById(
+                "passwordToggle"
+            );
+
+
+        const loginMessage =
+            document.getElementById(
+                "loginMessage"
+            );
+
+
+        /* =================================================
+           CHECK EXISTING SESSION
+           ================================================= */
+
+        supabaseClient.auth
+            .getSession()
+            .then(async function (result) {
+
+                const session =
+                    result.data.session;
+
+
+                if (!session) {
+                    return;
+                }
+
+
+                const isAdmin =
+                    await verifyAdminUser(
+                        session.user.id
+                    );
+
+
+                if (isAdmin) {
+
+                    window.location.href =
+                        "admin-panel.html";
+                }
+
+            });
+
+
+        /* =================================================
+           PASSWORD SHOW / HIDE
+           ================================================= */
+
+        if (passwordToggle) {
+
+            passwordToggle.addEventListener(
+                "click",
+                function () {
+
+                    if (
+                        passwordInput.type ===
+                        "password"
+                    ) {
+
+                        passwordInput.type =
+                            "text";
+
+                        passwordToggle.innerHTML =
+                            '<i class="fa-solid fa-eye-slash"></i>';
+
+                        passwordToggle.setAttribute(
+                            "aria-label",
+                            "Hide password"
+                        );
+
+                    } else {
+
+                        passwordInput.type =
+                            "password";
+
+                        passwordToggle.innerHTML =
+                            '<i class="fa-solid fa-eye"></i>';
+
+                        passwordToggle.setAttribute(
+                            "aria-label",
+                            "Show password"
+                        );
+                    }
+
+                }
+            );
+        }
+
+
+        /* =================================================
+           LOGIN SUBMIT
+           ================================================= */
 
         loginForm.addEventListener(
             "submit",
-            function (event) {
+            async function (event) {
 
                 event.preventDefault();
 
 
-                const username =
-                    usernameInput.value.trim();
+                const email =
+                    emailInput.value.trim();
+
 
                 const password =
                     passwordInput.value;
 
 
-                /* =========================================
-                   DEMO AUTHENTICATION
-                ========================================= */
-
                 if (
-                    username === ADMIN_USERNAME &&
-                    password === ADMIN_PASSWORD
+                    !email ||
+                    !password
                 ) {
 
-                    sessionStorage.setItem(
-                        "mpiti_admin_logged_in",
-                        "true"
+                    loginMessage.textContent =
+                        "Please enter email and password.";
+
+                    return;
+                }
+
+
+                loginMessage.textContent =
+                    "Signing in...";
+
+
+                /* =========================================
+                   SUPABASE AUTH
+                   ========================================= */
+
+                const {
+                    data,
+                    error
+                } =
+                    await supabaseClient.auth
+                        .signInWithPassword({
+
+                            email: email,
+
+                            password: password
+
+                        });
+
+
+                if (error) {
+
+                    console.error(
+                        "Login error:",
+                        error
                     );
 
 
-                    loginMessage.textContent = "";
-
-
-                    window.location.href =
-                        "admin-panel.html";
-
-
-                } else {
-
                     loginMessage.textContent =
-                        "Invalid username or password.";
+                        "Invalid email or password.";
 
                     passwordInput.value = "";
 
                     passwordInput.focus();
 
+                    return;
                 }
+
+
+                /* =========================================
+                   VERIFY ADMIN USER
+                   ========================================= */
+
+                const isAdmin =
+                    await verifyAdminUser(
+                        data.user.id
+                    );
+
+
+                if (!isAdmin) {
+
+                    await supabaseClient.auth.signOut();
+
+                    loginMessage.textContent =
+                        "This account is not authorized as an administrator.";
+
+                    passwordInput.value = "";
+
+                    return;
+                }
+
+
+                loginMessage.textContent =
+                    "Login successful...";
+
+
+                window.location.href =
+                    "admin-panel.html";
 
             }
         );
@@ -136,291 +374,404 @@
 
 
     /* =====================================================
-       DASHBOARD CHECK
-    ===================================================== */
+       VERIFY ADMIN
+       ===================================================== */
 
-    const dashboardSection =
-        document.getElementById(
-            "section-dashboard"
-        );
+    async function verifyAdminUser(userId) {
+
+        if (!userId) {
+            return false;
+        }
 
 
-    if (!dashboardSection) {
-        return;
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("admin_users")
+                .select("user_id")
+                .eq(
+                    "user_id",
+                    userId
+                )
+                .maybeSingle();
+
+
+        if (error) {
+
+            console.error(
+                "Admin verification error:",
+                error
+            );
+
+            return false;
+        }
+
+
+        return !!data;
     }
 
 
 
     /* =====================================================
-       SECURITY CHECK
-    ===================================================== */
+       DASHBOARD INITIALIZATION
+       ===================================================== */
 
-    const isLoggedIn =
-        sessionStorage.getItem(
-            "mpiti_admin_logged_in"
-        );
+    function initializeDashboard() {
 
-
-    if (isLoggedIn !== "true") {
-
-        window.location.href =
-            "admin-login.html";
-
-        return;
-
-    }
+        const sidebar =
+            document.getElementById(
+                "adminSidebar"
+            );
 
 
-
-    /* =====================================================
-       ELEMENTS
-    ===================================================== */
-
-    const sidebar =
-        document.getElementById(
-            "adminSidebar"
-        );
+        const sidebarToggle =
+            document.getElementById(
+                "sidebarToggle"
+            );
 
 
-    const sidebarToggle =
-        document.getElementById(
-            "sidebarToggle"
-        );
+        const logoutButton =
+            document.getElementById(
+                "logoutBtn"
+            );
 
 
-    const logoutButton =
-        document.getElementById(
-            "logoutBtn"
-        );
+        const sectionTitle =
+            document.getElementById(
+                "sectionTitle"
+            );
 
 
-    const sectionTitle =
-        document.getElementById(
-            "sectionTitle"
-        );
+        const sections =
+            document.querySelectorAll(
+                ".dashboard-section"
+            );
 
 
-    const sections =
-        document.querySelectorAll(
-            ".dashboard-section"
-        );
+        const navItems =
+            document.querySelectorAll(
+                ".admin-nav-item"
+            );
 
 
-    const navItems =
-        document.querySelectorAll(
-            ".admin-nav-item"
-        );
+        const sectionTitles = {
+
+            dashboard:
+                "Dashboard",
+
+            submissions:
+                "All Submissions",
+
+            admissions:
+                "Admissions",
+
+            contacts:
+                "Contact Enquiries",
+
+            feedback:
+                "Feedback"
+
+        };
 
 
-    const clearDemoData =
-        document.getElementById(
-            "clearDemoData"
-        );
+        /* =================================================
+           SHOW SECTION
+           ================================================= */
 
-
-
-    /* =====================================================
-       SECTION TITLES
-    ===================================================== */
-
-    const sectionTitles = {
-
-        dashboard:
-            "Dashboard",
-
-        submissions:
-            "All Submissions",
-
-        admissions:
-            "Admissions",
-
-        contacts:
-            "Contact Enquiries",
-
-        feedback:
-            "Feedback"
-
-    };
-
-
-
-    /* =====================================================
-       DATA TYPE
-    ===================================================== */
-
-    function getTypeFromKey(key) {
-
-        const lowerKey =
-            key.toLowerCase();
-
-
-        if (
-            lowerKey.includes("admission")
+        function showSection(
+            sectionName
         ) {
 
-            return "Admission";
+            sections.forEach(
+                function (section) {
+
+                    const shouldShow =
+                        section.id ===
+                        "section-" +
+                        sectionName;
+
+
+                    section.classList.toggle(
+                        "active",
+                        shouldShow
+                    );
+
+                }
+            );
+
+
+            navItems.forEach(
+                function (item) {
+
+                    item.classList.toggle(
+                        "active",
+                        item.dataset.section ===
+                        sectionName
+                    );
+
+                }
+            );
+
+
+            if (sectionTitle) {
+
+                sectionTitle.textContent =
+                    sectionTitles[
+                        sectionName
+                    ] ||
+                    "Dashboard";
+            }
+
+
+            if (sidebar) {
+
+                sidebar.classList.remove(
+                    "open"
+                );
+            }
 
         }
 
 
-        if (
-            lowerKey.includes("contact")
-        ) {
+        /* =================================================
+           SIDEBAR NAVIGATION
+           ================================================= */
 
-            return "Contact";
+        navItems.forEach(
+            function (item) {
+
+                item.addEventListener(
+                    "click",
+                    function () {
+
+                        showSection(
+                            item.dataset.section
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+        /* =================================================
+           VIEW ALL
+           ================================================= */
+
+        const sectionButtons =
+            document.querySelectorAll(
+                "[data-section-target]"
+            );
+
+
+        sectionButtons.forEach(
+            function (button) {
+
+                button.addEventListener(
+                    "click",
+                    function () {
+
+                        showSection(
+                            button.dataset.sectionTarget
+                        );
+
+                    }
+                );
+
+            }
+        );
+
+
+        /* =================================================
+           MOBILE SIDEBAR
+           ================================================= */
+
+        if (sidebarToggle) {
+
+            sidebarToggle.addEventListener(
+                "click",
+                function () {
+
+                    sidebar.classList.toggle(
+                        "open"
+                    );
+
+                }
+            );
 
         }
 
 
-        if (
-            lowerKey.includes("feedback")
-        ) {
+        /* =================================================
+           LOGOUT
+           ================================================= */
 
-            return "Feedback";
+        if (logoutButton) {
 
-        }
+            logoutButton.addEventListener(
+                "click",
+                async function () {
 
-
-        return "Submission";
-
-    }
-
-
-
-    /* =====================================================
-       GET DATA
-
-       CURRENTLY:
-       localStorage
-
-       LATER:
-       DATABASE/API
-    ===================================================== */
-
-    function getAllData() {
-
-        const storageKeys = [
-
-            "siteSubmissions",
-
-            "contactSubmissions",
-
-            "admissionSubmissions",
-
-            "feedbackSubmissions"
-
-        ];
+                    const {
+                        error
+                    } =
+                        await supabaseClient.auth
+                            .signOut();
 
 
-        const allData = [];
+                    if (error) {
 
+                        console.error(
+                            "Logout error:",
+                            error
+                        );
 
-        storageKeys.forEach(
-            function (key) {
-
-                try {
-
-                    const stored =
-                        localStorage.getItem(key);
-
-
-                    if (!stored) {
                         return;
                     }
 
 
-                    const parsed =
-                        JSON.parse(stored);
-
-
-                    if (
-                        !Array.isArray(parsed)
-                    ) {
-                        return;
-                    }
-
-
-                    parsed.forEach(
-                        function (item) {
-
-                            allData.push({
-
-                                ...item,
-
-                                type:
-                                    item.type ||
-                                    getTypeFromKey(key)
-
-                            });
-
-                        }
-                    );
-
-
-                } catch (error) {
-
-                    console.warn(
-                        "Unable to read:",
-                        key
-                    );
+                    window.location.href =
+                        "admin-login.html";
 
                 }
-
-            }
-        );
-
-
-        return allData;
-
-    }
-
-
-
-    /* =====================================================
-       GET FIRST AVAILABLE VALUE
-    ===================================================== */
-
-    function getValue(
-        item,
-        keys
-    ) {
-
-        for (
-            let i = 0;
-            i < keys.length;
-            i++
-        ) {
-
-            const key =
-                keys[i];
-
-
-            if (
-                item[key] !== undefined &&
-                item[key] !== null &&
-                item[key] !== ""
-            ) {
-
-                return item[key];
-
-            }
+            );
 
         }
 
 
-        return "-";
+        /* =================================================
+           LOAD REAL DATABASE DATA
+           ================================================= */
+
+        renderDashboard();
 
     }
 
 
 
     /* =====================================================
-       HTML SECURITY
-    ===================================================== */
+       GET ADMISSIONS
+       ===================================================== */
+
+    async function getAdmissions() {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("admissions")
+                .select("*")
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
+
+
+        if (error) {
+
+            console.error(
+                "Admissions error:",
+                error
+            );
+
+            return [];
+        }
+
+
+        return data || [];
+    }
+
+
+
+    /* =====================================================
+       GET ENQUIRIES
+       ===================================================== */
+
+    async function getEnquiries() {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("enquiries")
+                .select("*")
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
+
+
+        if (error) {
+
+            console.error(
+                "Enquiries error:",
+                error
+            );
+
+            return [];
+        }
+
+
+        return data || [];
+    }
+
+
+
+    /* =====================================================
+       GET FEEDBACK
+       ===================================================== */
+
+    async function getFeedback() {
+
+        const {
+            data,
+            error
+        } =
+            await supabaseClient
+                .from("feedback")
+                .select("*")
+                .order(
+                    "created_at",
+                    {
+                        ascending: false
+                    }
+                );
+
+
+        if (error) {
+
+            console.error(
+                "Feedback error:",
+                error
+            );
+
+            return [];
+        }
+
+
+        return data || [];
+    }
+
+
+
+    /* =====================================================
+       ESCAPE HTML
+       ===================================================== */
 
     function escapeHTML(value) {
 
-        return String(value)
+        return String(
+            value ?? ""
+        )
 
             .replaceAll(
                 "&",
@@ -452,14 +803,164 @@
 
 
     /* =====================================================
-       CREATE TABLE
-    ===================================================== */
+       FORMAT DATE
+       ===================================================== */
 
-    function createTable(
+    function formatDate(
+        date
+    ) {
+
+        if (!date) {
+            return "-";
+        }
+
+
+        const d =
+            new Date(date);
+
+
+        if (
+            Number.isNaN(
+                d.getTime()
+            )
+        ) {
+
+            return escapeHTML(
+                date
+            );
+        }
+
+
+        return d.toLocaleString(
+            "en-IN",
+            {
+                dateStyle: "medium",
+                timeStyle: "short"
+            }
+        );
+
+    }
+
+
+
+    /* =====================================================
+       CREATE ALL SUBMISSIONS
+       ===================================================== */
+
+    function createAllSubmissions(
+        admissions,
+        enquiries,
+        feedback
+    ) {
+
+        const records = [];
+
+
+        admissions.forEach(
+            function (item) {
+
+                records.push({
+
+                    name:
+                        item.name,
+
+                    email:
+                        item.email,
+
+                    phone:
+                        item.mobile,
+
+                    type:
+                        "Admission",
+
+                    date:
+                        item.created_at
+
+                });
+
+            }
+        );
+
+
+        enquiries.forEach(
+            function (item) {
+
+                records.push({
+
+                    name:
+                        item.name,
+
+                    email:
+                        item.email,
+
+                    phone:
+                        item.mobile,
+
+                    type:
+                        "Enquiry",
+
+                    date:
+                        item.created_at
+
+                });
+
+            }
+        );
+
+
+        feedback.forEach(
+            function (item) {
+
+                records.push({
+
+                    name:
+                        item.name,
+
+                    email:
+                        item.email,
+
+                    phone:
+                        item.mobile,
+
+                    type:
+                        "Feedback",
+
+                    date:
+                        item.created_at
+
+                });
+
+            }
+        );
+
+
+        records.sort(
+            function (a, b) {
+
+                return new Date(
+                    b.date
+                ) -
+                new Date(
+                    a.date
+                );
+
+            }
+        );
+
+
+        return records;
+    }
+
+
+
+    /* =====================================================
+       CREATE GENERAL TABLE
+       ===================================================== */
+
+    function createGeneralTable(
         data,
         limit
     ) {
-
 
         if (
             !data ||
@@ -472,34 +973,23 @@
 
                     <i class="fa-regular fa-folder-open"></i>
 
-                    No data available yet.
-
                     <br>
 
-                    Backend/database connect
-                    karne ke baad real submissions
-                    yahan show honge.
+                    No data available yet.
 
                 </div>
 
             `;
-
         }
 
 
-        let records =
-            data;
-
-
-        if (limit) {
-
-            records =
-                data.slice(
+        const records =
+            limit
+                ? data.slice(
                     0,
                     limit
-                );
-
-        }
+                )
+                : data;
 
 
         let rows = "";
@@ -508,77 +998,30 @@
         records.forEach(
             function (item) {
 
-
-                const name =
-                    getValue(
-                        item,
-                        [
-                            "name",
-                            "fullName",
-                            "studentName",
-                            "applicantName"
-                        ]
-                    );
-
-
-                const email =
-                    getValue(
-                        item,
-                        [
-                            "email",
-                            "emailAddress"
-                        ]
-                    );
-
-
-                const phone =
-                    getValue(
-                        item,
-                        [
-                            "phone",
-                            "mobile",
-                            "mobileNumber"
-                        ]
-                    );
-
-
-                const type =
-                    item.type || "-";
-
-
-                const date =
-                    getValue(
-                        item,
-                        [
-                            "date",
-                            "createdAt",
-                            "timestamp"
-                        ]
-                    );
-
-
                 rows += `
 
                     <tr>
 
                         <td>
-                            ${escapeHTML(name)}
+                            ${escapeHTML(item.name)}
                         </td>
 
                         <td>
-                            ${escapeHTML(email)}
+                            ${escapeHTML(item.email)}
                         </td>
 
                         <td>
-                            ${escapeHTML(phone)}
+                            ${escapeHTML(item.phone)}
                         </td>
 
                         <td>
-                            ${escapeHTML(type)}
+                            ${escapeHTML(item.type)}
                         </td>
 
                         <td>
-                            ${escapeHTML(date)}
+                            ${escapeHTML(
+                                formatDate(item.date)
+                            )}
                         </td>
 
                     </tr>
@@ -597,30 +1040,19 @@
 
                     <tr>
 
-                        <th>
-                            Name
-                        </th>
+                        <th>Name</th>
 
-                        <th>
-                            Email
-                        </th>
+                        <th>Email</th>
 
-                        <th>
-                            Phone
-                        </th>
+                        <th>Phone</th>
 
-                        <th>
-                            Type
-                        </th>
+                        <th>Type</th>
 
-                        <th>
-                            Date
-                        </th>
+                        <th>Date</th>
 
                     </tr>
 
                 </thead>
-
 
                 <tbody>
 
@@ -637,53 +1069,383 @@
 
 
     /* =====================================================
-       RENDER DASHBOARD
-    ===================================================== */
+       CREATE ADMISSION TABLE
+       ===================================================== */
 
-    function renderDashboard() {
+    function createAdmissionTable(
+        data
+    ) {
+
+        if (
+            !data ||
+            data.length === 0
+        ) {
+
+            return `
+
+                <div class="empty-state">
+
+                    <i class="fa-regular fa-folder-open"></i>
+
+                    <br>
+
+                    No admission applications yet.
+
+                </div>
+
+            `;
+        }
+
+
+        let rows = "";
+
+
+        data.forEach(
+            function (item) {
+
+                rows += `
+
+                    <tr>
+
+                        <td>
+                            ${escapeHTML(item.name)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(item.father_name)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(item.mobile)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(item.email)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(item.trade)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(item.session)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(item.status)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(
+                                formatDate(item.created_at)
+                            )}
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+        );
+
+
+        return `
+
+            <div style="overflow-x:auto;">
+
+                <table class="data-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Name</th>
+                            <th>Father Name</th>
+                            <th>Mobile</th>
+                            <th>Email</th>
+                            <th>Trade</th>
+                            <th>Session</th>
+                            <th>Status</th>
+                            <th>Date</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        ${rows}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        `;
+
+    }
+
+
+
+    /* =====================================================
+       CREATE ENQUIRY TABLE
+       ===================================================== */
+
+    function createEnquiryTable(
+        data
+    ) {
+
+        if (
+            !data ||
+            data.length === 0
+        ) {
+
+            return `
+
+                <div class="empty-state">
+
+                    <i class="fa-regular fa-folder-open"></i>
+
+                    <br>
+
+                    No enquiries yet.
+
+                </div>
+
+            `;
+        }
+
+
+        let rows = "";
+
+
+        data.forEach(
+            function (item) {
+
+                rows += `
+
+                    <tr>
+
+                        <td>
+                            ${escapeHTML(item.name)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(item.mobile)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(item.email)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(item.subject)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(item.status)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(
+                                formatDate(item.created_at)
+                            )}
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+        );
+
+
+        return `
+
+            <div style="overflow-x:auto;">
+
+                <table class="data-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Name</th>
+                            <th>Mobile</th>
+                            <th>Email</th>
+                            <th>Subject</th>
+                            <th>Status</th>
+                            <th>Date</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        ${rows}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        `;
+
+    }
+
+
+
+    /* =====================================================
+       CREATE FEEDBACK TABLE
+       ===================================================== */
+
+    function createFeedbackTable(
+        data
+    ) {
+
+        if (
+            !data ||
+            data.length === 0
+        ) {
+
+            return `
+
+                <div class="empty-state">
+
+                    <i class="fa-regular fa-folder-open"></i>
+
+                    <br>
+
+                    No feedback yet.
+
+                </div>
+
+            `;
+        }
+
+
+        let rows = "";
+
+
+        data.forEach(
+            function (item) {
+
+                rows += `
+
+                    <tr>
+
+                        <td>
+                            ${escapeHTML(item.name)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(item.mobile)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(item.email)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(item.rating)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(item.message)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(item.status)}
+                        </td>
+
+                        <td>
+                            ${escapeHTML(
+                                formatDate(item.created_at)
+                            )}
+                        </td>
+
+                    </tr>
+
+                `;
+
+            }
+        );
+
+
+        return `
+
+            <div style="overflow-x:auto;">
+
+                <table class="data-table">
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Name</th>
+                            <th>Mobile</th>
+                            <th>Email</th>
+                            <th>Rating</th>
+                            <th>Message</th>
+                            <th>Status</th>
+                            <th>Date</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                        ${rows}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        `;
+
+    }
+
+
+
+    /* =====================================================
+       RENDER DASHBOARD
+       ===================================================== */
+
+    async function renderDashboard() {
+
+        const [
+            admissions,
+            enquiries,
+            feedback
+        ] =
+            await Promise.all([
+
+                getAdmissions(),
+
+                getEnquiries(),
+
+                getFeedback()
+
+            ]);
 
 
         const allData =
-            getAllData();
-
-
-        const admissions =
-            allData.filter(
-                function (item) {
-
-                    return item.type ===
-                        "Admission";
-
-                }
+            createAllSubmissions(
+                admissions,
+                enquiries,
+                feedback
             );
 
 
-        const contacts =
-            allData.filter(
-                function (item) {
-
-                    return item.type ===
-                        "Contact";
-
-                }
-            );
-
-
-        const feedback =
-            allData.filter(
-                function (item) {
-
-                    return item.type ===
-                        "Feedback";
-
-                }
-            );
-
-
-
-        /* ================================================
+        /* =================================================
            COUNTS
-        ================================================= */
+           ================================================= */
 
         const totalCount =
             document.getElementById(
@@ -728,7 +1490,7 @@
         if (contactCount) {
 
             contactCount.textContent =
-                contacts.length;
+                enquiries.length;
 
         }
 
@@ -741,10 +1503,9 @@
         }
 
 
-
-        /* ================================================
+        /* =================================================
            TABLES
-        ================================================= */
+           ================================================= */
 
         const recentTable =
             document.getElementById(
@@ -779,7 +1540,7 @@
         if (recentTable) {
 
             recentTable.innerHTML =
-                createTable(
+                createGeneralTable(
                     allData,
                     8
                 );
@@ -790,7 +1551,7 @@
         if (allSubmissionsTable) {
 
             allSubmissionsTable.innerHTML =
-                createTable(
+                createGeneralTable(
                     allData
                 );
 
@@ -800,7 +1561,7 @@
         if (admissionsTable) {
 
             admissionsTable.innerHTML =
-                createTable(
+                createAdmissionTable(
                     admissions
                 );
 
@@ -810,8 +1571,8 @@
         if (contactsTable) {
 
             contactsTable.innerHTML =
-                createTable(
-                    contacts
+                createEnquiryTable(
+                    enquiries
                 );
 
         }
@@ -820,7 +1581,7 @@
         if (feedbackTable) {
 
             feedbackTable.innerHTML =
-                createTable(
+                createFeedbackTable(
                     feedback
                 );
 
@@ -831,217 +1592,41 @@
 
 
     /* =====================================================
-       SHOW DASHBOARD SECTION
-    ===================================================== */
+       AUTH STATE LISTENER
+       ===================================================== */
 
-    function showSection(
-        sectionName
-    ) {
+    function setupAuthListener() {
 
-
-        sections.forEach(
-            function (section) {
-
-                const shouldShow =
-                    section.id ===
-                    "section-" +
-                    sectionName;
-
-
-                section.classList.toggle(
-                    "active",
-                    shouldShow
-                );
-
-            }
-        );
-
-
-        navItems.forEach(
-            function (item) {
-
-                item.classList.toggle(
-
-                    "active",
-
-                    item.dataset.section ===
-                    sectionName
-
-                );
-
-            }
-        );
-
-
-        if (sectionTitle) {
-
-            sectionTitle.textContent =
-                sectionTitles[
-                    sectionName
-                ] || "Dashboard";
-
+        if (!supabaseClient) {
+            return;
         }
 
 
-        /* Mobile sidebar close */
+        supabaseClient.auth.onAuthStateChange(
+            function (
+                event,
+                session
+            ) {
 
-        if (sidebar) {
+                if (
+                    event ===
+                    "SIGNED_OUT"
+                ) {
 
-            sidebar.classList.remove(
-                "open"
-            );
-
-        }
-
-    }
-
-
-
-    /* =====================================================
-       SIDEBAR NAVIGATION
-    ===================================================== */
-
-    navItems.forEach(
-        function (item) {
-
-            item.addEventListener(
-                "click",
-                function () {
-
-                    showSection(
-                        item.dataset.section
-                    );
-
-                }
-            );
-
-        }
-    );
-
-
-
-    /* =====================================================
-       VIEW ALL BUTTON
-    ===================================================== */
-
-    const sectionButtons =
-        document.querySelectorAll(
-            "[data-section-target]"
-        );
-
-
-    sectionButtons.forEach(
-        function (button) {
-
-            button.addEventListener(
-                "click",
-                function () {
-
-                    showSection(
-                        button.dataset.sectionTarget
-                    );
-
-                }
-            );
-
-        }
-    );
-
-
-
-    /* =====================================================
-       MOBILE SIDEBAR
-    ===================================================== */
-
-    if (sidebarToggle) {
-
-        sidebarToggle.addEventListener(
-            "click",
-            function () {
-
-                sidebar.classList.toggle(
-                    "open"
-                );
-
-            }
-        );
-
-    }
-
-
-
-    /* =====================================================
-       LOGOUT
-    ===================================================== */
-
-    if (logoutButton) {
-
-        logoutButton.addEventListener(
-            "click",
-            function () {
-
-                sessionStorage.removeItem(
-                    "mpiti_admin_logged_in"
-                );
-
-
-                window.location.href =
-                    "admin-login.html";
-
-            }
-        );
-
-    }
-
-
-
-    /* =====================================================
-       CLEAR FRONTEND DEMO DATA
-    ===================================================== */
-
-    if (clearDemoData) {
-
-        clearDemoData.addEventListener(
-            "click",
-            function () {
-
-
-                const confirmed =
-                    window.confirm(
-                        "Are you sure you want to clear frontend demo data?"
-                    );
-
-
-                if (!confirmed) {
-                    return;
-                }
-
-
-                const keys = [
-
-                    "siteSubmissions",
-
-                    "contactSubmissions",
-
-                    "admissionSubmissions",
-
-                    "feedbackSubmissions"
-
-                ];
-
-
-                keys.forEach(
-                    function (key) {
-
-                        localStorage.removeItem(
-                            key
+                    const dashboard =
+                        document.getElementById(
+                            "section-dashboard"
                         );
 
+
+                    if (dashboard) {
+
+                        window.location.href =
+                            "admin-login.html";
+
                     }
-                );
 
-
-                renderDashboard();
+                }
 
             }
         );
@@ -1051,10 +1636,27 @@
 
 
     /* =====================================================
-       INITIALIZE
-    ===================================================== */
+       LOGIN ERROR
+       ===================================================== */
 
-    renderDashboard();
+    function showLoginError(
+        message
+    ) {
+
+        const loginMessage =
+            document.getElementById(
+                "loginMessage"
+            );
+
+
+        if (loginMessage) {
+
+            loginMessage.textContent =
+                message;
+
+        }
+
+    }
 
 
 })();
