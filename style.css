@@ -11601,368 +11601,7 @@ body {
         transform: none !important;
     }
 }
-/* =========================================================
-   WEBSITE UNDER WORKING POPUP
-========================================================= */
 
-.under-working-overlay {
-    position: fixed;
-    top: 0;
-    left: 0;
-
-    width: 100vw;
-    height: 100vh;
-    height: 100dvh;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 20px;
-
-    box-sizing: border-box;
-
-    background: rgba(7, 25, 45, 0.68);
-
-    backdrop-filter: blur(5px);
-    -webkit-backdrop-filter: blur(5px);
-
-    z-index: 2147483647;
-}
-
-
-/* ================= POPUP ================= */
-
-.under-working-popup {
-    position: relative;
-
-    width: 100%;
-    max-width: 470px;
-
-    padding: 38px 38px 34px;
-
-    box-sizing: border-box;
-
-    background: #ffffff;
-
-    border: 1px solid #e1e8ef;
-    border-radius: 16px;
-
-    text-align: center;
-
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.20);
-
-    animation: underWorkingPopupIn 0.35s ease;
-}
-
-
-/* ================= ANIMATION ================= */
-
-@keyframes underWorkingPopupIn {
-
-    from {
-        opacity: 0;
-        transform: translateY(20px) scale(0.97);
-    }
-
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
-
-}
-
-
-/* ================= CLOSE ================= */
-
-.under-working-close {
-    position: absolute;
-
-    top: 13px;
-    right: 15px;
-
-    width: 34px;
-    height: 34px;
-
-    border: none;
-    border-radius: 50%;
-
-    background: #f3f5f7;
-    color: #52606d;
-
-    font-size: 25px;
-    line-height: 1;
-
-    cursor: pointer;
-}
-
-.under-working-close:hover {
-    background: #e8edf2;
-    color: #0b1f3a;
-}
-
-
-/* ================= ICON ================= */
-
-.under-working-icon {
-    width: 66px;
-    height: 66px;
-
-    margin: 0 auto 17px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 50%;
-
-    background: #edf5fc;
-    color: #07579a;
-
-    font-size: 27px;
-}
-
-
-/* ================= LABEL ================= */
-
-.under-working-label {
-    display: block;
-
-    margin-bottom: 9px;
-
-    color: #07579a;
-
-    font-family: Arial, sans-serif;
-    font-size: 11px;
-    font-weight: 700;
-
-    letter-spacing: 1.3px;
-}
-
-
-/* ================= HEADING ================= */
-
-.under-working-popup h2 {
-    margin: 0 0 12px;
-
-    color: #0b1f3a;
-
-    font-family: Arial, sans-serif;
-    font-size: 27px;
-    font-weight: 700;
-
-    line-height: 1.25;
-}
-
-
-/* ================= DESCRIPTION ================= */
-
-.under-working-popup > p {
-    max-width: 390px;
-
-    margin: 0 auto 18px;
-
-    color: #697586;
-
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-
-    line-height: 1.65;
-}
-
-
-/* ================= NOTE ================= */
-
-.under-working-note {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 8px;
-
-    margin: 0 auto 23px;
-
-    padding: 11px 14px;
-
-    box-sizing: border-box;
-
-    border-radius: 8px;
-
-    background: #f7f9fb;
-    color: #5d6875;
-
-    font-family: Arial, sans-serif;
-    font-size: 12px;
-}
-
-.under-working-note i {
-    color: #07579a;
-}
-
-
-/* ================= BUTTON ================= */
-
-.under-working-btn {
-    width: 100%;
-    min-height: 46px;
-
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-
-    gap: 9px;
-
-    border: none;
-    border-radius: 7px;
-
-    background: #07579a;
-    color: #ffffff;
-
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-
-    cursor: pointer;
-}
-
-.under-working-btn:hover {
-    background: #064477;
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 768px) {
-
-    .under-working-overlay {
-        position: fixed !important;
-
-        top: 0 !important;
-        left: 0 !important;
-
-        width: 100vw !important;
-        height: 100dvh !important;
-
-        padding: 16px !important;
-
-        display: flex !important;
-
-        align-items: center !important;
-        justify-content: center !important;
-
-        box-sizing: border-box !important;
-
-        z-index: 2147483647 !important;
-    }
-
-
-    .under-working-popup {
-        position: relative !important;
-
-        width: 100% !important;
-        max-width: 360px !important;
-
-        margin: 0 !important;
-
-        padding: 30px 20px 24px !important;
-
-        box-sizing: border-box !important;
-
-        border-radius: 14px !important;
-    }
-
-
-    .under-working-close {
-        top: 10px !important;
-        right: 10px !important;
-
-        width: 32px !important;
-        height: 32px !important;
-
-        font-size: 23px !important;
-    }
-
-
-    .under-working-icon {
-        width: 56px !important;
-        height: 56px !important;
-
-        margin: 0 auto 13px !important;
-
-        font-size: 23px !important;
-    }
-
-
-    .under-working-label {
-        font-size: 10px !important;
-    }
-
-
-    .under-working-popup h2 {
-        margin-bottom: 10px !important;
-
-        font-size: 22px !important;
-        line-height: 1.25 !important;
-    }
-
-
-    .under-working-popup > p {
-        margin-bottom: 16px !important;
-
-        font-size: 13px !important;
-        line-height: 1.55 !important;
-    }
-
-
-    .under-working-note {
-        margin-bottom: 19px !important;
-
-        padding: 10px !important;
-
-        font-size: 11px !important;
-        line-height: 1.4 !important;
-    }
-
-
-    .under-working-btn {
-        min-height: 44px !important;
-
-        font-size: 13px !important;
-    }
-
-}
-
-
-/* =========================================================
-   VERY SMALL MOBILE
-========================================================= */
-
-@media (max-width: 380px) {
-
-    .under-working-overlay {
-        padding: 12px !important;
-    }
-
-
-    .under-working-popup {
-        max-width: 100% !important;
-
-        padding: 27px 17px 22px !important;
-    }
-
-
-    .under-working-popup h2 {
-        font-size: 20px !important;
-    }
-
-
-    .under-working-popup > p {
-        font-size: 12px !important;
-    }
-
-}
 /* =========================================================
    OUR SUCCESS STORIES
    ========================================================= */
@@ -13543,4 +13182,257 @@ body {
 /* Gap before Address field */
 #admissionForm .admission-form-group:has(#address) {
     margin-top: 18px;
+}
+
+/* =========================================================
+   WEBSITE UNDER WORKING POPUP
+========================================================= */
+
+.uw-overlay {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.55);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+    box-sizing: border-box;
+
+    z-index: 999999;
+}
+
+.uw-popup {
+    position: relative;
+
+    width: 100%;
+    max-width: 470px;
+
+    padding: 32px 30px 28px;
+
+    background: #ffffff;
+    border-radius: 15px;
+
+    text-align: center;
+
+    box-sizing: border-box;
+
+    box-shadow: 0 18px 55px rgba(0, 0, 0, 0.25);
+}
+
+.uw-close {
+    position: absolute;
+    top: 10px;
+    right: 12px;
+
+    width: 34px;
+    height: 34px;
+
+    border: none;
+    background: transparent;
+
+    color: #555;
+    font-size: 25px;
+    line-height: 1;
+
+    cursor: pointer;
+
+    z-index: 5;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+.uw-close:hover {
+    color: #07579a;
+}
+
+.uw-icon {
+    width: 62px;
+    height: 62px;
+
+    margin: 0 auto 14px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: #edf5fb;
+    color: #07579a;
+
+    font-size: 25px;
+}
+
+.uw-label {
+    display: inline-block;
+
+    margin-bottom: 8px;
+
+    color: #c99a3d;
+
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+}
+
+.uw-popup h2 {
+    margin: 0 0 12px;
+
+    color: #0b1f3a;
+
+    font-family: Arial, sans-serif;
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 1.25;
+}
+
+.uw-popup > p {
+    margin: 0 0 18px;
+
+    color: #5f6872;
+
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    line-height: 1.65;
+}
+
+.uw-note {
+    display: flex;
+    align-items: flex-start;
+    gap: 9px;
+
+    margin-bottom: 20px;
+    padding: 11px 12px;
+
+    border: 1px solid #e5eaf0;
+    border-radius: 8px;
+
+    background: #f7f9fb;
+
+    color: #626b75;
+
+    font-family: Arial, sans-serif;
+    font-size: 12px;
+    line-height: 1.5;
+
+    text-align: left;
+}
+
+.uw-note i {
+    flex-shrink: 0;
+    margin-top: 2px;
+
+    color: #c99a3d;
+}
+
+.uw-continue {
+    width: 100%;
+    min-height: 46px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 9px;
+
+    border: none;
+    border-radius: 7px;
+
+    background: #07579a;
+    color: #ffffff;
+
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
+}
+
+.uw-continue:hover {
+    background: #064477;
+}
+
+.uw-continue:active {
+    transform: scale(0.99);
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 768px) {
+
+    .uw-overlay {
+        padding: 16px;
+    }
+
+    .uw-popup {
+        max-width: 360px;
+        padding: 30px 20px 24px;
+    }
+
+    .uw-icon {
+        width: 56px;
+        height: 56px;
+        font-size: 23px;
+        margin-bottom: 13px;
+    }
+
+    .uw-label {
+        font-size: 10px;
+    }
+
+    .uw-popup h2 {
+        font-size: 22px;
+        margin-bottom: 10px;
+    }
+
+    .uw-popup > p {
+        font-size: 13px;
+        line-height: 1.55;
+        margin-bottom: 16px;
+    }
+
+    .uw-note {
+        margin-bottom: 19px;
+        padding: 10px;
+        font-size: 11px;
+    }
+
+    .uw-continue {
+        min-height: 46px;
+        font-size: 13px;
+    }
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+========================================================= */
+
+@media (max-width: 380px) {
+
+    .uw-overlay {
+        padding: 12px;
+    }
+
+    .uw-popup {
+        max-width: 100%;
+        padding: 27px 17px 22px;
+    }
+
+    .uw-popup h2 {
+        font-size: 20px;
+    }
+
+    .uw-popup > p {
+        font-size: 12px;
+    }
 }

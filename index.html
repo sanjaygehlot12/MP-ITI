@@ -8,7 +8,7 @@
 
     <title>Maharana Pratap Private ITI</title>
 
-    <link rel="icon" type="image/png" href="images/mpiti-logo.png">
+    <link rel="icon" type="image/png" href="favicon.png">
 
     <!-- Font Awesome Icons -->
     <link
@@ -22,20 +22,25 @@
 
 
 <body>
+    
     <!-- ================= WEBSITE UNDER WORKING POPUP ================= -->
-<div class="under-working-overlay" id="underWorkingPopup">
+<div id="underWorkingPopup" class="uw-overlay">
 
-    <div class="under-working-popup">
+    <div class="uw-popup">
 
-        <button class="under-working-close" id="underWorkingClose" aria-label="Close">
+        <button
+            type="button"
+            id="underWorkingClose"
+            class="uw-close"
+            aria-label="Close">
             &times;
         </button>
 
-        <div class="under-working-icon">
+        <div class="uw-icon">
             <i class="fa-solid fa-screwdriver-wrench"></i>
         </div>
 
-        <span class="under-working-label">WEBSITE UPDATE</span>
+        <div class="uw-label">WEBSITE UPDATE</div>
 
         <h2>Website Under Working</h2>
 
@@ -45,13 +50,22 @@
             we complete the work.
         </p>
 
-        <div class="under-working-note">
+        <div class="uw-note">
             <i class="fa-solid fa-circle-info"></i>
-            Thank you for your patience and understanding.
+            <span>
+                Thank you for your patience and understanding.
+            </span>
         </div>
 
-        <button class="under-working-btn" id="underWorkingContinue">
-            Continue to Website
+        <button
+            type="button"
+            id="underWorkingContinue"
+            class="uw-continue"
+            onclick="
+                document.getElementById('underWorkingPopup').style.display='none';
+                document.body.style.overflow='';
+            ">
+            <span>Continue to Website</span>
             <i class="fa-solid fa-arrow-right"></i>
         </button>
 
@@ -59,7 +73,7 @@
 
 </div>
 <!-- ================= END WEBSITE UNDER WORKING POPUP ================= -->
-
+    
     <!-- =========================================
          TOP CONTACT BAR
          ========================================= -->
@@ -843,7 +857,7 @@
     </div>
 
 </section>
-
+<!-- 
 <!-- =========================================================
      OUR SUCCESS STORIES
      ========================================================= -->
@@ -1321,7 +1335,7 @@
         id="successSliderDots">
     </div>
 
-</section>
+</section> -->
 
 <!-- ================= KEY FACTS / HIGHLIGHTS ================= -->
 <section class="highlights-section">
@@ -1900,7 +1914,7 @@
                 </li>
 
                 <li>
-                    <a href="pages/staff.html">Staff</a>
+                    <a href="pages/technical-staff.html">Staff</a>
                 </li>
 
                 <li>

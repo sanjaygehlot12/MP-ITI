@@ -1657,6 +1657,622 @@
         }
 
     }
+    
+/* =========================================================
+   PASSWORD PROTECTED CLEAR DATA
+   SUPABASE VERSION
+========================================================= */
 
+
+/* =========================================================
+   CLEAR DATA CONFIRMATION POPUP
+========================================================= */
+
+const clearDataBtn =
+    document.getElementById("clearDataBtn");
+
+const clearDataPopup =
+    document.getElementById("clearDataPopup");
+
+const clearDataCancel =
+    document.getElementById("clearDataCancel");
+
+const clearDataCancelTop =
+    document.getElementById("clearDataCancelTop");
+
+const clearDataConfirm =
+    document.getElementById("clearDataConfirm");
+
+
+/* =========================================================
+   CLOSE CLEAR DATA CONFIRMATION POPUP
+========================================================= */
+
+function closeClearDataPopup() {
+
+    if (clearDataPopup) {
+
+        clearDataPopup.classList.remove("show");
+
+    }
+
+    document.body.style.overflow = "";
+
+}
+
+
+/* =========================================================
+   OPEN CLEAR DATA CONFIRMATION POPUP
+========================================================= */
+
+if (clearDataBtn) {
+
+    clearDataBtn.addEventListener(
+        "click",
+        function () {
+
+            if (clearDataPopup) {
+
+                clearDataPopup.classList.add(
+                    "show"
+                );
+
+                document.body.style.overflow =
+                    "hidden";
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   CANCEL BUTTON
+========================================================= */
+
+if (clearDataCancel) {
+
+    clearDataCancel.addEventListener(
+        "click",
+        closeClearDataPopup
+    );
+
+}
+
+
+/* =========================================================
+   TOP CLOSE BUTTON
+========================================================= */
+
+if (clearDataCancelTop) {
+
+    clearDataCancelTop.addEventListener(
+        "click",
+        closeClearDataPopup
+    );
+
+}
+
+
+/* =========================================================
+   CLOSE WHEN CLICKING OUTSIDE
+========================================================= */
+
+if (clearDataPopup) {
+
+    clearDataPopup.addEventListener(
+        "click",
+        function (event) {
+
+            if (
+                event.target ===
+                clearDataPopup
+            ) {
+
+                closeClearDataPopup();
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   YES - CLEAR DATA
+========================================================= */
+
+if (clearDataConfirm) {
+
+    clearDataConfirm.addEventListener(
+        "click",
+        function () {
+
+            closeClearDataPopup();
+
+
+            const passwordPopup =
+                document.getElementById(
+                    "adminPasswordPopup"
+                );
+
+
+            const passwordInput =
+                document.getElementById(
+                    "clearDataPassword"
+                );
+
+
+            const passwordError =
+                document.getElementById(
+                    "clearPasswordError"
+                );
+
+
+            if (passwordPopup) {
+
+                passwordPopup.classList.add(
+                    "show"
+                );
+
+                document.body.style.overflow =
+                    "hidden";
+
+            }
+
+
+            if (passwordInput) {
+
+                passwordInput.value = "";
+
+                setTimeout(
+                    function () {
+
+                        passwordInput.focus();
+
+                    },
+                    100
+                );
+
+            }
+
+
+            if (passwordError) {
+
+                passwordError.textContent = "";
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ADMIN PASSWORD POPUP ELEMENTS
+========================================================= */
+
+const adminPasswordPopup =
+    document.getElementById(
+        "adminPasswordPopup"
+    );
+
+
+const adminPasswordCancel =
+    document.getElementById(
+        "adminPasswordCancel"
+    );
+
+
+const adminPasswordCancelTop =
+    document.getElementById(
+        "adminPasswordCancelTop"
+    );
+
+
+const adminPasswordSubmit =
+    document.getElementById(
+        "adminPasswordSubmit"
+    );
+
+
+const clearDataPassword =
+    document.getElementById(
+        "clearDataPassword"
+    );
+
+
+const toggleClearPassword =
+    document.getElementById(
+        "toggleClearPassword"
+    );
+
+
+const clearPasswordError =
+    document.getElementById(
+        "clearPasswordError"
+    );
+
+
+/* =========================================================
+   CLOSE PASSWORD POPUP
+========================================================= */
+
+function closeAdminPasswordPopup() {
+
+    if (adminPasswordPopup) {
+
+        adminPasswordPopup.classList.remove(
+            "show"
+        );
+
+    }
+
+    document.body.style.overflow = "";
+
+}
+
+
+/* =========================================================
+   PASSWORD POPUP CANCEL
+========================================================= */
+
+if (adminPasswordCancel) {
+
+    adminPasswordCancel.addEventListener(
+        "click",
+        closeAdminPasswordPopup
+    );
+
+}
+
+
+/* =========================================================
+   PASSWORD POPUP TOP CLOSE
+========================================================= */
+
+if (adminPasswordCancelTop) {
+
+    adminPasswordCancelTop.addEventListener(
+        "click",
+        closeAdminPasswordPopup
+    );
+
+}
+
+
+/* =========================================================
+   SHOW / HIDE PASSWORD
+========================================================= */
+
+if (toggleClearPassword) {
+
+    toggleClearPassword.addEventListener(
+        "click",
+        function () {
+
+            if (
+                clearDataPassword.type ===
+                "password"
+            ) {
+
+                clearDataPassword.type =
+                    "text";
+
+
+                toggleClearPassword.innerHTML =
+                    '<i class="fa-solid fa-eye-slash"></i>';
+
+            }
+
+            else {
+
+                clearDataPassword.type =
+                    "password";
+
+
+                toggleClearPassword.innerHTML =
+                    '<i class="fa-solid fa-eye"></i>';
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   PASSWORD VERIFICATION + DELETE
+========================================================= */
+
+if (adminPasswordSubmit) {
+
+    adminPasswordSubmit.addEventListener(
+        "click",
+        async function () {
+
+
+            const password =
+                clearDataPassword
+                    ? clearDataPassword.value
+                    : "";
+
+
+            /* -----------------------------------------
+               EMPTY PASSWORD
+            ----------------------------------------- */
+
+            if (!password) {
+
+                if (clearPasswordError) {
+
+                    clearPasswordError.textContent =
+                        "Please enter your admin password.";
+
+                }
+
+                if (clearDataPassword) {
+
+                    clearDataPassword.focus();
+
+                }
+
+                return;
+
+            }
+
+
+            /* -----------------------------------------
+               BUTTON LOADING
+            ----------------------------------------- */
+
+            adminPasswordSubmit.disabled =
+                true;
+
+            adminPasswordSubmit.textContent =
+                "Verifying...";
+
+
+            if (clearPasswordError) {
+
+                clearPasswordError.textContent =
+                    "";
+
+            }
+
+
+            try {
+
+
+                /* =====================================
+                   GET CURRENT SUPABASE USER
+                ===================================== */
+
+                const {
+                    data: { user },
+                    error: userError
+                } =
+                    await supabaseClient.auth.getUser();
+
+
+                if (
+                    userError ||
+                    !user
+                ) {
+
+                    throw new Error(
+                        "Admin session expired. Please login again."
+                    );
+
+                }
+
+
+                /* =====================================
+                   VERIFY ADMIN PASSWORD
+                ===================================== */
+
+                const {
+                    error: loginError
+                } =
+                    await supabaseClient.auth
+                        .signInWithPassword({
+
+                            email:
+                                user.email,
+
+                            password:
+                                password
+
+                        });
+
+
+                /* =====================================
+                   WRONG PASSWORD
+                ===================================== */
+
+                if (loginError) {
+
+                    if (clearPasswordError) {
+
+                        clearPasswordError.textContent =
+                            "Incorrect admin password.";
+
+                    }
+
+
+                    if (clearDataPassword) {
+
+                        clearDataPassword.value = "";
+
+                        clearDataPassword.focus();
+
+                    }
+
+
+                    return;
+
+                }
+
+
+                /* =====================================
+                   DELETE ADMISSIONS
+                ===================================== */
+
+                const {
+                    error:
+                        admissionsError
+                } =
+                    await supabaseClient
+                        .from("admissions")
+                        .delete()
+                        .not(
+                            "id",
+                            "is",
+                            null
+                        );
+
+
+                if (admissionsError) {
+
+                    throw admissionsError;
+
+                }
+
+
+                /* =====================================
+                   DELETE ENQUIRIES
+                ===================================== */
+
+                const {
+                    error:
+                        enquiriesError
+                } =
+                    await supabaseClient
+                        .from("enquiries")
+                        .delete()
+                        .not(
+                            "id",
+                            "is",
+                            null
+                        );
+
+
+                if (enquiriesError) {
+
+                    throw enquiriesError;
+
+                }
+
+
+                /* =====================================
+                   DELETE FEEDBACK
+                ===================================== */
+
+                const {
+                    error:
+                        feedbackError
+                } =
+                    await supabaseClient
+                        .from("feedback")
+                        .delete()
+                        .not(
+                            "id",
+                            "is",
+                            null
+                        );
+
+
+                if (feedbackError) {
+
+                    throw feedbackError;
+
+                }
+
+
+                /* =====================================
+                   CLOSE PASSWORD POPUP
+                ===================================== */
+
+                closeAdminPasswordPopup();
+
+
+                /* =====================================
+                   SUCCESS
+                ===================================== */
+
+                alert(
+                    "All website data has been cleared successfully."
+                );
+
+
+                /* =====================================
+                   REFRESH DASHBOARD
+                ===================================== */
+
+                window.location.reload();
+
+
+            }
+
+            catch (error) {
+
+                console.error(
+                    "Clear Data Error:",
+                    error
+                );
+
+
+                if (clearPasswordError) {
+
+                    clearPasswordError.textContent =
+                        error.message ||
+                        "Unable to clear data.";
+
+                }
+
+            }
+
+            finally {
+
+                adminPasswordSubmit.disabled =
+                    false;
+
+                adminPasswordSubmit.textContent =
+                    "Verify & Clear";
+
+            }
+
+        }
+    );
+
+}
+
+
+/* =========================================================
+   ESC KEY - CLOSE POPUPS
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    function (event) {
+
+        if (
+            event.key ===
+            "Escape"
+        ) {
+
+            closeClearDataPopup();
+
+            closeAdminPasswordPopup();
+
+        }
+
+    }
+);
 
 })();

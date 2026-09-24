@@ -2116,62 +2116,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 
-/* =========================================================
-   WEBSITE UNDER WORKING POPUP
-========================================================= */
 
-document.addEventListener("DOMContentLoaded", function () {
-
-    const popup = document.getElementById("underWorkingPopup");
-    const closeBtn = document.getElementById("underWorkingClose");
-    const continueBtn = document.getElementById("underWorkingContinue");
-
-    if (!popup) return;
-
-
-    function closeUnderWorkingPopup() {
-        popup.style.display = "none";
-        document.body.style.overflow = "";
-    }
-
-
-    // Popup show
-    popup.style.display = "flex";
-    document.body.style.overflow = "hidden";
-
-
-    // Close button
-    if (closeBtn) {
-        closeBtn.addEventListener("click", closeUnderWorkingPopup);
-    }
-
-
-    // Continue button
-    if (continueBtn) {
-        continueBtn.addEventListener("click", closeUnderWorkingPopup);
-    }
-
-
-    // Overlay par click karne par close
-    popup.addEventListener("click", function (event) {
-
-        if (event.target === popup) {
-            closeUnderWorkingPopup();
-        }
-
-    });
-
-
-    // ESC key se close
-    document.addEventListener("keydown", function (event) {
-
-        if (event.key === "Escape") {
-            closeUnderWorkingPopup();
-        }
-
-    });
-
-});
 /* =========================================================
    OUR SUCCESS STORIES SLIDER
    ========================================================= */
@@ -3040,3 +2985,67 @@ function getCurrentSession() {
     }
 }
 
+/* =========================================================
+   WEBSITE UNDER WORKING POPUP
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const popup = document.getElementById("underWorkingPopup");
+    const closeBtn = document.getElementById("underWorkingClose");
+    const continueBtn = document.getElementById("underWorkingContinue");
+
+    if (!popup) return;
+
+    function closePopup() {
+        popup.style.display = "none";
+        document.body.style.overflow = "";
+    }
+
+    function openPopup() {
+        popup.style.display = "flex";
+        document.body.style.overflow = "hidden";
+    }
+
+    /* Show popup */
+    openPopup();
+
+    /* Close button */
+    if (closeBtn) {
+        closeBtn.addEventListener("click", function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            closePopup();
+        });
+    }
+
+    /* Continue button */
+    if (continueBtn) {
+        continueBtn.addEventListener("click", function (event) {
+            event.preventDefault();
+            event.stopPropagation();
+
+            closePopup();
+        });
+    }
+
+    /* Click outside popup */
+    popup.addEventListener("click", function (event) {
+
+        if (event.target === popup) {
+            closePopup();
+        }
+
+    });
+
+    /* ESC */
+    document.addEventListener("keydown", function (event) {
+
+        if (event.key === "Escape") {
+            closePopup();
+        }
+
+    });
+
+});

@@ -462,13 +462,9 @@
 
                         </div>
 
-
-                        <button
-                            class="danger-btn"
-                            id="clearDemoData"
-                        >
-                            Clear Demo Data
-                        </button>
+                        <button  class="danger-btn" id="clearDataBtn" type="button">
+                        Clear Data
+                    </button>
 
                     </div>
 
@@ -612,6 +608,125 @@
     </main>
 
 </div>
+
+<!-- ================= CLEAR DATA CONFIRM POPUP ================= -->
+
+<div id="clearDataPopup" class="clear-data-overlay">
+
+    <div class="clear-data-popup">
+
+        <button
+            type="button"
+            class="clear-data-close"
+            id="clearDataCancelTop"
+            aria-label="Close">
+            &times;
+        </button>
+
+        <div class="clear-data-icon">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+
+        <h3>Clear All Data?</h3>
+
+        <p>
+            This will permanently delete all website
+            submissions, admissions, enquiries and feedback.
+        </p>
+
+        <div class="clear-data-actions">
+
+            <button
+                type="button"
+                class="clear-data-cancel"
+                id="clearDataCancel">
+                No, Cancel
+            </button>
+
+            <button
+                type="button"
+                class="clear-data-confirm"
+                id="clearDataConfirm">
+                Yes, Clear Data
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= END CLEAR DATA POPUP ================= -->
+ <!-- ================= ADMIN PASSWORD POPUP ================= -->
+
+<div id="adminPasswordPopup" class="clear-data-overlay">
+
+    <div class="clear-data-popup">
+
+        <button
+            type="button"
+            class="clear-data-close"
+            id="adminPasswordCancelTop"
+            aria-label="Close">
+            &times;
+        </button>
+
+        <div class="clear-data-icon">
+            <i class="fa-solid fa-lock"></i>
+        </div>
+
+        <h3>Admin Verification</h3>
+
+        <p>
+            Enter your admin password to permanently clear
+            the website data.
+        </p>
+
+        <div class="admin-password-field">
+
+            <input
+                type="password"
+                id="clearDataPassword"
+                placeholder="Enter admin password"
+                autocomplete="current-password">
+
+            <button
+                type="button"
+                id="toggleClearPassword"
+                aria-label="Show password">
+                <i class="fa-solid fa-eye"></i>
+            </button>
+
+        </div>
+
+        <div class="clear-data-actions">
+
+            <button
+                type="button"
+                class="clear-data-cancel"
+                id="adminPasswordCancel">
+                Cancel
+            </button>
+
+            <button
+                type="button"
+                class="clear-data-confirm"
+                id="adminPasswordSubmit">
+                Verify & Clear
+            </button>
+
+        </div>
+
+        <div
+            id="clearPasswordError"
+            class="clear-password-error">
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= END ADMIN PASSWORD POPUP ================= -->
 
 
 <script src="admin.js"></script>
