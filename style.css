@@ -1,14 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
-
-/* baaki CSS */
 /* ==================================================
    ITI WEBSITE
    MAIN STYLESHEET
-   ================================================== */
-
-
-/* ==================================================
-   BASIC RESET
    ================================================== */
 
 * {
@@ -17,11 +10,9 @@
     box-sizing: border-box;
 }
 
-
 html {
     scroll-behavior: smooth;
 }
-
 
 body {
     margin: 0;
@@ -37,7 +28,6 @@ body {
 
     overflow-x: hidden;
 }
-
 
 /* ==================================================
    TOP CONTACT BAR
@@ -65,7 +55,6 @@ body {
     line-height: 1.4;
 }
 
-
 /* ==================================================
    TOP BAR - LEFT
    ================================================== */
@@ -80,7 +69,6 @@ body {
     min-width: 0;
 }
 
-
 .contact-item {
     display: flex;
 
@@ -91,13 +79,11 @@ body {
     white-space: nowrap;
 }
 
-
 .contact-item i {
     font-size: 12px;
 
     color: #ffffff;
 }
-
 
 /* ==================================================
    TOP BAR - RIGHT
@@ -113,18 +99,15 @@ body {
     min-width: 0;
 }
 
-
 .top-info {
     white-space: nowrap;
 }
-
 
 .separator {
     opacity: 0.65;
 
     user-select: none;
 }
-
 
 /* ==================================================
    SOCIAL ICONS
@@ -154,13 +137,11 @@ body {
         transform 0.2s ease;
 }
 
-
 .social-icon:hover {
     opacity: 0.75;
 
     transform: translateY(-1px);
 }
-
 
 /* ==================================================
    SEARCH BOX
@@ -177,7 +158,6 @@ body {
 
     flex-shrink: 0;
 }
-
 
 .search-box input {
     width: 180px;
@@ -199,11 +179,9 @@ body {
     font-size: 12px;
 }
 
-
 .search-box input::placeholder {
     color: #777777;
 }
-
 
 .search-box button {
     width: 32px;
@@ -231,11 +209,9 @@ body {
     transition: background 0.2s ease;
 }
 
-
 .search-box button:hover {
     background: #083b65;
 }
-
 
 /* ==================================================
    TABLET
@@ -251,23 +227,18 @@ body {
         font-size: 12px;
     }
 
-
     .top-left {
         gap: 10px;
     }
-
 
     .top-right {
         gap: 8px;
     }
 
-
     .search-box input {
         width: 140px;
     }
-
 }
-
 
 /* ==================================================
    MOBILE
@@ -290,7 +261,6 @@ body {
         gap: 7px;
     }
 
-
     /* Left section */
 
     .top-left {
@@ -308,7 +278,6 @@ body {
         gap: 6px 14px;
     }
 
-
     .contact-item {
 
         white-space: normal;
@@ -317,7 +286,6 @@ body {
 
         line-height: 1.4;
     }
-
 
     /* Right section */
 
@@ -336,7 +304,6 @@ body {
         gap: 7px 11px;
     }
 
-
     .top-info {
 
         white-space: normal;
@@ -344,12 +311,10 @@ body {
         text-align: center;
     }
 
-
     .separator {
 
         display: none;
     }
-
 
     /* Social icons */
 
@@ -362,7 +327,6 @@ body {
         font-size: 13px;
     }
 
-
     /* Search */
 
     .search-box {
@@ -373,7 +337,6 @@ body {
 
         margin: 3px 0 0;
     }
-
 
     .search-box input {
 
@@ -386,7 +349,6 @@ body {
         font-size: 13px;
     }
 
-
     .search-box button {
 
         width: 38px;
@@ -395,9 +357,7 @@ body {
 
         font-size: 13px;
     }
-
 }
-
 
 /* ==================================================
    SMALL MOBILE
@@ -412,30 +372,25 @@ body {
         font-size: 11px;
     }
 
-
     .top-left {
 
         gap: 5px 9px;
     }
-
 
     .top-right {
 
         gap: 6px 9px;
     }
 
-
     .contact-item {
 
         gap: 5px;
     }
 
-
     .contact-item i {
 
         font-size: 11px;
     }
-
 
     .search-box input {
 
@@ -466,8 +421,6 @@ body {
     justify-content: space-between;
     gap: 25px;
 }
-
-
 /* ==================================================
    COLLEGE LOGO
    ================================================== */
@@ -493,7 +446,6 @@ body {
     object-fit: contain;
 }
 
-
 /* ==================================================
    INSTITUTE INFORMATION
    ================================================== */
@@ -512,7 +464,6 @@ body {
     letter-spacing: 0;
     line-height: 1.1;
 }
-
 .institute-info h2 {
     margin: 5px 0 5px;
 
@@ -555,7 +506,6 @@ body {
     object-position: center;
 }
 
-
 /* ==================================================
    TABLET
    ================================================== */
@@ -572,11 +522,9 @@ body {
     }
 }
 
-
 /* ==================================================
    MOBILE
    ================================================== */
-
 @media (max-width: 768px) {
 
     .official-logos {
@@ -593,9 +541,8 @@ body {
     }
 }
 
-
 /* ==================================================
-   SMALL MOBILE
+SMALL MOBILE
    ================================================== */
 
 @media (max-width: 480px) {
@@ -611,7 +558,7 @@ body {
 }
 
 /* ==================================================
-   DROPDOWN
+DROPDOWN
    ================================================== */
 
 .nav-dropdown {
@@ -621,7 +568,6 @@ body {
 
     align-items: stretch;
 }
-
 
 .dropdown-menu {
     position: absolute;
@@ -643,7 +589,6 @@ body {
     z-index: 2000;
 }
 
-
 .dropdown-menu a {
     display: block;
 
@@ -664,11 +609,9 @@ body {
     white-space: nowrap;
 }
 
-
 .dropdown-menu a:last-child {
     border-bottom: none;
 }
-
 
 .dropdown-menu a:hover {
     background: #edf6fc;
@@ -676,13 +619,11 @@ body {
     color: #0b6ebf;
 }
 
-
 /* Show dropdown on desktop */
 
 .nav-dropdown:hover .dropdown-menu {
     display: block;
 }
-
 
 /* ==================================================
    TABLET
@@ -704,7 +645,6 @@ body {
 
 }
 
-
 /* ==================================================
    MOBILE NAVIGATION
    ================================================== */
@@ -716,7 +656,6 @@ body {
 
         border-bottom: 2px solid #0a4e86;
     }
-
 
     .nav-container {
 
@@ -733,7 +672,6 @@ body {
         justify-content: flex-start;
     }
 
-
     .nav-link {
 
         width: 100%;
@@ -749,7 +687,6 @@ body {
         border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     }
 
-
     .nav-dropdown {
 
         width: 100%;
@@ -757,12 +694,10 @@ body {
         display: block;
     }
 
-
     .nav-dropdown > .nav-link {
 
         width: 100%;
     }
-
 
     /* Mobile dropdown */
 
@@ -782,7 +717,6 @@ body {
 
     }
 
-
     .dropdown-menu a {
 
         padding: 11px 28px;
@@ -796,13 +730,8 @@ body {
         white-space: normal;
     }
 
-
     /*
-       Temporary mobile behavior:
-       dropdown opens when parent is hovered/focused.
-       We will make a proper mobile menu button
-       with JavaScript in the next functionality stage.
-    */
+    Temporary mobile behavior:*/
 
     .nav-dropdown:hover .dropdown-menu {
 
@@ -811,9 +740,8 @@ body {
 
 }
 
-
 /* ==================================================
-   SMALL MOBILE
+SMALL MOBILE
    ================================================== */
 
 @media (max-width: 480px) {
@@ -821,7 +749,6 @@ body {
     .nav-container {
         padding: 4px 6px;
     }
-
 
     .nav-link {
 
@@ -831,7 +758,6 @@ body {
 
         font-size: 13px;
     }
-
 
     .dropdown-menu a {
 
@@ -870,7 +796,6 @@ body {
         gap: 12px;
     }
 
-
     /* -------------------------------
        COLLEGE LOGO
        ------------------------------- */
@@ -894,7 +819,6 @@ body {
         object-fit: contain;
     }
 
-
     /* -------------------------------
        INSTITUTE INFORMATION
        ------------------------------- */
@@ -909,7 +833,6 @@ body {
 
         text-align: center;
     }
-
 
     .institute-info h1 {
         width: 100%;
@@ -937,9 +860,8 @@ body {
         letter-spacing: 0;
     }
 
-
     /* -------------------------------
-       ADDRESS
+    ADDRESS
        ------------------------------- */
 
     .institute-address {
@@ -959,9 +881,8 @@ body {
         color: #444;
     }
 
-
     /* -------------------------------
-       PHONE + EMAIL
+    PHONE + EMAIL
        ------------------------------- */
 
     .institute-contact {
@@ -985,7 +906,6 @@ body {
         line-height: 1.5;
     }
 
-
     .institute-contact span {
         display: inline-flex;
 
@@ -996,16 +916,13 @@ body {
         white-space: nowrap;
     }
 
-
     .institute-contact i {
         font-size: 13px;
     }
 
-
     .contact-divider {
         display: inline-flex;
     }
-
 
     /* -------------------------------
        ESTABLISHED / AFFILIATION
@@ -1034,11 +951,9 @@ body {
         text-align: center;
     }
 
-
     /* -------------------------------
        OFFICIAL LOGOS
        ------------------------------- */
-
     .official-logos {
 
         width: 100%;
@@ -1058,7 +973,6 @@ body {
         margin-top: 4px;
     }
 
-
     .official-logos img {
 
         width: 90px;
@@ -1074,7 +988,6 @@ body {
 
 }
 
-
 /* ==================================================
    VERY SMALL MOBILE
    ================================================== */
@@ -1087,12 +1000,10 @@ body {
         gap: 10px;
     }
 
-
     .college-logo {
         width: 90px;
         height: 90px;
     }
-
 
     .institute-info h1 {
 
@@ -1100,7 +1011,6 @@ body {
 
         line-height: 1.15;
     }
-
 
     .institute-address {
 
@@ -1111,14 +1021,12 @@ body {
         max-width: 350px;
     }
 
-
     .institute-contact {
 
         font-size: 12px;
 
         gap: 5px 9px;
     }
-
 
     .institute-details {
 
@@ -1127,12 +1035,10 @@ body {
         gap: 4px 7px;
     }
 
-
     .official-logos {
 
         gap: 10px;
     }
-
 
     .official-logos img {
 
@@ -1204,7 +1110,6 @@ body {
     overflow: hidden;
 }
 
-
 /* =========================================================
    LATEST UPDATES BUTTON
    ========================================================= */
@@ -1251,7 +1156,6 @@ body {
 
     white-space: nowrap;
 }
-
 
 /* =========================================================
    TICKER WINDOW
@@ -1300,7 +1204,6 @@ body {
     will-change: transform;
 }
 
-
 /* =========================================================
    EACH SET
    ========================================================= */
@@ -1319,7 +1222,6 @@ body {
     padding-right: 20px;
 }
 
-
 /* =========================================================
    TEXT
    ========================================================= */
@@ -1334,7 +1236,6 @@ body {
     white-space: nowrap;
 }
 
-
 /* =========================================================
    GOLD DOT
    ========================================================= */
@@ -1346,7 +1247,6 @@ body {
 
     margin: 0 20px;
 }
-
 
 /* =========================================================
    SEAMLESS INFINITE ANIMATION
@@ -1364,7 +1264,6 @@ body {
 
 }
 
-
 /* =========================================================
    PAUSE ON HOVER
    ========================================================= */
@@ -1372,7 +1271,6 @@ body {
 .latest-updates-ticker:hover .latest-updates-track {
     animation-play-state: paused;
 }
-
 
 /* =========================================================
    TABLET
@@ -1424,7 +1322,6 @@ body {
     }
 
 }
-
 
 /* =========================================================
    MOBILE
@@ -1478,7 +1375,6 @@ body {
     }
 
 }
-
 
 /* =========================================================
    SMALL MOBILE
@@ -1549,7 +1445,6 @@ body {
     font-family: Arial, sans-serif;
 }
 
-
 /* SLIDES */
 
 .hero-slides {
@@ -1588,7 +1483,6 @@ body {
     visibility: visible;
 }
 
-
 /* IMAGE */
 
 .hero-slide img {
@@ -1601,7 +1495,6 @@ body {
 
     object-position: center;
 }
-
 
 /* =========================================================
    HERO ARROWS
