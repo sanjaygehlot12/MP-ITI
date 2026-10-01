@@ -7266,205 +7266,6 @@ SMALL MOBILE
     }
 
 }
-/* ==================== PAYMENT OPTIONS ==================== */
-
-.payment-options-section {
-    width: 100%;
-    padding: 10px 20px 40px;
-    box-sizing: border-box;
-}
-
-.payment-options-container {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 25px;
-}
-
-.payment-option-card {
-    background: #ffffff;
-    border: 1px solid #d8e4ee;
-    border-radius: 10px;
-    padding: 28px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-}
-
-.payment-option-title {
-    margin: 0 0 10px;
-    text-align: center;
-    color: #07579a;
-    font-size: 26px;
-    font-weight: 700;
-}
-
-.payment-option-title i {
-    margin-right: 7px;
-}
-
-.payment-option-description {
-    text-align: center;
-    color: #555;
-    font-size: 15px;
-    line-height: 1.6;
-    margin-bottom: 20px;
-}
-
-
-/* QR */
-
-.payment-qr {
-    display: flex;
-    justify-content: center;
-    margin: 20px auto;
-}
-
-.payment-qr img {
-    width: 220px;
-    height: 220px;
-    object-fit: contain;
-    padding: 8px;
-    background: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-}
-
-.payment-scan-note {
-    text-align: center;
-    color: #07579a;
-    font-weight: 600;
-    font-size: 15px;
-    margin: 15px 0 25px;
-}
-
-.payment-scan-note i {
-    margin-right: 5px;
-}
-
-
-/* BANK DETAILS */
-
-.bank-details {
-    margin: 20px 0;
-    border: 1px solid #dbe5ed;
-    border-radius: 7px;
-    overflow: hidden;
-}
-
-.bank-detail-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: 15px;
-    padding: 13px 15px;
-    border-bottom: 1px solid #e5ebf0;
-}
-
-.bank-detail-row:last-child {
-    border-bottom: none;
-}
-
-.bank-detail-label {
-    color: #555;
-    font-weight: 600;
-}
-
-.bank-detail-label i {
-    width: 20px;
-    color: #07579a;
-    margin-right: 5px;
-}
-
-.bank-detail-row strong {
-    color: #222;
-    text-align: right;
-    word-break: break-word;
-}
-
-
-/* FORM FIELDS */
-
-.payment-field {
-    margin-bottom: 18px;
-}
-
-.payment-field label {
-    display: block;
-    margin-bottom: 7px;
-    font-weight: 600;
-    color: #333;
-}
-
-.payment-field input[type="text"],
-.payment-field input[type="file"] {
-    width: 100%;
-    padding: 11px 12px;
-    border: 1px solid #cfd8df;
-    border-radius: 5px;
-    font-size: 14px;
-    box-sizing: border-box;
-}
-
-.payment-field input:focus {
-    outline: none;
-    border-color: #07579a;
-}
-
-
-/* INFO */
-
-.bank-payment-note {
-    padding: 12px 15px;
-    margin: 20px 0;
-    background: #f1f7fc;
-    border-left: 4px solid #07579a;
-    color: #444;
-    font-size: 14px;
-    line-height: 1.6;
-}
-
-.bank-payment-note i {
-    color: #07579a;
-    margin-right: 5px;
-}
-
-
-/* MOBILE */
-
-@media (max-width: 768px) {
-
-    .payment-options-section {
-        padding: 10px 12px 30px;
-    }
-
-    .payment-options-container {
-        grid-template-columns: 1fr;
-        gap: 20px;
-    }
-
-    .payment-option-card {
-        padding: 20px 15px;
-    }
-
-    .payment-option-title {
-        font-size: 23px;
-    }
-
-    .payment-qr img {
-        width: 200px;
-        height: 200px;
-    }
-
-    .bank-detail-row {
-        align-items: flex-start;
-        flex-direction: column;
-        gap: 5px;
-    }
-
-    .bank-detail-row strong {
-        text-align: left;
-    }
-}
 /* =========================================================
    BUILDING & WORKSHOPS PAGE
    ========================================================= */
@@ -13570,3 +13371,415 @@ SMALL MOBILE
     }
 
 }
+/* =========================================================
+   ADMISSION PAYMENT MODAL
+========================================================= */
+
+.payment-modal-overlay {
+    position: fixed;
+    inset: 0;
+
+    width: 100%;
+    height: 100%;
+
+    background: rgba(7, 31, 58, 0.55);
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+
+    box-sizing: border-box;
+
+    z-index: 999999;
+}
+
+
+.payment-modal-overlay.active {
+    display: flex;
+}
+
+
+/* ================= MODAL ================= */
+
+.payment-modal {
+    position: relative;
+
+    width: 100%;
+    max-width: 430px;
+
+    background: #ffffff;
+
+    border-radius: 16px;
+
+    padding: 32px 28px 26px;
+
+    box-sizing: border-box;
+
+    text-align: center;
+
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.20);
+
+    animation: paymentModalIn 0.22s ease;
+}
+
+
+@keyframes paymentModalIn {
+
+    from {
+        opacity: 0;
+        transform: translateY(15px) scale(0.97);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+}
+
+
+/* ================= CLOSE ================= */
+
+.payment-modal-close {
+    position: absolute;
+
+    top: 12px;
+    right: 12px;
+
+    width: 34px;
+    height: 34px;
+
+    border: none;
+
+    border-radius: 50%;
+
+    background: #f1f5f9;
+
+    color: #475569;
+
+    font-size: 22px;
+
+    line-height: 1;
+
+    cursor: pointer;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+
+.payment-modal-close:hover {
+    background: #e2e8f0;
+}
+
+
+/* ================= ICON ================= */
+
+.payment-modal-icon {
+    width: 62px;
+    height: 62px;
+
+    margin: 0 auto 14px;
+
+    border-radius: 50%;
+
+    background: #eaf4ff;
+
+    color: #07579a;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 25px;
+}
+
+
+/* ================= LABEL ================= */
+
+.payment-modal-label {
+    display: inline-block;
+
+    margin-bottom: 7px;
+
+    font-size: 10px;
+
+    font-weight: 700;
+
+    letter-spacing: 1px;
+
+    color: #07579a;
+}
+
+
+/* ================= HEADING ================= */
+
+.payment-modal h2 {
+    margin: 0 0 10px;
+
+    color: #0b1f3a;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 24px;
+
+    font-weight: 700;
+}
+
+
+.payment-modal-description {
+    margin: 0 auto 22px;
+
+    max-width: 350px;
+
+    color: #64748b;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 13px;
+
+    line-height: 1.6;
+}
+
+
+/* ================= PAYMENT METHOD ================= */
+
+.payment-method-card {
+    width: 100%;
+
+    min-height: 76px;
+
+    padding: 12px 14px;
+
+    display: flex;
+
+    align-items: center;
+
+    gap: 13px;
+
+    border: 1px solid #dbe7f2;
+
+    border-radius: 11px;
+
+    background: #f8fbff;
+
+    text-align: left;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        border-color 0.2s ease,
+        transform 0.2s ease;
+}
+
+
+.payment-method-card:hover {
+    background: #f0f7ff;
+
+    border-color: #07579a;
+
+    transform: translateY(-1px);
+}
+
+
+/* ================= METHOD ICON ================= */
+
+.payment-method-icon {
+    width: 44px;
+    height: 44px;
+
+    flex: 0 0 44px;
+
+    border-radius: 9px;
+
+    background: #07579a;
+
+    color: #ffffff;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 18px;
+}
+
+
+/* ================= METHOD CONTENT ================= */
+
+.payment-method-content {
+    min-width: 0;
+
+    flex: 1;
+
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 4px;
+}
+
+
+.payment-method-content strong {
+    color: #0b1f3a;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 14px;
+
+    font-weight: 700;
+}
+
+
+.payment-method-content span {
+    color: #64748b;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 11px;
+}
+
+
+/* ================= ARROW ================= */
+
+.payment-method-arrow {
+    color: #07579a;
+
+    font-size: 14px;
+}
+
+
+/* ================= SECURE NOTE ================= */
+
+.payment-secure-note {
+    margin-top: 16px;
+
+    display: flex;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 7px;
+
+    color: #64748b;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 11px;
+}
+
+
+.payment-secure-note i {
+    color: #16803c;
+}
+
+
+/* ================= CANCEL ================= */
+
+.payment-cancel-btn {
+    width: 100%;
+
+    min-height: 42px;
+
+    margin-top: 17px;
+
+    border: none;
+
+    border-radius: 7px;
+
+    background: #eef2f6;
+
+    color: #475569;
+
+    font-family: Arial, sans-serif;
+
+    font-size: 13px;
+
+    font-weight: 600;
+
+    cursor: pointer;
+}
+
+
+.payment-cancel-btn:hover {
+    background: #e2e8f0;
+}
+
+
+/* =========================================================
+   MOBILE
+========================================================= */
+
+@media (max-width: 480px) {
+
+    .payment-modal-overlay {
+        padding: 15px;
+    }
+
+
+    .payment-modal {
+        max-width: 100%;
+
+        padding: 29px 19px 21px;
+
+        border-radius: 14px;
+    }
+
+
+    .payment-modal-icon {
+        width: 55px;
+        height: 55px;
+
+        font-size: 22px;
+    }
+
+
+    .payment-modal h2 {
+        font-size: 21px;
+    }
+
+
+    .payment-modal-description {
+        font-size: 12px;
+
+        line-height: 1.55;
+
+        margin-bottom: 19px;
+    }
+
+
+    .payment-method-card {
+        min-height: 70px;
+
+        padding: 10px 11px;
+
+        gap: 10px;
+    }
+
+
+    .payment-method-icon {
+        width: 40px;
+        height: 40px;
+
+        flex-basis: 40px;
+
+        font-size: 16px;
+    }
+
+
+    .payment-method-content strong {
+        font-size: 13px;
+    }
+
+
+    .payment-method-content span {
+        font-size: 10px;
+    }
+
+}
+

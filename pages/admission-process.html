@@ -1203,7 +1203,6 @@
 
     </div>
 
-
     <!-- UPLOAD ALL -->
     <button type="button" class="upload-all-btn" id="uploadAllBtn">
         <i class="fa-solid fa-cloud-arrow-up"></i>
@@ -1213,8 +1212,6 @@
     <div id="uploadStatus" class="upload-status"></div>
 
 </section>
-
-
             <!-- PAYMENT -->
 
             <div class="admission-form-section">
@@ -1250,23 +1247,16 @@
                         </div>
 
                     </div>
-
-
                     <button
-                        type="button"
-                        class="admission-pay-button"
-                        onclick="openPaymentPopup()"
-                    >
+    type="button"
+    class="admission-pay-button"
+   onclick="document.getElementById('paymentModal').classList.add('active')">
 
-                        <i class="fa-solid fa-credit-card"></i>
+    <i class="fa-solid fa-credit-card"></i>
+    Pay Admission Fee
 
-                        Pay Admission Fee
-
-                    </button>
-
-
-                </div>
-
+</button>
+    </div>
 
                 <p class="payment-information">
 
@@ -1308,151 +1298,92 @@
         </form>
 
     </section>
-    
-<!-- ==================== PAYMENT OPTIONS ==================== -->
-<section class="payment-options-section">
+    <!-- ================= PAYMENT MODAL ================= -->
 
-    <div class="payment-options-container">
+<div class="payment-modal-overlay" id="paymentModal">
 
-        <!-- LEFT : SCAN & PAY -->
-        <div class="payment-option-card">
+    <div class="payment-modal">
 
-            <h2 class="payment-option-title">
-                <i class="fa-solid fa-qrcode"></i>
-                Scan & Pay
-            </h2>
+        <!-- Close -->
+        <button
+    type="button"
+    class="payment-modal-close"
+    onclick="document.getElementById('paymentModal').classList.remove('active')"
+    aria-label="Close payment">
+    &times;
+</button>
 
-            <p class="payment-option-description">
-                Admission Fee जमा करने के लिए नीचे दिए गए QR Code को
-                अपने UPI App से Scan करें।
-            </p>
 
-            <div class="payment-qr">
-                <img src="../images/payment-qr.jpg"
-                     alt="Admission Fee Payment QR Code">
+        <!-- Icon -->
+        <div class="payment-modal-icon">
+            <i class="fa-solid fa-credit-card"></i>
+        </div>
+
+
+        <span class="payment-modal-label">
+            SECURE PAYMENT
+        </span>
+
+
+        <h2>Pay Admission Fee</h2>
+
+        <p class="payment-modal-description">
+            Select your preferred payment method to continue
+            with the admission fee payment.
+        </p>
+
+
+        <!-- Payment Option -->
+
+        <button
+            type="button"
+            class="payment-method-card"
+            id="razorpayOption">
+
+            <div class="payment-method-icon">
+                <i class="fa-solid fa-indian-rupee-sign"></i>
             </div>
 
-            <p class="payment-scan-note">
-                <i class="fa-solid fa-mobile-screen-button"></i>
-                Scan the QR Code to Pay Admission Fee
-            </p>
+            <div class="payment-method-content">
+                <strong>Online Payment</strong>
 
-            <div class="payment-field">
-                <label for="scanTransactionId">
-                    Transaction ID / UTR Number
-                </label>
-
-                <input type="text"
-                       id="scanTransactionId"
-                       name="scanTransactionId"
-                       placeholder="Enter Transaction ID / UTR Number">
+                <span>
+                    Pay securely using Razorpay
+                </span>
             </div>
 
-            <div class="payment-field">
-                <label for="scanPaymentScreenshot">
-                    Payment Screenshot
-                </label>
+            <i class="fa-solid fa-chevron-right payment-method-arrow"></i>
 
-                <input type="file"
-                       id="scanPaymentScreenshot"
-                       name="scanPaymentScreenshot"
-                       accept=".jpg,.jpeg,.png">
-            </div>
+        </button>
+
+
+        <!-- Secure note -->
+
+        <div class="payment-secure-note">
+
+            <i class="fa-solid fa-shield-halved"></i>
+
+            <span>
+                Secure payment gateway
+            </span>
 
         </div>
 
 
-        <!-- RIGHT : PAY TO BANK -->
-        <div class="payment-option-card">
+        <button
+    type="button"
+    class="payment-cancel-btn"
+    onclick="document.getElementById('paymentModal').classList.remove('active')">
 
-            <h2 class="payment-option-title">
-                <i class="fa-solid fa-building-columns"></i>
-                Pay to Bank
-            </h2>
+    Cancel
 
-            <p class="payment-option-description">
-                आप Admission Fee सीधे Institute के Bank Account में
-                भी जमा कर सकते हैं।
-            </p>
-
-            <div class="bank-details">
-
-                <div class="bank-detail-row">
-                    <span class="bank-detail-label">
-                        <i class="fa-solid fa-building-columns"></i>
-                        Bank Name
-                    </span>
-                    <strong>YOUR BANK NAME</strong>
-                </div>
-
-                <div class="bank-detail-row">
-                    <span class="bank-detail-label">
-                        <i class="fa-solid fa-user"></i>
-                        Account Name
-                    </span>
-                    <strong>MAHARANA PRATAP PVT ITI SEHORE</strong>
-                </div>
-
-                <div class="bank-detail-row">
-                    <span class="bank-detail-label">
-                        <i class="fa-solid fa-credit-card"></i>
-                        Account Number
-                    </span>
-                    <strong>XXXXXXXXXXXX</strong>
-                </div>
-
-                <div class="bank-detail-row">
-                    <span class="bank-detail-label">
-                        <i class="fa-solid fa-code-branch"></i>
-                        IFSC Code
-                    </span>
-                    <strong>XXXXXXXXXXX</strong>
-                </div>
-
-                <div class="bank-detail-row">
-                    <span class="bank-detail-label">
-                        <i class="fa-solid fa-location-dot"></i>
-                        Branch
-                    </span>
-                    <strong>YOUR BRANCH</strong>
-                </div>
-
-            </div>
-
-            <div class="bank-payment-note">
-                <i class="fa-solid fa-circle-info"></i>
-                Bank में payment करने के बाद Transaction ID / UTR
-                Number और Payment Screenshot जरूर दर्ज करें।
-            </div>
-
-            <div class="payment-field">
-                <label for="bankTransactionId">
-                    Transaction ID / UTR Number
-                </label>
-
-                <input type="text"
-                       id="bankTransactionId"
-                       name="bankTransactionId"
-                       placeholder="Enter Transaction ID / UTR Number">
-            </div>
-
-            <div class="payment-field">
-                <label for="bankPaymentScreenshot">
-                    Payment Screenshot
-                </label>
-
-                <input type="file"
-                       id="bankPaymentScreenshot"
-                       name="bankPaymentScreenshot"
-                       accept=".jpg,.jpeg,.png">
-            </div>
-
-        </div>
+</button>
 
     </div>
 
-</section>
-<!-- ==================== END PAYMENT OPTIONS ==================== -->
+</div>
+
+<!-- ================= END PAYMENT MODAL ================= -->
 
 </main>
 
@@ -1768,32 +1699,6 @@
 <script src="../script.js"></script>
 
 
-<script>
-
-function showPaymentMessage() {
-
-    alert(
-        "Online payment gateway will be connected soon."
-    );
-
-}
-
-
-document
-    .getElementById("admissionForm")
-    .addEventListener("submit", function(event) {
-
-        event.preventDefault();
-
-        alert(
-            "Admission form frontend is ready. " +
-            "Database, document upload and payment gateway " +
-            "will be connected later."
-        );
-
-    });
-
-</script>
  <!-- Floating WhatsApp Button -->
 
 <a

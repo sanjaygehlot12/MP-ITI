@@ -3049,3 +3049,106 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
+/* =========================================================
+   ADMISSION PAYMENT MODAL
+========================================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const paymentModal = document.getElementById("paymentModal");
+    const closeButton = document.getElementById("paymentModalClose");
+    const cancelButton = document.getElementById("paymentModalCancel");
+    const razorpayButton = document.getElementById("razorpayOption");
+
+    if (!paymentModal) {
+        return;
+    }
+
+    /* OPEN MODAL */
+    window.openPaymentModal = function () {
+
+        paymentModal.classList.add("active");
+
+        document.body.style.overflow = "hidden";
+    };
+
+
+    /* CLOSE MODAL */
+    function closePaymentModal() {
+
+        paymentModal.classList.remove("active");
+
+        document.body.style.overflow = "";
+    }
+
+
+    /* CLOSE BUTTON */
+    if (closeButton) {
+
+        closeButton.addEventListener(
+            "click",
+            closePaymentModal
+        );
+    }
+
+
+    /* CANCEL BUTTON */
+    if (cancelButton) {
+
+        cancelButton.addEventListener(
+            "click",
+            closePaymentModal
+        );
+    }
+
+
+    /* CLICK OUTSIDE */
+    paymentModal.addEventListener(
+        "click",
+        function (event) {
+
+            if (event.target === paymentModal) {
+
+                closePaymentModal();
+
+            }
+
+        }
+    );
+
+
+    /* ESC KEY */
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key === "Escape" &&
+                paymentModal.classList.contains("active")
+            ) {
+
+                closePaymentModal();
+
+            }
+
+        }
+    );
+
+
+    /* RAZORPAY - TEMPORARY */
+    if (razorpayButton) {
+
+        razorpayButton.addEventListener(
+            "click",
+            function () {
+
+                alert(
+                    "Razorpay integration will be connected next."
+                );
+
+            }
+        );
+
+    }
+
+});

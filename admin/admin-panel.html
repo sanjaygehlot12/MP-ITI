@@ -20,7 +20,7 @@
         href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
     >
 
-    <link rel="stylesheet" href="admin.css">
+    <link rel="stylesheet" href="admin.css?v=1">
 
 </head>
 
@@ -727,7 +727,91 @@
 </div>
 
 <!-- ================= END ADMIN PASSWORD POPUP ================= -->
+<!-- =====================================================
+     ENQUIRY MESSAGE MODAL
+     ===================================================== -->
 
+<div class="enquiry-view-overlay" id="enquiryViewOverlay">
+
+    <div class="enquiry-view-modal">
+
+        <div class="enquiry-view-header">
+
+            <div class="enquiry-view-title">
+                <div class="enquiry-view-icon">
+                    <i class="fa-regular fa-message"></i>
+                </div>
+
+                <div>
+                    <span>CONTACT ENQUIRY</span>
+                    <h3>Enquiry Message</h3>
+                </div>
+            </div>
+
+            <button
+                type="button"
+                class="enquiry-view-close"
+                id="enquiryViewClose"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+
+        </div>
+
+
+        <div class="enquiry-view-body">
+
+            <div class="enquiry-view-info">
+
+                <div>
+                    <small>FROM</small>
+                    <strong id="enquiryViewName">—</strong>
+                </div>
+
+                <div>
+                    <small>SUBJECT</small>
+                    <strong id="enquiryViewSubject">—</strong>
+                </div>
+
+            </div>
+
+
+            <div class="enquiry-view-message-box">
+
+                <div class="enquiry-view-message-label">
+                    <i class="fa-regular fa-message"></i>
+                    Message
+                </div>
+
+                <div
+                    class="enquiry-view-message"
+                    id="enquiryViewMessage"
+                >
+                    —
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="enquiry-view-footer">
+
+            <button
+                type="button"
+                class="enquiry-view-close-btn"
+                id="enquiryViewCloseBtn"
+            >
+                Close
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- ================= END ENQUIRY MESSAGE MODAL ================= -->
 
 <script src="admin.js"></script>
 

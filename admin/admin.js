@@ -185,40 +185,6 @@
             document.getElementById(
                 "loginMessage"
             );
-
-
-        /* =================================================
-           CHECK EXISTING SESSION
-           ================================================= */
-
-        supabaseClient.auth
-            .getSession()
-            .then(async function (result) {
-
-                const session =
-                    result.data.session;
-
-
-                if (!session) {
-                    return;
-                }
-
-
-                const isAdmin =
-                    await verifyAdminUser(
-                        session.user.id
-                    );
-
-
-                if (isAdmin) {
-
-                    window.location.href =
-                        "admin-panel.html";
-                }
-
-            });
-
-
         /* =================================================
            PASSWORD SHOW / HIDE
            ================================================= */
@@ -419,7 +385,45 @@
        ===================================================== */
 
     function initializeDashboard() {
+        /* =====================================================
+   ADMIN SESSION CHECK
+   ===================================================== */
 
+supabaseClient.auth.getSession()
+    .then(async function (result) {
+
+        const session = result.data.session;
+
+        /* No login session */
+        if (!session) {
+
+            window.location.replace("admin-login.html");
+            return;
+        }
+
+        /* Check whether user is admin */
+        const isAdmin =
+            await verifyAdminUser(session.user.id);
+
+        if (!isAdmin) {
+
+            await supabaseClient.auth.signOut();
+
+            window.location.replace("admin-login.html");
+            return;
+        }
+
+    })
+    .catch(function (error) {
+
+        console.error(
+            "Admin session check error:",
+            error
+        );
+
+        window.location.replace("admin-login.html");
+
+    });
         const sidebar =
             document.getElementById(
                 "adminSidebar"
@@ -1186,118 +1190,116 @@
 
     }
 
+/* =====================================================
+   CREATE ENQUIRY TABLE
+   ===================================================== */
 
+function createEnquiryTable(data) {
 
-    /* =====================================================
-       CREATE ENQUIRY TABLE
-       ===================================================== */
-
-    function createEnquiryTable(
-        data
-    ) {
-
-        if (
-            !data ||
-            data.length === 0
-        ) {
-
-            return `
-
-                <div class="empty-state">
-
-                    <i class="fa-regular fa-folder-open"></i>
-
-                    <br>
-
-                    No enquiries yet.
-
-                </div>
-
-            `;
-        }
-
-
-        let rows = "";
-
-
-        data.forEach(
-            function (item) {
-
-                rows += `
-
-                    <tr>
-
-                        <td>
-                            ${escapeHTML(item.name)}
-                        </td>
-
-                        <td>
-                            ${escapeHTML(item.mobile)}
-                        </td>
-
-                        <td>
-                            ${escapeHTML(item.email)}
-                        </td>
-
-                        <td>
-                            ${escapeHTML(item.subject)}
-                        </td>
-
-                        <td>
-                            ${escapeHTML(item.status)}
-                        </td>
-
-                        <td>
-                            ${escapeHTML(
-                                formatDate(item.created_at)
-                            )}
-                        </td>
-
-                    </tr>
-
-                `;
-
-            }
-        );
-
+    if (!data || data.length === 0) {
 
         return `
-
-            <div style="overflow-x:auto;">
-
-                <table class="data-table">
-
-                    <thead>
-
-                        <tr>
-
-                            <th>Name</th>
-                            <th>Mobile</th>
-                            <th>Email</th>
-                            <th>Subject</th>
-                            <th>Status</th>
-                            <th>Date</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                        ${rows}
-
-                    </tbody>
-
-                </table>
-
+            <div class="empty-state">
+                <i class="fa-regular fa-folder-open"></i>
+                <br>
+                No enquiries yet.
             </div>
+        `;
+    }
+
+    let rows = "";
+
+    data.forEach(function (item, index) {
+
+        const message = item.message || "No message";
+
+        rows += `
+
+            <tr>
+
+                <td>
+                    ${escapeHTML(item.name || "")}
+                </td>
+
+                <td>
+                    ${escapeHTML(item.mobile || "")}
+                </td>
+
+                <td>
+                    ${escapeHTML(item.email || "")}
+                </td>
+
+                <td>
+                    ${escapeHTML(item.subject || "")}
+                </td>
+
+                <td>
+    <button
+        type="button"
+        class="view-message-btn"
+        data-message-index="${index}"
+    >
+        <i class="fa-regular fa-message"></i>
+        View Message
+    </button>
+</td>
+
+                <td>
+                    ${escapeHTML(item.status || "")}
+                </td>
+
+                <td>
+                    ${escapeHTML(
+                        formatDate(item.created_at)
+                    )}
+                </td>
+
+            </tr>
 
         `;
 
-    }
+    });
 
 
+    /* Store enquiries for View Message button */
 
+    window.currentEnquiries = data;
+
+
+    return `
+
+        <div style="overflow-x:auto;">
+
+            <table class="data-table">
+
+                <thead>
+
+                    <tr>
+
+                        <th>Name</th>
+                        <th>Mobile</th>
+                        <th>Email</th>
+                        <th>Subject</th>
+                        <th>Message</th>
+                        <th>Status</th>
+                        <th>Date</th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody>
+
+                    ${rows}
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    `;
+}
     /* =====================================================
        CREATE FEEDBACK TABLE
        ===================================================== */
@@ -2276,3 +2278,142 @@ document.addEventListener(
 );
 
 })();
+/* =====================================================
+   VIEW ENQUIRY MESSAGE MODAL
+   ===================================================== */
+
+document.addEventListener("click", function (event) {
+
+    const button = event.target.closest(".view-message-btn");
+
+    if (!button) {
+        return;
+    }
+
+    const index = Number(
+        button.getAttribute("data-message-index")
+    );
+
+    const enquiry = window.currentEnquiries?.[index];
+
+    if (!enquiry) {
+        alert("Enquiry message not found.");
+        return;
+    }
+
+    const overlay =
+        document.getElementById("enquiryViewOverlay");
+
+    const name =
+        document.getElementById("enquiryViewName");
+
+    const subject =
+        document.getElementById("enquiryViewSubject");
+
+    const message =
+        document.getElementById("enquiryViewMessage");
+
+    if (!overlay || !name || !subject || !message) {
+
+        console.error(
+            "Enquiry modal elements not found."
+        );
+
+        return;
+    }
+
+    /* Fill enquiry details */
+
+    name.textContent =
+        enquiry.name || "Unknown";
+
+    subject.textContent =
+        enquiry.subject || "General Enquiry";
+
+    message.textContent =
+        enquiry.message || "No message available.";
+
+    /* Open modal */
+
+    overlay.style.display = "flex";
+
+    document.body.style.overflow = "hidden";
+
+});
+
+
+/* =====================================================
+   CLOSE ENQUIRY MESSAGE MODAL
+   ===================================================== */
+
+document.addEventListener("click", function (event) {
+
+    if (
+        event.target.closest("#enquiryViewClose") ||
+        event.target.closest("#enquiryViewCloseBtn")
+    ) {
+
+        const overlay =
+            document.getElementById("enquiryViewOverlay");
+
+        if (overlay) {
+
+            overlay.style.display = "none";
+
+        }
+
+        document.body.style.overflow = "";
+
+    }
+
+});
+
+
+/* =====================================================
+   CLOSE WHEN CLICKING OUTSIDE
+   ===================================================== */
+
+document.addEventListener("click", function (event) {
+
+    const overlay =
+        document.getElementById("enquiryViewOverlay");
+
+    if (
+        overlay &&
+        event.target === overlay
+    ) {
+
+        overlay.style.display = "none";
+
+        document.body.style.overflow = "";
+
+    }
+
+});
+
+
+/* =====================================================
+   CLOSE WITH ESC
+   ===================================================== */
+
+document.addEventListener("keydown", function (event) {
+
+    if (event.key !== "Escape") {
+        return;
+    }
+
+    const overlay =
+        document.getElementById("enquiryViewOverlay");
+
+    if (
+        overlay &&
+        overlay.style.display === "flex"
+    ) {
+
+        overlay.style.display = "none";
+
+        document.body.style.overflow = "";
+
+    }
+
+});
