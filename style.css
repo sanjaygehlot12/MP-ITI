@@ -12787,263 +12787,6 @@ SMALL MOBILE
 }
 
 /* =========================================================
-   WEBSITE UNDER WORKING POPUP
-========================================================= */
-
-.uw-overlay {
-    position: fixed;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    background: rgba(0, 0, 0, 0.55);
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    padding: 20px;
-    box-sizing: border-box;
-
-    z-index: 999999;
-}
-
-.uw-popup {
-    position: relative;
-
-    width: 100%;
-    max-width: 470px;
-
-    padding: 32px 30px 28px;
-
-    background: #ffffff;
-    border-radius: 15px;
-
-    text-align: center;
-
-    box-sizing: border-box;
-
-    box-shadow: 0 18px 55px rgba(0, 0, 0, 0.25);
-}
-
-.uw-close {
-    position: absolute;
-    top: 10px;
-    right: 12px;
-
-    width: 34px;
-    height: 34px;
-
-    border: none;
-    background: transparent;
-
-    color: #555;
-    font-size: 25px;
-    line-height: 1;
-
-    cursor: pointer;
-
-    z-index: 5;
-
-    -webkit-tap-highlight-color: transparent;
-}
-
-.uw-close:hover {
-    color: #07579a;
-}
-
-.uw-icon {
-    width: 62px;
-    height: 62px;
-
-    margin: 0 auto 14px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    border-radius: 50%;
-
-    background: #edf5fb;
-    color: #07579a;
-
-    font-size: 25px;
-}
-
-.uw-label {
-    display: inline-block;
-
-    margin-bottom: 8px;
-
-    color: #c99a3d;
-
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1px;
-}
-
-.uw-popup h2 {
-    margin: 0 0 12px;
-
-    color: #0b1f3a;
-
-    font-family: Arial, sans-serif;
-    font-size: 25px;
-    font-weight: 700;
-    line-height: 1.25;
-}
-
-.uw-popup > p {
-    margin: 0 0 18px;
-
-    color: #5f6872;
-
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    line-height: 1.65;
-}
-
-.uw-note {
-    display: flex;
-    align-items: flex-start;
-    gap: 9px;
-
-    margin-bottom: 20px;
-    padding: 11px 12px;
-
-    border: 1px solid #e5eaf0;
-    border-radius: 8px;
-
-    background: #f7f9fb;
-
-    color: #626b75;
-
-    font-family: Arial, sans-serif;
-    font-size: 12px;
-    line-height: 1.5;
-
-    text-align: left;
-}
-
-.uw-note i {
-    flex-shrink: 0;
-    margin-top: 2px;
-
-    color: #c99a3d;
-}
-
-.uw-continue {
-    width: 100%;
-    min-height: 46px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 9px;
-
-    border: none;
-    border-radius: 7px;
-
-    background: #07579a;
-    color: #ffffff;
-
-    font-family: Arial, sans-serif;
-    font-size: 14px;
-    font-weight: 600;
-
-    cursor: pointer;
-
-    touch-action: manipulation;
-    -webkit-tap-highlight-color: transparent;
-}
-
-.uw-continue:hover {
-    background: #064477;
-}
-
-.uw-continue:active {
-    transform: scale(0.99);
-}
-
-
-/* =========================================================
-   MOBILE
-========================================================= */
-
-@media (max-width: 768px) {
-
-    .uw-overlay {
-        padding: 16px;
-    }
-
-    .uw-popup {
-        max-width: 360px;
-        padding: 30px 20px 24px;
-    }
-
-    .uw-icon {
-        width: 56px;
-        height: 56px;
-        font-size: 23px;
-        margin-bottom: 13px;
-    }
-
-    .uw-label {
-        font-size: 10px;
-    }
-
-    .uw-popup h2 {
-        font-size: 22px;
-        margin-bottom: 10px;
-    }
-
-    .uw-popup > p {
-        font-size: 13px;
-        line-height: 1.55;
-        margin-bottom: 16px;
-    }
-
-    .uw-note {
-        margin-bottom: 19px;
-        padding: 10px;
-        font-size: 11px;
-    }
-
-    .uw-continue {
-        min-height: 46px;
-        font-size: 13px;
-    }
-}
-
-
-/* =========================================================
-   SMALL MOBILE
-========================================================= */
-
-@media (max-width: 380px) {
-
-    .uw-overlay {
-        padding: 12px;
-    }
-
-    .uw-popup {
-        max-width: 100%;
-        padding: 27px 17px 22px;
-    }
-
-    .uw-popup h2 {
-        font-size: 20px;
-    }
-
-    .uw-popup > p {
-        font-size: 12px;
-    }
-}
-@media (max-width: 1024px) {
-    .official-logos {
-        display: none !important;
-    }
-}
-/* =========================================================
    HEADER - FINAL CSS
    Original desktop design + new affiliation section
 ========================================================= */
@@ -13783,3 +13526,58 @@ SMALL MOBILE
 
 }
 
+/* ================================
+   FLOATING APPLY NOW
+================================ */
+
+.floating-apply-btn {
+    position: fixed;
+
+    right: 22px;
+    bottom: 110px;
+
+    width: 54px;
+    height: 54px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    background: #f5b800;
+    color: #ffffff;
+
+    border-radius: 50%;
+
+    text-decoration: none;
+
+    font-size: 19px;
+
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.20);
+
+    z-index: 9998;
+
+    transition: all 0.3s ease;
+}
+
+.floating-apply-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    background: #d99f00;
+    color: #ffffff;
+}
+
+
+/* MOBILE */
+
+@media (max-width: 768px) {
+
+    .floating-apply-btn {
+        right: 15px;
+        bottom: 110px;
+
+        width: 49px;
+        height: 49px;
+
+        font-size: 17px;
+    }
+
+}
