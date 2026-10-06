@@ -961,7 +961,7 @@ SMALL MOBILE
 }
 
 .latest-updates-title i {
-    font-size: 16px;
+    font-size: 14px;
 
     color: #c99a3d;
 
@@ -1431,7 +1431,7 @@ SMALL MOBILE
     .latest-updates-title {
         padding: 0 20px;
 
-        font-size: 16px;
+        font-size: 14px;
     }
 
 
@@ -12881,7 +12881,7 @@ SMALL MOBILE
     align-items: center;
     justify-content: center;
 
-    gap: 24px;
+    gap: 28px;
 
     flex-shrink: 0;
 }
@@ -14119,4 +14119,20 @@ body {
 #main-content {
     overflow: visible !important;
     transform: none !important;
+}
+.latest-updates-track a {
+    color: #ffffff;
+    text-decoration: none;
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+.latest-updates-track a:hover {
+    text-decoration: underline;
+}
+.latest-updates-track .update-dot {
+    color: #c99a3d;
+    font-size: 20px;
+    margin: 0 20px;
+    display: inline-block;
 }
