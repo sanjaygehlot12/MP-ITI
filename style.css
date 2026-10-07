@@ -2782,6 +2782,73 @@ SMALL MOBILE
     }
 
 }
+/* =========================================================
+   TABLET LANDSCAPE - HIGHLIGHTS FIX
+   ========================================================= */
+
+@media (min-width: 769px)
+       and (max-width: 1400px)
+       and (orientation: landscape)
+       and (pointer: coarse) {
+
+    .highlights-section {
+        padding: 45px 0 35px;
+    }
+
+    .highlights-heading {
+        margin-bottom: 25px;
+    }
+
+    .highlights-heading h2 {
+        font-size: 36px;
+    }
+
+    .highlights-heading p {
+        font-size: 15px;
+    }
+
+    .highlights-grid {
+        width: 90%;
+        max-width: 1100px;
+
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 18px;
+    }
+
+    .highlight-card {
+        min-height: 170px;
+        padding: 22px 24px;
+
+        box-sizing: border-box;
+    }
+
+    .highlight-icon {
+        width: 70px;
+        height: 70px;
+        flex: 0 0 70px;
+
+        margin-right: 18px;
+
+        font-size: 30px;
+    }
+
+    .highlight-number {
+        font-size: 36px;
+    }
+
+    .highlight-content h3 {
+        font-size: 18px;
+    }
+
+    .highlight-content p {
+        font-size: 13px;
+    }
+
+    .card-dots {
+        right: 18px;
+    }
+}
+
   /* =========================================================
    WHAT'S NEW / LATEST UPDATES
    ========================================================= */
@@ -2794,8 +2861,6 @@ SMALL MOBILE
 
     font-family: Arial, sans-serif;
 }
-
-
 /* ================= HEADER ================= */
 
 .whats-new-header {
@@ -15323,4 +15388,148 @@ body {
 
 .top-bar .contact-item:hover a {
     color: #7ec8ff;
+}
+/* =========================================================
+   FLOATING APPLY NOW BUTTON
+   ========================================================= */
+
+.floating-apply-btn {
+    position: fixed;
+
+    right: 24px;
+    bottom: 110px;
+
+    z-index: 9998;
+
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    gap: 8px;
+
+    min-width: 130px;
+    height: 44px;
+
+    padding: 0 22px;
+
+    border-radius: 18px;
+
+    color: #ffffff;
+    text-decoration: none;
+
+    font-size: 16px;
+    font-weight: 650;
+    letter-spacing: 0.2px;
+
+    background: #ed1c24;
+
+    box-shadow:
+        0 8px 25px rgba(0, 0, 0, 0.22),
+        0 0 0 rgba(237, 28, 36, 0.5);
+
+    overflow: hidden;
+
+    animation: applySmoothFade 3s ease-in-out infinite;
+
+    transition:
+        transform 0.3s ease,
+        box-shadow 0.3s ease;
+}
+
+
+/* ICON */
+
+.floating-apply-btn i {
+    font-size: 18px;
+    transition: transform 0.3s ease;
+}
+
+
+/* HOVER */
+
+.floating-apply-btn:hover {
+    color: #ffffff;
+    text-decoration: none;
+
+    transform: translateY(-4px) scale(1.03);
+
+    box-shadow:
+        0 12px 30px rgba(0, 0, 0, 0.28),
+        0 0 20px rgba(255, 193, 7, 0.45);
+}
+
+.floating-apply-btn:hover i {
+    transform: translateY(-2px) rotate(-5deg);
+}
+
+@keyframes applySmoothFade {
+
+    0% {
+        background: #ed1c24;
+        box-shadow:
+            0 8px 25px rgba(0, 0, 0, 0.22),
+            0 0 0 rgba(237, 28, 36, 0);
+    }
+
+    50% {
+        background: #ffc107;
+        box-shadow:
+            0 8px 25px rgba(0, 0, 0, 0.22),
+            0 0 20px rgba(255, 193, 7, 0.45);
+    }
+
+    100% {
+        background: #ed1c24;
+        box-shadow:
+            0 8px 25px rgba(0, 0, 0, 0.22),
+            0 0 0 rgba(237, 28, 36, 0);
+    }
+}
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
+@media (max-width: 768px) {
+
+    .floating-apply-btn {
+        right: 16px;
+        bottom: 110px;
+
+        min-width: 130px;
+        height: 50px;
+
+        padding: 0 20px;
+
+        border-radius: 16px;
+
+        font-size: 15px;
+    }
+
+    .floating-apply-btn i {
+        font-size: 16px;
+    }
+
+}
+
+
+/* =========================================================
+   SMALL MOBILE
+   ========================================================= */
+
+@media (max-width: 480px) {
+
+    .floating-apply-btn {
+        right: 12px;
+        bottom: 110px;
+
+        min-width: 110px;
+        height: 42px;
+
+        padding: 0 17px;
+
+        border-radius: 15px;
+
+        font-size: 14px;
+    }
+
 }
