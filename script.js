@@ -420,7 +420,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
             /* Only mobile/tablet */
 
-            if (window.innerWidth <= 992) {
+            if (window.innerWidth <= 1199) {
 
                 event.preventDefault();
 
@@ -482,7 +482,7 @@ document.addEventListener("DOMContentLoaded", function () {
                  * automatically close complete menu
                  */
 
-                if (window.innerWidth <= 992) {
+                if (window.innerWidth <= 1199) {
 
                     closeMobileMenu();
 
@@ -507,7 +507,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
         link.addEventListener("click", function () {
 
-            if (window.innerWidth <= 992) {
+            if (window.innerWidth <= 1199) {
 
                 closeMobileMenu();
 
@@ -522,7 +522,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     document.addEventListener("click", function (event) {
 
-        if (window.innerWidth <= 992) {
+        if (window.innerWidth <= 1199) {
 
             if (
                 mainNav.classList.contains("mobile-menu-open") &&
@@ -555,7 +555,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     window.addEventListener("resize", function () {
 
-        if (window.innerWidth > 992) {
+        if (window.innerWidth > 1199) {
 
             closeMobileMenu();
 
