@@ -25,6 +25,11 @@
 
     <!-- SAME MAIN CSS -->
     <link rel="stylesheet" href="../style.css?v=3.1">
+    <script
+  src="https://challenges.cloudflare.com/turnstile/v0/api.js"
+  async
+  defer>
+</script>
 
 </head>
 
@@ -1208,12 +1213,6 @@
 
     </div>
 
-    <!-- UPLOAD ALL -->
-    <button type="button" class="upload-all-btn" id="uploadAllBtn">
-        <i class="fa-solid fa-cloud-arrow-up"></i>
-        UPLOAD
-    </button>
-
     <div id="uploadStatus" class="upload-status"></div>
 
 </section>
@@ -1273,9 +1272,14 @@
                 </p>
 
             </div>
-
-
-
+            <!-- Cloudflare Turnstile Security -->
+<div class="turnstile-container">
+    <div
+        class="cf-turnstile"
+        data-sitekey="0x4AAAAAAFSK9DgmNuudS_PP"
+        data-theme="light">
+    </div>
+</div>
             <!-- SUBMIT -->
 
             <div class="admission-submit-area">
@@ -1303,86 +1307,200 @@
         </form>
 
     </section>
-    <!-- ================= PAYMENT MODAL ================= -->
+   <!-- ================= PAYMENT MODAL ================= -->
 
 <div class="payment-modal-overlay" id="paymentModal">
 
-    <div class="payment-modal">
+    <div class="payment-modal payment-modal-updated">
 
-        <!-- Close -->
+        <!-- Close Button -->
         <button
-    type="button"
-    class="payment-modal-close"
-    onclick="document.getElementById('paymentModal').classList.remove('active')"
-    aria-label="Close payment">
-    &times;
-</button>
-
+            type="button"
+            class="payment-modal-close"
+            onclick="document.getElementById('paymentModal').classList.remove('active')"
+            aria-label="Close payment">
+            &times;
+        </button>
 
         <!-- Icon -->
         <div class="payment-modal-icon">
-            <i class="fa-solid fa-credit-card"></i>
+            <i class="fa-solid fa-wallet"></i>
         </div>
 
+        <span class="payment-modal-label">ADMISSION FEE PAYMENT</span>
 
-        <span class="payment-modal-label">
-            SECURE PAYMENT
-        </span>
-
-
-        <h2>Pay Admission Fee</h2>
+        <h2>Choose Payment Method</h2>
 
         <p class="payment-modal-description">
-            Select your preferred payment method to continue
-            with the admission fee payment.
+            Select QR / UPI or Bank Transfer to view payment details.
         </p>
+        <input
+    type="hidden"
+    id="paymentMethod"
+    name="paymentMethod"
+    form="admissionForm"
+    value=""
+>
+        <!-- Payment Method Options -->
+        <div class="payment-options">
 
+            <!-- QR / UPI -->
+            <button
+                type="button"
+                class="payment-method-card"
+                id="qrPaymentOption"
+                onclick="showPaymentDetails('upi')">
 
-        <!-- Payment Option -->
+                <div class="payment-method-icon">
+                    <i class="fa-solid fa-qrcode"></i>
+                </div>
 
-        <button
-            type="button"
-            class="payment-method-card"
-            id="razorpayOption">
+                <div class="payment-method-content">
+                    <strong>QR / UPI Payment</strong>
+                    <span>Scan QR code or pay using UPI</span>
+                </div>
 
-            <div class="payment-method-icon">
-                <i class="fa-solid fa-indian-rupee-sign"></i>
-            </div>
+                <i class="fa-solid fa-chevron-right payment-method-arrow"></i>
+            </button>
 
-            <div class="payment-method-content">
-                <strong>Online Payment</strong>
+            <!-- Bank Transfer -->
+            <button
+                type="button"
+                class="payment-method-card"
+                id="bankPaymentOption"
+                onclick="showPaymentDetails('bank')">
 
-                <span>
-                    Pay securely using Razorpay
-                </span>
-            </div>
+                <div class="payment-method-icon">
+                    <i class="fa-solid fa-building-columns"></i>
+                </div>
 
-            <i class="fa-solid fa-chevron-right payment-method-arrow"></i>
+                <div class="payment-method-content">
+                    <strong>Bank Transfer</strong>
+                    <span>Pay directly to the institute bank account</span>
+                </div>
 
-        </button>
-
-
-        <!-- Secure note -->
-
-        <div class="payment-secure-note">
-
-            <i class="fa-solid fa-shield-halved"></i>
-
-            <span>
-                Secure payment gateway
-            </span>
+                <i class="fa-solid fa-chevron-right payment-method-arrow"></i>
+            </button>
 
         </div>
 
+        <!-- QR / UPI Details -->
+        <div class="payment-details-panel" id="upiPaymentDetails" hidden>
 
+            <h3><i class="fa-solid fa-qrcode"></i> QR / UPI Payment</h3>
+
+            <div class="payment-qr-wrapper">
+                <img
+                    src="/images/payment-qr.webp"
+                    alt="Institute admission fee payment QR code"
+                    class="payment-qr-image"
+                    loading="lazy">
+            </div>
+
+            <p class="payment-detail-note">
+                Scan the QR code using your UPI application and complete the payment.
+            </p>
+
+            <div class="payment-detail-row">
+                <span>UPI ID</span>
+                <strong id="instituteUpiId">8319337572@hdfc</strong>
+            </div>
+
+        </div>
+
+        <!-- Bank Details -->
+        <div class="payment-details-panel" id="bankPaymentDetails" hidden>
+
+            <h3><i class="fa-solid fa-building-columns"></i> Bank Transfer</h3>
+
+            <div class="payment-detail-row">
+                <span>Account Holder</span>
+                <strong id="bankAccountHolder">MAHARANA PRATAP PRIVATE ITI</strong>
+            </div>
+
+            <div class="payment-detail-row">
+                <span>Bank Name</span>
+                <strong id="bankName">HDFC BANK</strong>
+            </div>
+
+            <div class="payment-detail-row">
+                <span>Account Number</span>
+                <strong id="bankAccountNumber">50200102839568</strong>
+            </div>
+
+            <div class="payment-detail-row">
+                <span>IFSC Code</span>
+                <strong id="bankIfsc">HDFC0001776</strong>
+            </div>
+
+            <div class="payment-detail-row">
+                <span>Branch</span>
+                <strong id="bankBranch">SEHORE</strong>
+            </div>
+
+        </div>
+        <!-- ============ PAYMENT PROOF SECTION ============ -->
+
+<div class="payment-proof-section" id="paymentProofSection">
+
+    <h3>Payment Verification</h3>
+
+    <p class="payment-proof-note">
+        After completing your payment, enter the transaction details
+        and upload your payment screenshot.
+    </p>
+
+    <!-- UTR / Transaction ID -->
+    <div class="payment-proof-field">
+        <label for="paymentUTR">
+            UTR / Transaction ID <span>*</span>
+        </label>
+
+        <input
+            type="text"
+            id="paymentUTR"
+            name="paymentUTR"
+            form="admissionForm"
+            placeholder="Enter UTR / Transaction ID"
+            maxlength="50"
+            autocomplete="off"
+            required>
+    </div>
+
+    <!-- Payment Screenshot -->
+    <div class="payment-proof-field">
+        <label for="paymentScreenshot">
+            Payment Screenshot <span>*</span>
+        </label>
+
+        <input
+            type="file"
+            id="paymentScreenshot"
+            name="paymentScreenshot"
+            form="admissionForm"
+            accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
+    required
+
+        <small>Maximum file size: 2 MB. JPG, JPEG, PNG or PDF.</small>
+    </div>
+
+</div>
+
+<!-- ============ END PAYMENT PROOF SECTION ============ -->
+
+        <!-- Secure Note -->
+        <div class="payment-secure-note">
+            <i class="fa-solid fa-shield-halved"></i>
+            <span>Verify the payment details before transferring money.</span>
+        </div>
+
+        <!-- Close -->
         <button
-    type="button"
-    class="payment-cancel-btn"
-    onclick="document.getElementById('paymentModal').classList.remove('active')">
-
-    Cancel
-
-</button>
+            type="button"
+            class="payment-cancel-btn"
+            onclick="document.getElementById('paymentModal').classList.remove('active')">
+            Close
+        </button>
 
     </div>
 
@@ -1697,11 +1815,53 @@
 
 </footer>
 
+<!-- ADMISSION SUCCESS POPUP -->
+<div
+    id="admissionSuccessModal"
+    class="admission-success-modal"
+    aria-hidden="true"
+    hidden
+>
+    <div
+        class="admission-success-card"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="admissionSuccessTitle"
+    >
+        <div class="admission-success-icon">
+            <i class="fa-solid fa-check"></i>
+        </div>
 
+        <h2 id="admissionSuccessTitle">
+            Application Submitted!
+        </h2>
+
+        <p>
+            Your admission application has been submitted successfully.
+        </p>
+
+        <p
+            id="admissionSuccessReference"
+            class="admission-success-reference"
+            hidden
+        ></p>
+
+        <button
+            type="button"
+            id="admissionSuccessDone"
+            class="admission-success-done"
+        >
+            Done
+        </button>
+    </div>
+</div>
+<!-- END ADMISSION SUCCESS POPUP -->
 
 <!-- =====================================================
      JAVASCRIPT
 ====================================================== -->
+<!-- Supabase JavaScript Library -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
 <script src="../script.js?v=3.1"></script>
  

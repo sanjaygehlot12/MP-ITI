@@ -3087,4 +3087,280 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 });
+/* ==========================================
+   SECURE ADMISSION FORM SUBMISSION
+   Maharana Pratap Pvt ITI Sehore
+========================================== */
 
+(() => {
+    "use strict";
+
+    const form = document.getElementById("admissionForm");
+
+    if (!form || form.dataset.secureSubmitAttached === "true") {
+        return;
+    }
+
+    form.dataset.secureSubmitAttached = "true";
+
+    const SUPABASE_FUNCTION_URL =
+    "https://zxgpekuluewytbxtebvy.supabase.co/functions/v1/quick-responder";
+
+    const SUPABASE_PUBLISHABLE_KEY =
+        "sb_publishable_Xnh5RRUBqQDkBbhNsy8E_Q_l8T_h8LT";
+        function openAdmissionSuccessPopup(admissionId) {
+    const modal = document.getElementById("admissionSuccessModal");
+    const reference = document.getElementById("admissionSuccessReference");
+    const doneButton = document.getElementById("admissionSuccessDone");
+
+    if (!modal) {
+        alert("Application submitted successfully! Application ID: " + admissionId);
+        return;
+    }
+
+    if (reference && admissionId) {
+        reference.textContent = "Application ID: " + admissionId;
+        reference.hidden = false;
+    }
+
+    modal.hidden = false;
+    modal.setAttribute("aria-hidden", "false");
+
+    if (doneButton) {
+        doneButton.onclick = () => {
+            modal.hidden = true;
+            modal.setAttribute("aria-hidden", "true");
+        };
+    }
+}
+
+    form.addEventListener("submit", async (event) => {
+        event.preventDefault();
+
+        if (!form.reportValidity()) {
+            return;
+        }
+
+        const submitButton = form.querySelector(
+            'button[type="submit"], input[type="submit"]'
+        );
+
+        const originalButtonText = submitButton
+            ? submitButton.textContent
+            : "";
+
+        const turnstileResponse = form.querySelector(
+            '[name="cf-turnstile-response"]'
+        );
+
+        if (!turnstileResponse || !turnstileResponse.value) {
+            alert("Please complete the security verification.");
+            return;
+        }
+
+        try {
+            if (submitButton) {
+                submitButton.disabled = true;
+                submitButton.textContent = "Submitting...";
+            }
+
+            const formData = new FormData(form);
+            // Validate payment details before submission
+const paymentMethod = document.getElementById("paymentMethod");
+const paymentUTR = document.getElementById("paymentUTR");
+const paymentScreenshot = document.getElementById("paymentScreenshot");
+
+// Check payment method
+if (!paymentMethod || !["upi", "bank"].includes(paymentMethod.value)) {
+    alert("Please select UPI / QR Payment or Bank Transfer.");
+    return;
+}
+
+// Check UTR number
+if (!paymentUTR || !paymentUTR.value.trim()) {
+    alert("Please enter your UTR / Transaction ID.");
+    return;
+}
+
+// Check payment screenshot
+if (!paymentScreenshot || !paymentScreenshot.files.length) {
+    alert("Please upload your payment screenshot.");
+    return;
+}
+
+// Check maximum screenshot size: 2 MB
+if (paymentScreenshot.files[0].size > 2 * 1024 * 1024) {
+    alert("Payment screenshot must be 2 MB or smaller.");
+    return;
+}
+
+// Rebuild FormData after validation
+const validatedFormData = new FormData(form);
+
+            const response = await fetch(SUPABASE_FUNCTION_URL, {
+                method: "POST",
+                headers: {
+                    "apikey": SUPABASE_PUBLISHABLE_KEY
+                },
+                body: validatedFormData
+            });
+
+            const result = await response.json();
+
+            if (!response.ok || !result.success) {
+                throw new Error(
+                    result.message ||
+                    "Unable to submit your application. Please try again."
+                );
+            }
+
+            openAdmissionSuccessPopup(result.admission_id);
+
+            // ==========================================
+// RESET ADMISSION FORM AFTER SUCCESS
+// ==========================================
+
+// Reset all form fields
+form.reset();
+
+// Reset selected document names
+const documentNameIds = [
+    "marksheet10Name",
+    "aadhaarName",
+    "samagraName",
+    "photographsName",
+    "domicileName",
+    "casteName",
+    "incomeName",
+    "tcName"
+];
+
+// Clear displayed filenames
+documentNameIds.forEach(function (id) {
+    const nameElement = document.getElementById(id);
+
+    if (nameElement) {
+        nameElement.textContent =
+            id === "photographsName"
+                ? "No files chosen"
+                : "No file chosen";
+    }
+});
+
+// Clear all file input values
+form.querySelectorAll('input[type="file"]').forEach(function (input) {
+    input.value = "";
+});
+
+// Clear upload status
+const uploadStatus = document.getElementById("uploadStatus");
+
+if (uploadStatus) {
+    uploadStatus.textContent = "";
+}
+
+// Reset Cloudflare Turnstile
+if (window.turnstile) {
+    window.turnstile.reset();
+}
+
+        } catch (error) {
+            console.error("Admission submission error:", error);
+
+            alert(
+                error instanceof Error
+                    ? error.message
+                    : "Something went wrong. Please try again."
+            );
+
+            if (window.turnstile) {
+                window.turnstile.reset();
+            }
+
+        } finally {
+            if (submitButton) {
+                submitButton.disabled = false;
+                submitButton.textContent = originalButtonText;
+            }
+        }
+    });
+})();
+/* =========================================
+   ADMISSION PAYMENT METHOD SWITCHER
+========================================= */
+
+window.showPaymentDetails = function (method) {
+
+    const upiDetails = document.getElementById("upiPaymentDetails");
+    const bankDetails = document.getElementById("bankPaymentDetails");
+
+    const upiButton = document.getElementById("qrPaymentOption");
+    const bankButton = document.getElementById("bankPaymentOption");
+
+    if (!upiDetails || !bankDetails || !upiButton || !bankButton) {
+        console.error("Payment modal elements not found.");
+        return;
+    }
+    // Save selected payment method for admission submission
+const paymentMethodInput = document.getElementById("paymentMethod");
+
+if (paymentMethodInput) {
+    paymentMethodInput.value = method;
+}
+
+    // Hide both panels first
+    upiDetails.hidden = true;
+    bankDetails.hidden = true;
+
+    upiButton.classList.remove("selected");
+    bankButton.classList.remove("selected");
+
+    // Show selected method
+    if (method === "upi") {
+        upiDetails.hidden = false;
+        upiButton.classList.add("selected");
+    }
+
+    if (method === "bank") {
+        bankDetails.hidden = false;
+        bankButton.classList.add("selected");
+    }
+};
+/* =========================================
+   RESET PAYMENT DETAILS WHEN MODAL OPENS
+========================================= */
+
+document.addEventListener("DOMContentLoaded", function () {
+
+    const paymentModal = document.getElementById("paymentModal");
+    const upiDetails = document.getElementById("upiPaymentDetails");
+    const bankDetails = document.getElementById("bankPaymentDetails");
+    const upiButton = document.getElementById("qrPaymentOption");
+    const bankButton = document.getElementById("bankPaymentOption");
+
+    if (!paymentModal) return;
+
+    function resetPaymentSelection() {
+
+        if (upiDetails) upiDetails.hidden = true;
+        if (bankDetails) bankDetails.hidden = true;
+
+        if (upiButton) upiButton.classList.remove("selected");
+        if (bankButton) bankButton.classList.remove("selected");
+    }
+
+    // Reset whenever the modal is opened
+    const observer = new MutationObserver(function () {
+
+        if (paymentModal.classList.contains("active")) {
+            resetPaymentSelection();
+        }
+
+    });
+
+    observer.observe(paymentModal, {
+        attributes: true,
+        attributeFilter: ["class"]
+    });
+
+});

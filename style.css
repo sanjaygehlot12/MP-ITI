@@ -6717,47 +6717,6 @@ SMALL MOBILE
     text-overflow: ellipsis;
 }
 
-
-/* ================= UPLOAD BUTTON ================= */
-
-.upload-all-btn {
-    display: flex;
-
-    align-items: center;
-    justify-content: center;
-
-    gap: 7px;
-
-    min-width: 180px;
-
-    margin: 20px auto 0;
-
-    padding: 9px 24px;
-
-    border: none;
-    border-radius: 5px;
-
-    background: #0b4f87;
-    color: #ffffff;
-
-    font-size: 13px;
-    font-weight: 700;
-
-    cursor: pointer;
-
-    transition: 0.2s ease;
-}
-
-.upload-all-btn:hover {
-    background: #083d68;
-}
-
-.upload-all-btn:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-
 /* ================= STATUS ================= */
 
 .upload-status {
@@ -15533,3 +15492,445 @@ body {
     }
 
 }
+/* ==========================================
+   ADMISSION SUCCESS POPUP
+   Maharana Pratap Pvt ITI Sehore
+   Isolated styles — existing UI unchanged
+========================================== */
+
+.admission-success-modal[hidden] {
+    display: none !important;
+}
+
+.admission-success-modal {
+    position: fixed;
+    inset: 0;
+    z-index: 99999;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 20px;
+    background: rgba(8, 20, 40, 0.65);
+
+    -webkit-backdrop-filter: blur(7px);
+    backdrop-filter: blur(7px);
+
+    opacity: 0;
+    visibility: hidden;
+
+    transition:
+        opacity 0.25s ease,
+        visibility 0.25s ease;
+}
+
+.admission-success-modal:not([hidden]) {
+    opacity: 1;
+    visibility: visible;
+}
+
+.admission-success-card {
+    width: 100%;
+    max-width: 430px;
+
+    padding: 36px 28px 30px;
+
+    background: #ffffff;
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    border-radius: 20px;
+
+    box-shadow: 0 24px 70px rgba(0, 0, 0, 0.22);
+
+    text-align: center;
+
+    transform: translateY(15px) scale(0.97);
+    transition: transform 0.25s ease;
+
+    font-family: inherit;
+}
+
+.admission-success-modal:not([hidden])
+.admission-success-card {
+    transform: translateY(0) scale(1);
+}
+
+.admission-success-icon {
+    width: 76px;
+    height: 76px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin: 0 auto 22px;
+
+    color: #ffffff;
+    background: #16a34a;
+
+    border-radius: 50%;
+
+    font-size: 34px;
+
+    box-shadow: 0 8px 22px rgba(22, 163, 74, 0.22);
+}
+
+.admission-success-card h2 {
+    margin: 0 0 12px;
+
+    color: #0b1f3a;
+
+    font-size: 25px;
+    font-weight: 700;
+    line-height: 1.35;
+}
+
+.admission-success-card > p {
+    margin: 0 auto 18px;
+
+    max-width: 330px;
+
+    color: #64748b;
+
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+.admission-success-card .admission-success-reference {
+    padding: 11px 14px;
+    margin: 0 0 22px;
+
+    color: #1d4ed8;
+    background: #eff6ff;
+
+    border: 1px solid #dbeafe;
+    border-radius: 10px;
+
+    font-size: 14px;
+    font-weight: 600;
+
+    overflow-wrap: anywhere;
+}
+
+.admission-success-done {
+    width: 100%;
+    min-height: 48px;
+
+    padding: 12px 22px;
+
+    color: #ffffff;
+    background: #0b1f3a;
+
+    border: 1px solid #0b1f3a;
+    border-radius: 10px;
+
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    transition:
+        background 0.2s ease,
+        transform 0.2s ease,
+        box-shadow 0.2s ease;
+}
+
+.admission-success-done:hover {
+    background: #163d6b;
+    border-color: #163d6b;
+
+    box-shadow: 0 6px 16px rgba(11, 31, 58, 0.18);
+}
+
+.admission-success-done:active {
+    transform: scale(0.98);
+}
+
+.admission-success-done:focus-visible {
+    outline: 3px solid #60a5fa;
+    outline-offset: 3px;
+}
+
+/* MOBILE RESPONSIVE */
+
+@media (max-width: 480px) {
+    .admission-success-modal {
+        padding: 16px;
+    }
+
+    .admission-success-card {
+        max-width: 100%;
+        padding: 30px 22px 24px;
+        border-radius: 17px;
+    }
+
+    .admission-success-icon {
+        width: 66px;
+        height: 66px;
+        margin-bottom: 18px;
+        font-size: 29px;
+    }
+
+    .admission-success-card h2 {
+        font-size: 22px;
+    }
+
+    .admission-success-card > p {
+        font-size: 14px;
+    }
+}
+
+/* END ADMISSION SUCCESS POPUP CSS */
+/* ========================================
+   ADMISSION FORM — CENTER ALIGNMENT
+   Cloudflare Turnstile + Submit Button
+======================================== */
+
+/* Center Cloudflare Turnstile */
+.cf-turnstile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    margin: 20px auto;
+}
+
+/* Center Cloudflare iframe/container */
+.cf-turnstile iframe {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Center Submit Button */
+#admissionForm button[type="submit"] {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 12px auto;
+}
+
+/* Center instruction text */
+#admissionForm button[type="submit"] + p {
+    text-align: center;
+}
+
+/* Mobile Responsive */
+@media (max-width: 576px) {
+    .cf-turnstile {
+        max-width: 100%;
+        overflow-x: auto;
+    }
+
+    #admissionForm button[type="submit"] {
+        max-width: 100%;
+    }
+}
+/* =========================================
+   PAYMENT MODAL - QR / UPI / BANK
+========================================= */
+
+.payment-modal-updated {
+    width: min(100% - 30px, 520px);
+    max-height: 90vh;
+    overflow-y: auto;
+    box-sizing: border-box;
+}
+
+.payment-options {
+    display: grid;
+    gap: 12px;
+    margin: 24px 0;
+}
+
+.payment-options .payment-method-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    width: 100%;
+    min-width: 0;
+    padding: 16px;
+    text-align: left;
+    cursor: pointer;
+    font: inherit;
+    color: inherit;
+    box-sizing: border-box;
+}
+
+.payment-method-content {
+    flex: 1;
+    min-width: 0;
+}
+
+.payment-method-content strong,
+.payment-method-content span {
+    display: block;
+}
+
+.payment-method-content strong {
+    margin-bottom: 5px;
+}
+
+.payment-method-content span {
+    font-size: 13px;
+    line-height: 1.5;
+    overflow-wrap: anywhere;
+}
+
+.payment-options .payment-method-card.selected {
+    border: 2px solid #174ea6;
+    background: #f0f6ff;
+}
+
+.payment-details-panel {
+    margin: 18px 0;
+    padding: 20px;
+    border: 1px solid #dbe5f1;
+    border-radius: 14px;
+    background: #f8fbff;
+    text-align: left;
+}
+
+.payment-details-panel[hidden] {
+    display: none !important;
+}
+
+.payment-details-panel h3 {
+    margin: 0 0 18px;
+    color: #0b1f3a;
+    font-size: 18px;
+}
+
+.payment-qr-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 12px;
+}
+
+.payment-qr-image {
+    display: block;
+    width: min(100%, 240px);
+    height: auto;
+    object-fit: contain;
+}
+
+.payment-detail-note {
+    font-size: 13px;
+    line-height: 1.6;
+    text-align: center;
+    color: #526174;
+}
+
+.payment-detail-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 12px 0;
+    border-bottom: 1px solid #e1e8f0;
+}
+
+.payment-detail-row:last-child {
+    border-bottom: none;
+}
+
+.payment-detail-row span {
+    flex: 0 0 40%;
+    color: #526174;
+    font-size: 13px;
+}
+
+.payment-detail-row strong {
+    flex: 1;
+    min-width: 0;
+    text-align: right;
+    overflow-wrap: anywhere;
+    color: #0b1f3a;
+    font-size: 13px;
+}
+
+@media (max-width: 480px) {
+    .payment-modal-updated {
+        width: calc(100% - 24px);
+        padding-left: 16px;
+        padding-right: 16px;
+    }
+
+    .payment-details-panel {
+        padding: 14px;
+    }
+
+    .payment-detail-row {
+        gap: 10px;
+    }
+}
+/* ============ PAYMENT PROOF SECTION ============ */
+
+.payment-proof-section {
+    margin: 20px 0;
+    padding: 20px;
+    background: #f8fbff;
+    border: 1px solid #dbe5f1;
+    border-radius: 14px;
+}
+
+.payment-proof-section h3 {
+    margin: 0 0 10px;
+    color: #0b1f3a;
+    font-size: 19px;
+}
+
+.payment-proof-note {
+    margin-bottom: 18px;
+    color: #526174;
+    font-size: 13px;
+    line-height: 1.6;
+}
+
+.payment-proof-field {
+    margin-bottom: 18px;
+}
+
+.payment-proof-field:last-child {
+    margin-bottom: 0;
+}
+
+.payment-proof-field label {
+    display: block;
+    margin-bottom: 8px;
+    color: #0b1f3a;
+    font-weight: 600;
+}
+
+.payment-proof-field label span {
+    color: #dc2626;
+}
+
+.payment-proof-field input {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+.payment-proof-field small {
+    display: block;
+    margin-top: 7px;
+    color: #64748b;
+    font-size: 12px;
+    line-height: 1.5;
+}
+
+@media (max-width: 480px) {
+    .payment-proof-section {
+        padding: 14px;
+    }
+}
+
+/* ============ END PAYMENT PROOF SECTION ============ */
