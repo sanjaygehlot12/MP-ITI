@@ -1809,3 +1809,42 @@ button {
     }
 
 }
+
+/* Admission details and payment review - additive styles */
+.admin-detail-overlay{position:fixed;inset:0;z-index:100000;display:none;align-items:center;justify-content:center;padding:18px;background:rgba(8,20,38,.62);backdrop-filter:blur(5px)}
+.admin-detail-overlay.show{display:flex}
+.admin-detail-modal{width:min(900px,100%);max-height:90vh;overflow:auto;background:#fff;border:1px solid rgba(255,255,255,.8);border-radius:20px;box-shadow:0 25px 80px rgba(0,0,0,.28)}
+.admin-detail-header{position:sticky;top:0;z-index:2;display:flex;align-items:center;justify-content:space-between;gap:12px;padding:18px 22px;background:#f8fbff;border-bottom:1px solid #e4eaf1}
+.admin-detail-header h2{color:#0b1f3a;font-size:21px}
+.admin-detail-close{border:0;background:transparent;font-size:30px;color:#526173;line-height:1}
+.admin-detail-body{padding:22px;color:#172033}
+.admin-detail-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.admin-detail-grid>div{min-width:0;padding:13px;border:1px solid #e4eaf1;border-radius:12px;background:#f8fbff}
+.admin-detail-grid span,.admin-detail-grid strong{display:block;overflow-wrap:anywhere}
+.admin-detail-grid span{font-size:11px;color:#687386;margin-bottom:5px}
+.admin-detail-grid strong{font-size:13px;color:#0b1f3a}
+.admin-detail-section-title{margin:22px 0 12px;color:#0b1f3a;font-size:16px}
+.admin-doc-list{display:grid;gap:9px}
+.admin-doc-item{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;border:1px solid #e4eaf1;border-radius:12px}
+.admin-doc-item strong,.admin-doc-item small{display:block;overflow-wrap:anywhere}
+.admin-doc-item small{margin-top:4px;color:#687386;font-size:12px}
+.admin-payment-actions{display:flex;flex-wrap:wrap;gap:10px;margin:22px 0 12px}
+.admin-verify-btn,.admin-reject-btn{border:0;border-radius:10px;padding:11px 16px;font-weight:700;color:#fff}
+.admin-verify-btn{background:#16804a}.admin-reject-btn{background:#b42318}
+.admin-detail-muted{margin-top:10px;color:#687386;font-size:12px;line-height:1.6}.admin-detail-error{color:#b42318;font-weight:700}
+@media(max-width:600px){.admin-detail-overlay{padding:8px}.admin-detail-modal{max-height:95vh;border-radius:14px}.admin-detail-header,.admin-detail-body{padding:15px}.admin-detail-grid{grid-template-columns:1fr}.admin-doc-item{align-items:flex-start;flex-direction:column}.admin-detail-header h2{font-size:18px}}
+
+
+/* Additive admissions view: keeps the existing admin visual system intact. */
+.admin-table-scroll{width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.admin-admission-actions{display:flex;gap:8px;min-width:230px;flex-wrap:wrap}
+.admin-payment-pill{display:inline-block;padding:5px 9px;border-radius:999px;background:#fff4d6;color:#805b00;font-size:12px;font-weight:700;white-space:nowrap}
+.admin-payment-pill.verified{background:#dcfce7;color:#166534}.admin-payment-pill.rejected{background:#fee2e2;color:#991b1b}
+.admin-detail-table-wrap{width:100%;overflow-x:auto}
+.admin-detail-table{width:100%;border-collapse:collapse;background:#fff}
+.admin-detail-table th,.admin-detail-table td{padding:11px 13px;border:1px solid #e4eaf1;text-align:left;vertical-align:top;overflow-wrap:anywhere}
+.admin-detail-table th{width:34%;background:#f8fbff;color:#0b1f3a;font-size:12px;font-weight:700}
+.admin-detail-table td{color:#253247;font-size:13px}
+.admin-folder-card{display:flex;align-items:flex-start;gap:14px;padding:16px;margin-bottom:16px;background:#f5f9ff;border:1px solid #dce7f5;border-radius:14px}
+.admin-folder-icon{font-size:28px}.admin-folder-card small{color:#687386;font-size:11px}.admin-folder-card h3{margin:5px 0;color:#0b1f3a}.admin-folder-card p{margin:5px 0 8px;color:#334155;overflow-wrap:anywhere}
+@media(max-width:600px){.admin-detail-table th{width:40%;}.admin-admission-actions{min-width:200px}.admin-folder-card{padding:12px}}

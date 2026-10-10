@@ -63,92 +63,150 @@
         } = window.supabase;
 
 
-        supabaseClient = createClient(
-            SUPABASE_URL,
-            SUPABASE_PUBLISHABLE_KEY
-        );
-
+        supabaseClient = window.supabase.createClient(
+    SUPABASE_URL,
+    SUPABASE_PUBLISHABLE_KEY,
+    {
+        auth: {
+            persistSession: true,
+            autoRefreshToken: true,
+            detectSessionInUrl: false,
+            storage: window.sessionStorage
+        }
+    }
+);
 
         initializeApplication();
     }
 
+/* =====================================================
+   SECURE ADMIN APPLICATION INITIALIZATION
+   Maharana Pratap Pvt ITI Sehore
+===================================================== */
 
-    /* =====================================================
-       LOGIN PAGE
-       ===================================================== */
+async function initializeApplication() {
 
-    async function initializeApplication() {
+    "use strict";
 
-        const loginForm =
-            document.getElementById("adminLoginForm");
+    const loginForm = document.getElementById("adminLoginForm");
 
+    /*
+     * LOGIN PAGE
+     * Login page must remain accessible without a session.
+     */
+    if (loginForm) {
+        initializeLogin();
+        return;
+    }
 
-        if (loginForm) {
+    /*
+     * DASHBOARD PAGE
+     */
+    const dashboardSection =
+        document.getElementById("section-dashboard");
 
-            initializeLogin();
+    const isDashboardPage = window.location.pathname.toLowerCase().endsWith("admin-panel.html") || Boolean(dashboardSection);
+    if (!isDashboardPage) {
+        return;
+    }
 
+    /*
+     * Hide dashboard content while authentication is checked.
+     */
+    document.documentElement.style.visibility = "hidden";
+
+    /*
+     * Always resolve the login page relative to the current page.
+     */
+    const loginUrl = new URL(
+        "admin-login.html",
+        window.location.href
+    ).href;
+
+    /*
+     * Redirect helper.
+     */
+    function redirectToLogin() {
+        window.location.replace(loginUrl);
+    }
+
+    try {
+
+        /*
+         * 1. Confirm that Supabase initialized successfully.
+         */
+        if (!supabaseClient || !supabaseClient.auth) {
+            console.error("Supabase authentication is unavailable.");
+            redirectToLogin();
             return;
         }
 
-
-        /* =================================================
-           DASHBOARD PAGE
-           ================================================= */
-
-        const dashboardSection =
-            document.getElementById("section-dashboard");
-
-
-        if (!dashboardSection) {
-            return;
-        }
-
-
+        /*
+         * 2. Get the current authenticated session.
+         */
         const {
-            data: {
-                session
-            },
+            data,
             error
-        } =
-            await supabaseClient.auth.getSession();
+        } = await supabaseClient.auth.getSession();
 
-
-        if (
-            error ||
-            !session
-        ) {
-
-            window.location.href =
-                "admin-login.html";
-
+        if (error) {
+            console.error("Session verification failed:", error);
+            redirectToLogin();
             return;
         }
 
+        const session = data?.session;
 
-        /* =================================================
-           VERIFY ADMIN
-           ================================================= */
+        /*
+         * 3. Reject users without a valid session.
+         */
+        if (!session || !session.user || !session.user.id) {
+            redirectToLogin();
+            return;
+        }
 
-        const isAdmin =
-            await verifyAdminUser(
-                session.user.id
-            );
-
+        /*
+         * 4. Verify that the logged-in user is an authorized admin.
+         */
+        const isAdmin = await verifyAdminUser(session.user.id);
 
         if (!isAdmin) {
 
-            await supabaseClient.auth.signOut();
+            console.warn("Unauthorized admin dashboard access.");
 
-            window.location.href =
-                "admin-login.html";
+            try {
+                await supabaseClient.auth.signOut();
+            } catch (signOutError) {
+                console.error(
+                    "Sign-out failed:",
+                    signOutError
+                );
+            }
 
+            redirectToLogin();
             return;
         }
 
-
+        /*
+         * 5. Only authorized admins can initialize the dashboard.
+         */
         initializeDashboard();
-    }
 
+        /*
+         * 6. Reveal the page after successful verification.
+         */
+        document.documentElement.style.visibility = "visible";
+
+    } catch (authError) {
+
+        console.error(
+            "Admin authentication failed:",
+            authError
+        );
+
+        redirectToLogin();
+    }
+}
 
 
     /* =====================================================
@@ -378,52 +436,12 @@
         return !!data;
     }
 
-
-
-    /* =====================================================
+/* =====================================================
        DASHBOARD INITIALIZATION
        ===================================================== */
 
     function initializeDashboard() {
-        /* =====================================================
-   ADMIN SESSION CHECK
-   ===================================================== */
-
-supabaseClient.auth.getSession()
-    .then(async function (result) {
-
-        const session = result.data.session;
-
-        /* No login session */
-        if (!session) {
-
-            window.location.replace("admin-login.html");
-            return;
-        }
-
-        /* Check whether user is admin */
-        const isAdmin =
-            await verifyAdminUser(session.user.id);
-
-        if (!isAdmin) {
-
-            await supabaseClient.auth.signOut();
-
-            window.location.replace("admin-login.html");
-            return;
-        }
-
-    })
-    .catch(function (error) {
-
-        console.error(
-            "Admin session check error:",
-            error
-        );
-
-        window.location.replace("admin-login.html");
-
-    });
+        
         const sidebar =
             document.getElementById(
                 "adminSidebar"
@@ -441,7 +459,41 @@ supabaseClient.auth.getSession()
                 "logoutBtn"
             );
 
+                    /* =========================================
+           VIEW WEBSITE - LOGOUT BEFORE NAVIGATION
+        ========================================= */
 
+        const viewWebsiteBtn =
+            document.getElementById("viewWebsiteBtn");
+
+        if (viewWebsiteBtn) {
+            viewWebsiteBtn.addEventListener(
+                "click",
+                async function (event) {
+
+                    event.preventDefault();
+
+                    const { error } =
+                        await supabaseClient.auth.signOut();
+
+                    if (error) {
+                        console.error(
+                            "Logout failed:",
+                            error
+                        );
+
+                        alert(
+                            "Logout nahi ho paya. Dobara try karein."
+                        );
+
+                        return;
+                    }
+
+                    window.location.replace("../index.html");
+                }
+            );
+        }
+        
         const sectionTitle =
             document.getElementById(
                 "sectionTitle"
@@ -1076,119 +1128,148 @@ supabaseClient.auth.getSession()
        CREATE ADMISSION TABLE
        ===================================================== */
 
-    function createAdmissionTable(
-        data
-    ) {
-
-        if (
-            !data ||
-            data.length === 0
-        ) {
-
-            return `
-
-                <div class="empty-state">
-
-                    <i class="fa-regular fa-folder-open"></i>
-
-                    <br>
-
-                    No admission applications yet.
-
-                </div>
-
-            `;
+    function createAdmissionTable(data) {
+        if (!data || data.length === 0) {
+            return `<div class="empty-state"><i class="fa-regular fa-folder-open"></i><br>No admission applications yet.</div>`;
         }
-
-
-        let rows = "";
-
-
-        data.forEach(
-            function (item) {
-
-                rows += `
-
-                    <tr>
-
-                        <td>
-                            ${escapeHTML(item.name)}
-                        </td>
-
-                        <td>
-                            ${escapeHTML(item.father_name)}
-                        </td>
-
-                        <td>
-                            ${escapeHTML(item.mobile)}
-                        </td>
-
-                        <td>
-                            ${escapeHTML(item.email)}
-                        </td>
-
-                        <td>
-                            ${escapeHTML(item.trade)}
-                        </td>
-
-                        <td>
-                            ${escapeHTML(item.session)}
-                        </td>
-
-                        <td>
-                            ${escapeHTML(item.status)}
-                        </td>
-
-                        <td>
-                            ${escapeHTML(
-                                formatDate(item.created_at)
-                            )}
-                        </td>
-
-                    </tr>
-
-                `;
-
-            }
-        );
-
-
-        return `
-
-            <div style="overflow-x:auto;">
-
-                <table class="data-table">
-
-                    <thead>
-
-                        <tr>
-
-                            <th>Name</th>
-                            <th>Father Name</th>
-                            <th>Mobile</th>
-                            <th>Email</th>
-                            <th>Trade</th>
-                            <th>Session</th>
-                            <th>Status</th>
-                            <th>Date</th>
-
-                        </tr>
-
-                    </thead>
-
-                    <tbody>
-
-                        ${rows}
-
-                    </tbody>
-
-                </table>
-
-            </div>
-
-        `;
-
+        const rows = data.map(item => `
+            <tr>
+                <td>${escapeHTML(item.id)}</td>
+                <td>${escapeHTML(item.name || item.student_name || '')}</td>
+                <td>${escapeHTML(item.father_name || '')}</td>
+                <td>${escapeHTML(item.mobile || '')}</td>
+                <td>${escapeHTML(item.trade || '')}</td>
+                <td>${escapeHTML(item.session || '')}</td>
+                <td>${escapeHTML(item.status || 'New')}</td>
+                <td><span class="admin-payment-pill ${String(item.payment_status || 'Pending').toLowerCase()}">${escapeHTML(item.payment_status || 'Pending')}</span></td>
+                <td>${escapeHTML(formatDate(item.created_at))}</td>
+                <td class="admin-admission-actions">
+                    <button type="button" class="outline-btn" onclick="window.viewAdmissionDetails(${Number(item.id)})">View Form</button>
+                    <button type="button" class="outline-btn" onclick="window.viewAdmissionDocuments(${Number(item.id)})">View Documents</button>
+                </td>
+            </tr>`).join('');
+        return `<div class="admin-table-scroll"><table class="data-table"><thead><tr>
+            <th>Student ID</th><th>Name</th><th>Father Name</th><th>Mobile</th><th>Trade</th><th>Session</th><th>Application Status</th><th>Payment Status</th><th>Date</th><th>Actions</th>
+            </tr></thead><tbody>${rows}</tbody></table></div>`;
     }
+
+/* =====================================================
+   ADMISSION FORM DETAILS + SECURE DOCUMENT VIEWER
+   These features run only after the existing admin auth gate succeeds.
+   ===================================================== */
+function ensureAdminModal(id, title) {
+    let overlay = document.getElementById(id);
+    if (overlay) return overlay;
+    overlay = document.createElement('div');
+    overlay.id = id;
+    overlay.className = 'admin-detail-overlay';
+    overlay.innerHTML = `<section class="admin-detail-modal" role="dialog" aria-modal="true" aria-labelledby="${id}Title">
+        <header class="admin-detail-header"><h2 id="${id}Title">${escapeHTML(title)}</h2><button type="button" class="admin-detail-close" aria-label="Close">&times;</button></header>
+        <div class="admin-detail-body" id="${id}Body">Loading…</div></section>`;
+    overlay.querySelector('.admin-detail-close').addEventListener('click', () => overlay.classList.remove('show'));
+    overlay.addEventListener('click', e => { if (e.target === overlay) overlay.classList.remove('show'); });
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') overlay.classList.remove('show'); });
+    document.body.appendChild(overlay);
+    return overlay;
+}
+
+function displayValue(value) {
+    if (value === null || value === undefined || value === '') return '—';
+    if (typeof value === 'object') return JSON.stringify(value);
+    return String(value);
+}
+
+window.viewAdmissionDetails = async function (admissionId) {
+    const modal = ensureAdminModal('admissionDetailsOverlay', 'Student Admission Form');
+    const body = document.getElementById('admissionDetailsOverlayBody');
+    modal.classList.add('show');
+    body.innerHTML = '<p>Loading student form and payment details…</p>';
+    try {
+        const { data: admission, error } = await supabaseClient.from('admissions').select('*').eq('id', admissionId).single();
+        if (error) throw error;
+        // All fields returned by the admissions row are shown in one table. Sensitive storage paths are intentionally not exposed.
+        const labels = {
+            id: 'Student / Admission ID', name: 'Student Name', student_name: 'Student Name', father_name: 'Father Name', mother_name: 'Mother Name',
+            mobile: 'Mobile', phone: 'Phone', email: 'Email', dob: 'Date of Birth', address: 'Address', qualification: 'Highest Qualification',
+            trade: 'Trade', session: 'Session', status: 'Application Status', created_at: 'Application Date', updated_at: 'Last Updated',
+            payment_method: 'Payment Method', payment_utr: 'Payment UTR / Transaction ID', payment_status: 'Payment Status'
+        };
+        const hiddenKeys = new Set(['payment_screenshot_path']);
+        const entries = Object.entries(admission).filter(([key]) => !hiddenKeys.has(key) && !/password|secret|token|storage_path|file_path/i.test(key));
+        let screenshotRow = '<tr><th>Payment Screenshot</th><td>No payment screenshot path saved.</td></tr>';
+        if (admission.payment_screenshot_path) {
+            const { data: signed, error: signedError } = await supabaseClient.storage.from('admission-documents').createSignedUrl(admission.payment_screenshot_path, 120);
+            if (!signedError && signed?.signedUrl) screenshotRow = `<tr><th>Payment Screenshot</th><td><a class="outline-btn" href="${signed.signedUrl}" target="_blank" rel="noopener noreferrer">View payment screenshot (expires in 2 minutes)</a></td></tr>`;
+            else screenshotRow = '<tr><th>Payment Screenshot</th><td>Unavailable. Check private bucket access policy and saved file path.</td></tr>';
+        }
+        const rows = entries.map(([key, value]) => `<tr><th>${escapeHTML(labels[key] || key.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase()))}</th><td>${escapeHTML(displayValue(value))}</td></tr>`).join('');
+        const status = String(admission.payment_status || 'Pending');
+        body.innerHTML = `<div class="admin-detail-table-wrap"><table class="admin-detail-table"><tbody>${rows}${screenshotRow}</tbody></table></div>
+          <div class="admin-payment-actions"><span class="admin-detail-muted">Current payment status: <strong>${escapeHTML(status)}</strong></span>
+          <button type="button" class="admin-verify-btn" onclick="window.setAdmissionPaymentStatus(${Number(admissionId)}, 'Verified')">Verify Payment</button>
+          <button type="button" class="admin-reject-btn" onclick="window.setAdmissionPaymentStatus(${Number(admissionId)}, 'Rejected')">Reject Payment</button></div>
+          <p class="admin-detail-muted">Payment status is an admin record only. Verify the actual bank credit before choosing Verified.</p>`;
+    } catch (err) {
+        console.error('Admission form load failed:', err);
+        body.innerHTML = `<p class="admin-detail-error">Could not load student form: ${escapeHTML(err.message || 'Unknown error')}</p><p class="admin-detail-muted">Check admin access and Supabase Row Level Security policies.</p>`;
+    }
+};
+
+window.viewAdmissionDocuments = async function (admissionId) {
+    const modal = ensureAdminModal('admissionDocumentsOverlay', 'Student Documents');
+    const body = document.getElementById('admissionDocumentsOverlayBody');
+    modal.classList.add('show');
+    body.innerHTML = '<p>Loading private student documents…</p>';
+    try {
+       const { data: admission, error: admissionError } =
+    await supabaseClient
+        .from('admissions')
+        .select('id, name, trade, session')
+        .eq('id', admissionId)
+        .single();
+        if (admissionError) throw admissionError;
+        const { data: docs, error } = await supabaseClient.from('admission_documents')
+            .select('id,admission_id,document_type,file_name,file_path,uploaded_at,status,notes')
+            .eq('admission_id', admissionId).order('id', { ascending: true });
+        if (error) throw error;
+        let paymentScreenshot = '';
+        const { data: payment, error: paymentError } = await supabaseClient.from('admissions').select('payment_screenshot_path').eq('id', admissionId).single();
+        if (!paymentError && payment?.payment_screenshot_path) {
+            const signed = await supabaseClient.storage.from('admission-documents').createSignedUrl(payment.payment_screenshot_path, 120);
+            if (!signed.error && signed.data?.signedUrl) paymentScreenshot = `<div class="admin-doc-item"><div><strong>Payment Screenshot</strong><small>Student ID folder: ${escapeHTML(admissionId)}</small></div><a class="outline-btn" href="${signed.data.signedUrl}" target="_blank" rel="noopener noreferrer">View file</a></div>`;
+        }
+        const docsHtml = await Promise.all((docs || []).map(async doc => {
+            // Short-lived signed URLs; the bucket stays private.
+            const signed = await supabaseClient.storage.from('admission-documents').createSignedUrl(doc.file_path, 120);
+            const link = !signed.error && signed.data?.signedUrl
+                ? `<a class="outline-btn" href="${signed.data.signedUrl}" target="_blank" rel="noopener noreferrer">View file</a>`
+                : '<span class="admin-detail-muted">Unavailable — check private bucket permissions</span>';
+            return `<div class="admin-doc-item"><div><strong>${escapeHTML(doc.document_type || 'Document')}</strong><small>${escapeHTML(doc.file_name || 'Unnamed file')}</small><small>Uploaded: ${escapeHTML(formatDate(doc.uploaded_at))} · Status: ${escapeHTML(doc.status || 'Pending')}</small>${doc.notes ? `<small>Notes: ${escapeHTML(doc.notes)}</small>` : ''}</div>${link}</div>`;
+        }));
+        const studentName = admission.name || admission.student_name || 'Student';
+        body.innerHTML = `<div class="admin-folder-card"><div class="admin-folder-icon">📁</div><div><small>PRIVATE STUDENT FOLDER</small><h3>Student ID: ${escapeHTML(admission.id)}</h3><p>${escapeHTML(studentName)} · ${escapeHTML(admission.trade || 'Trade not set')} · ${escapeHTML(admission.session || 'Session not set')}</p><small>Documents are accessed using admin authentication and short-lived signed links.</small></div></div>
+          <div class="admin-doc-list">${paymentScreenshot}${docsHtml.join('') || '<p class="admin-detail-muted">No uploaded document records found for this student.</p>'}</div>`;
+    } catch (err) {
+        console.error('Student documents load failed:', err);
+        body.innerHTML = `<p class="admin-detail-error">Could not load student documents: ${escapeHTML(err.message || 'Unknown error')}</p><p class="admin-detail-muted">Ensure the admission_documents table, private storage bucket, and admin SELECT policies are configured.</p>`;
+    }
+};
+
+window.setAdmissionPaymentStatus = async function (admissionId, status) {
+    if (!['Verified', 'Rejected'].includes(status)) return;
+    if (!window.confirm(`Set payment status to ${status}? Verify the actual bank transaction before marking it Verified.`)) return;
+    try {
+        const { error } = await supabaseClient.rpc('admin_set_admission_payment_status', { p_admission_id: admissionId, p_status: status });
+        if (error) throw error;
+        alert(`Payment status updated to ${status}.`);
+        const modal = document.getElementById('admissionDetailsOverlay');
+        if (modal) modal.classList.remove('show');
+        await renderDashboard();
+    } catch (err) {
+        console.error('Payment status update failed:', err);
+        alert('Could not update payment status. Run the admin_set_admission_payment_status SQL function setup and check admin permissions. ' + (err.message || ''));
+    }
+};
 
 /* =====================================================
    CREATE ENQUIRY TABLE
