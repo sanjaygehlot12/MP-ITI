@@ -3232,7 +3232,7 @@ const documentNameIds = [
     "domicileName",
     "casteName",
     "incomeName",
-    "tcName"
+    "signaturename"
 ];
 
 // Clear displayed filenames

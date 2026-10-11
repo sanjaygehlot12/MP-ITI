@@ -140,7 +140,7 @@
     <h1>MAHARANA PRATAP PRIVATE ITI SEHORE</h1>
 
     <p>
-        Krishan Nagar, Shanti Vihar Housing Board Colony,
+        Krishna Nagar, Shanti Vihar Housing Board Colony,
         Sehore - 466001
     </p>
 
@@ -1007,7 +1007,7 @@
         <div class="document-item">
 
             <div class="document-title">
-                10th Marksheet
+                10th Marksheet <span style="color: red;">*</span>
             </div>
 
             <label for="marksheet10" class="choose-file-btn">
@@ -1020,6 +1020,7 @@
                 id="marksheet10"
                 name="marksheet10"
                 accept=".pdf,.jpg,.jpeg,.png"
+                required
             >
 
             <small id="marksheet10Name" class="selected-file">
@@ -1033,7 +1034,7 @@
         <div class="document-item">
 
             <div class="document-title">
-                Aadhaar Card
+                Aadhaar Card <span style="color: red;">*</span>
             </div>
 
             <label for="aadhaar" class="choose-file-btn">
@@ -1054,38 +1055,37 @@
 
         </div>
 
-
-        <!-- 3. Samagra ID -->
+       <!-- 3. Singature -->
         <div class="document-item">
 
             <div class="document-title">
-                Samagra ID
+                Signature <span style="color: red;">*</span>
             </div>
 
-            <label for="samagra" class="choose-file-btn">
+            <label for="signature" class="choose-file-btn">
                 <i class="fa-solid fa-folder-open"></i>
-                Choose File
+                Choose Files
             </label>
 
             <input
                 type="file"
-                id="samagra"
-                name="samagra"
-                accept=".pdf,.jpg,.jpeg,.png"
+                id="signature"
+                name="signature"
+                accept=".jpg,.jpeg,.png"
+                multiple
             >
 
-            <small id="samagraName" class="selected-file">
-                No file chosen
+            <small id="signatureName" class="selected-file">
+                No files chosen
             </small>
 
         </div>
-
 
         <!-- 4. Passport Photos -->
         <div class="document-item">
 
             <div class="document-title">
-                Passport Photos
+                Passport Photos <span style="color: red;">*</span>
             </div>
 
             <label for="photographs" class="choose-file-btn">
@@ -1185,27 +1185,26 @@
 
         </div>
 
-
-        <!-- 8. Transfer Certificate -->
+         <!-- 8. Samagra ID -->
         <div class="document-item">
 
             <div class="document-title">
-                Transfer Certificate (TC)
+                Samagra ID
             </div>
 
-            <label for="tc" class="choose-file-btn">
+            <label for="samagra" class="choose-file-btn">
                 <i class="fa-solid fa-folder-open"></i>
                 Choose File
             </label>
 
             <input
                 type="file"
-                id="tc"
-                name="tc"
+                id="samagra"
+                name="samagra"
                 accept=".pdf,.jpg,.jpeg,.png"
             >
 
-            <small id="tcName" class="selected-file">
+            <small id="samagraName" class="selected-file">
                 No file chosen
             </small>
 
@@ -1265,10 +1264,7 @@
                 <p class="payment-information">
 
                     <i class="fa-solid fa-circle-info"></i>
-
-                    Online payment gateway will be connected
-                    with the final admission system.
-
+                    For any payment-related queries, please contact support at +91 8319337572
                 </p>
 
             </div>
@@ -1479,7 +1475,7 @@
             name="paymentScreenshot"
             form="admissionForm"
             accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
-    required
+    required>
 
         <small>Maximum file size: 2 MB. JPG, JPEG, PNG or PDF.</small>
     </div>
@@ -1499,7 +1495,7 @@
             type="button"
             class="payment-cancel-btn"
             onclick="document.getElementById('paymentModal').classList.remove('active')">
-            Close
+            Submit
         </button>
 
     </div>
