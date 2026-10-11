@@ -16330,3 +16330,34 @@ body {
         transition: none;
     }
 }
+/* Footer Website Statistics */
+.footer-website-stats {
+    margin-top: 12px;
+    width: 100%;
+}
+
+.footer-website-stats .footer-stat-item {
+    margin: 0 0 8px;
+    padding: 0;
+    color: #cbd7e6;
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1.7;
+    overflow-wrap: anywhere;
+}
+
+.footer-website-stats .footer-stat-item strong {
+    color: #ffffff;
+    font-weight: 700;
+}
+
+#visitorCount {
+    font-variant-numeric: tabular-nums;
+}
+
+/* Mobile */
+@media (max-width: 600px) {
+    .footer-website-stats .footer-stat-item {
+        font-size: 13px;
+    }
+}

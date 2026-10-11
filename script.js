@@ -3364,3 +3364,88 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
+/* ==========================================
+   WEBSITE VISITOR COUNTER
+   Maharana Pratap Pvt ITI Sehore
+   Supabase Edge Function
+========================================== */
+
+(() => {
+    "use strict";
+
+    const updateVisitorCount = async () => {
+        const counterElement = document.getElementById("visitorCount");
+
+        // Counter element nahi hai toh function stop
+        if (!counterElement) return;
+
+        try {
+            // Browser se existing Visitor ID check karo
+            let visitorId = localStorage.getItem("site_visitor_id");
+
+            // First visit par unique ID create karo
+            if (!visitorId) {
+                if (!window.crypto?.randomUUID) {
+                    throw new Error("Secure UUID generation unavailable");
+                }
+
+                visitorId = crypto.randomUUID();
+
+                localStorage.setItem("site_visitor_id", visitorId);
+            }
+
+            // Supabase configuration
+            const SUPABASE_URL = "https://zxgpekuluewytbxtebvy.supabase.co";
+            const SUPABASE_KEY = "sb_publishable_Xnh5RRUBqQDkBbhNsy8E_Q_l8T_h8LT";
+
+            // Edge Function request
+            const response = await fetch(
+                `${SUPABASE_URL}/functions/v1/visitor-counter`,
+                {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "apikey": SUPABASE_KEY,
+                        "Authorization": `Bearer ${SUPABASE_KEY}`
+                    },
+                    body: JSON.stringify({
+                        visitor_id: visitorId
+                    })
+                }
+            );
+
+            if (!response.ok) {
+                throw new Error(
+                    `Visitor counter request failed: ${response.status}`
+                );
+            }
+
+            const result = await response.json();
+
+            // Counter display update
+            if (
+                result.visitors !== undefined &&
+                result.visitors !== null &&
+                /^\d+$/.test(String(result.visitors))
+            ) {
+                counterElement.textContent = String(result.visitors)
+                    .padStart(6, "0");
+            }
+
+        } catch (error) {
+            console.error("Visitor counter error:", error);
+        }
+    };
+
+    // Page load hone ke baad counter update karo
+    if (document.readyState === "loading") {
+        document.addEventListener(
+            "DOMContentLoaded",
+            updateVisitorCount,
+            { once: true }
+        );
+    } else {
+        updateVisitorCount();
+    }
+
+})();
