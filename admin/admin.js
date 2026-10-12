@@ -1144,8 +1144,8 @@ async function initializeApplication() {
                 <td><span class="admin-payment-pill ${String(item.payment_status || 'Pending').toLowerCase()}">${escapeHTML(item.payment_status || 'Pending')}</span></td>
                 <td>${escapeHTML(formatDate(item.created_at))}</td>
                 <td class="admin-admission-actions">
-                    <button type="button" class="outline-btn" onclick="window.viewAdmissionDetails(${Number(item.id)})">View Form</button>
-                    <button type="button" class="outline-btn" onclick="window.viewAdmissionDocuments(${Number(item.id)})">View Documents</button>
+                    <button type="button" class="outline-btn" data-admission-action="view-form" data-admission-id="${Number(item.id)}">View Form</button>
+                    <button type="button" class="outline-btn" data-admission-action="view-documents" data-admission-id="${Number(item.id)}">View Documents</button>
                 </td>
             </tr>`).join('');
         return `<div class="admin-table-scroll"><table class="data-table"><thead><tr>
@@ -1206,8 +1206,8 @@ window.viewAdmissionDetails = async function (admissionId) {
         const status = String(admission.payment_status || 'Pending');
         body.innerHTML = `<div class="admin-detail-table-wrap"><table class="admin-detail-table"><tbody>${rows}${screenshotRow}</tbody></table></div>
           <div class="admin-payment-actions"><span class="admin-detail-muted">Current payment status: <strong>${escapeHTML(status)}</strong></span>
-          <button type="button" class="admin-verify-btn" onclick="window.setAdmissionPaymentStatus(${Number(admissionId)}, 'Verified')">Verify Payment</button>
-          <button type="button" class="admin-reject-btn" onclick="window.setAdmissionPaymentStatus(${Number(admissionId)}, 'Rejected')">Reject Payment</button></div>
+          <button type="button" class="admin-verify-btn" data-payment-status="Verified" data-admission-id="${Number(admissionId)}">Verify Payment</button>
+          <button type="button" class="admin-reject-btn" data-payment-status="Rejected" data-admission-id="${Number(admissionId)}">Reject Payment</button></div>
           <p class="admin-detail-muted">Payment status is an admin record only. Verify the actual bank credit before choosing Verified.</p>`;
     } catch (err) {
         console.error('Admission form load failed:', err);
@@ -1270,6 +1270,36 @@ window.setAdmissionPaymentStatus = async function (admissionId, status) {
         alert('Could not update payment status. Run the admin_set_admission_payment_status SQL function setup and check admin permissions. ' + (err.message || ''));
     }
 };
+
+/* =====================================================
+   CSP-SAFE ADMISSION BUTTON HANDLERS
+   No inline onclick attributes; compatible with strict script-src.
+   ===================================================== */
+document.addEventListener('click', function (event) {
+    const button = event.target.closest('button[data-admission-action], button[data-payment-status]');
+    if (!button) return;
+
+    const admissionId = Number(button.dataset.admissionId);
+    if (!Number.isSafeInteger(admissionId) || admissionId <= 0) {
+        console.error('Invalid admission ID for admin action.');
+        return;
+    }
+
+    if (button.dataset.admissionAction === 'view-form') {
+        window.viewAdmissionDetails(admissionId);
+        return;
+    }
+
+    if (button.dataset.admissionAction === 'view-documents') {
+        window.viewAdmissionDocuments(admissionId);
+        return;
+    }
+
+    if (button.dataset.paymentStatus) {
+        window.setAdmissionPaymentStatus(admissionId, button.dataset.paymentStatus);
+    }
+});
+
 
 /* =====================================================
    CREATE ENQUIRY TABLE
