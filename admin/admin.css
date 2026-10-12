@@ -1848,3 +1848,29 @@ button {
 .admin-folder-card{display:flex;align-items:flex-start;gap:14px;padding:16px;margin-bottom:16px;background:#f5f9ff;border:1px solid #dce7f5;border-radius:14px}
 .admin-folder-icon{font-size:28px}.admin-folder-card small{color:#687386;font-size:11px}.admin-folder-card h3{margin:5px 0;color:#0b1f3a}.admin-folder-card p{margin:5px 0 8px;color:#334155;overflow-wrap:anywhere}
 @media(max-width:600px){.admin-detail-table th{width:40%;}.admin-admission-actions{min-width:200px}.admin-folder-card{padding:12px}}
+/* Tablet sidebar: fit all items without scrolling */
+@media (min-width: 761px) and (max-width: 1200px) {
+    .admin-sidebar {
+        display: flex;
+        flex-direction: column;
+        height: 100vh;
+        height: 100dvh;
+        overflow: hidden;
+        box-sizing: border-box;
+    }
+
+    .sidebar-brand {
+        flex-shrink: 0;
+    }
+
+    .admin-nav {
+        flex: 1;
+        min-height: 0;
+        overflow: hidden;
+    }
+
+    .sidebar-bottom {
+        flex-shrink: 0;
+        margin-top: auto;
+    }
+}
