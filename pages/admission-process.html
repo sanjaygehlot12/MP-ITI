@@ -85,7 +85,7 @@
     >
 
     <!-- SAME MAIN CSS -->
-    <link rel="stylesheet" href="../style.css?v=4.5">
+    <link rel="stylesheet" href="../style.css?v=4.7">
     <script
   src="https://challenges.cloudflare.com/turnstile/v0/api.js"
   async
@@ -1314,7 +1314,7 @@
                     <button
     type="button"
     class="admission-pay-button"
-   onclick="document.getElementById('paymentModal').classList.add('active')">
+    id="payAdmissionFeeBtn">
 
     <i class="fa-solid fa-credit-card"></i>
     Pay Admission Fee
@@ -1371,13 +1371,13 @@
     <div class="payment-modal payment-modal-updated">
 
         <!-- Close Button -->
-        <button
-            type="button"
-            class="payment-modal-close"
-            onclick="document.getElementById('paymentModal').classList.remove('active')"
-            aria-label="Close payment">
-            &times;
-        </button>
+<button
+    type="button"
+    class="payment-modal-close"
+    id="closePaymentModal"
+    aria-label="Close payment">
+    &times;
+</button>
 
         <!-- Icon -->
         <div class="payment-modal-icon">
@@ -1402,42 +1402,40 @@
         <div class="payment-options">
 
             <!-- QR / UPI -->
-            <button
-                type="button"
-                class="payment-method-card"
-                id="qrPaymentOption"
-                onclick="showPaymentDetails('upi')">
+<button
+    type="button"
+    class="payment-method-card"
+    id="qrPaymentOption">
 
-                <div class="payment-method-icon">
-                    <i class="fa-solid fa-qrcode"></i>
-                </div>
+    <div class="payment-method-icon">
+        <i class="fa-solid fa-qrcode"></i>
+    </div>
 
-                <div class="payment-method-content">
-                    <strong>QR / UPI Payment</strong>
-                    <span>Scan QR code or pay using UPI</span>
-                </div>
+    <div class="payment-method-content">
+        <strong>QR / UPI Payment</strong>
+        <span>Scan QR code or pay using UPI</span>
+    </div>
 
-                <i class="fa-solid fa-chevron-right payment-method-arrow"></i>
-            </button>
+    <i class="fa-solid fa-chevron-right payment-method-arrow"></i>
+</button>
 
-            <!-- Bank Transfer -->
-            <button
-                type="button"
-                class="payment-method-card"
-                id="bankPaymentOption"
-                onclick="showPaymentDetails('bank')">
+        <!-- Bank Transfer -->
+<button
+    type="button"
+    class="payment-method-card"
+    id="bankPaymentOption">
 
-                <div class="payment-method-icon">
-                    <i class="fa-solid fa-building-columns"></i>
-                </div>
+    <div class="payment-method-icon">
+        <i class="fa-solid fa-building-columns"></i>
+    </div>
 
-                <div class="payment-method-content">
-                    <strong>Bank Transfer</strong>
-                    <span>Pay directly to the institute bank account</span>
-                </div>
+    <div class="payment-method-content">
+        <strong>Bank Transfer</strong>
+        <span>Pay directly to the institute bank account</span>
+    </div>
 
-                <i class="fa-solid fa-chevron-right payment-method-arrow"></i>
-            </button>
+    <i class="fa-solid fa-chevron-right payment-method-arrow"></i>
+</button>
 
         </div>
 
@@ -1551,13 +1549,13 @@
             <span>Verify the payment details before transferring money.</span>
         </div>
 
-        <!-- Close -->
-        <button
-            type="button"
-            class="payment-cancel-btn"
-            onclick="document.getElementById('paymentModal').classList.remove('active')">
-            Submit
-        </button>
+        <!-- Close / Cancel Button -->
+<button
+    type="button"
+    class="payment-cancel-btn"
+    id="cancelPaymentModal">
+    Submit
+</button>
 
     </div>
 
@@ -1934,7 +1932,7 @@
 <!-- Supabase JavaScript Library -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script src="../script.js?v=4.5"></script>
+<script src="../script.js?v=4.7"></script>
  
 <a href="admission-process.html"
    class="floating-apply-btn"

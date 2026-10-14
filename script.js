@@ -3223,3 +3223,65 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 })();
+/* Secure Payment Modal Button */
+
+document.addEventListener("DOMContentLoaded", function () {
+    const payButton = document.getElementById("payAdmissionFeeBtn");
+    const paymentModal = document.getElementById("paymentModal");
+
+    if (!payButton || !paymentModal) return;
+
+    payButton.addEventListener("click", function () {
+        paymentModal.classList.add("active");
+    });
+});
+/* Payment Modal Close Button */
+document.addEventListener("DOMContentLoaded", function () {
+    const closeButton = document.getElementById("closePaymentModal");
+    const paymentModal = document.getElementById("paymentModal");
+
+    if (closeButton && paymentModal) {
+        closeButton.addEventListener("click", function () {
+            paymentModal.classList.remove("active");
+        });
+    }
+});
+/* QR / UPI Payment Option */
+document.addEventListener("DOMContentLoaded", function () {
+    const qrButton = document.getElementById("qrPaymentOption");
+
+    if (qrButton) {
+        qrButton.addEventListener("click", function () {
+            if (typeof showPaymentDetails === "function") {
+                showPaymentDetails("upi");
+            } else {
+                console.error("showPaymentDetails() function not found.");
+            }
+        });
+    }
+});
+/* Bank Transfer Payment Option */
+document.addEventListener("DOMContentLoaded", function () {
+    const bankButton = document.getElementById("bankPaymentOption");
+
+    if (bankButton) {
+        bankButton.addEventListener("click", function () {
+            if (typeof showPaymentDetails === "function") {
+                showPaymentDetails("bank");
+            } else {
+                console.error("showPaymentDetails() function not found.");
+            }
+        });
+    }
+});
+/* Payment Modal Cancel Button */
+document.addEventListener("DOMContentLoaded", function () {
+    const cancelButton = document.getElementById("cancelPaymentModal");
+    const paymentModal = document.getElementById("paymentModal");
+
+    if (cancelButton && paymentModal) {
+        cancelButton.addEventListener("click", function () {
+            paymentModal.classList.remove("active");
+        });
+    }
+});
