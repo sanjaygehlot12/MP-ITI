@@ -2115,8 +2115,6 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
-
-
 /* =========================================================
    OUR SUCCESS STORIES SLIDER
    ========================================================= */
@@ -2174,7 +2172,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /* =====================================================
        CARDS PER PAGE
-       
+
        DESKTOP = 3
        TABLET  = 3
        MOBILE  = 2
@@ -2192,10 +2190,6 @@ document.addEventListener("DOMContentLoaded", function () {
 
     /* =====================================================
        SET EXACT CARD WIDTH
-       
-       This is the important part.
-       Card width is calculated from the ACTUAL
-       visible slider width.
        ===================================================== */
 
     function setCardWidths() {
@@ -2207,58 +2201,33 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-
         const cardsPerPage =
             getCardsPerPage();
-
 
         const sliderWidth =
             slider.getBoundingClientRect().width;
 
-
         const trackStyle =
             window.getComputedStyle(track);
-
 
         const gap =
             parseFloat(trackStyle.gap) || 0;
 
-
-        /*
-         * Example desktop:
-         *
-         * slider = 1200px
-         * gap = 24px
-         *
-         * 3 cards:
-         *
-         * (1200 - 48) / 3
-         *
-         * = 384px each
-         */
-
         const cardWidth =
             (
                 sliderWidth -
-                (
-                    gap *
-                    (cardsPerPage - 1)
-                )
+                (gap * (cardsPerPage - 1))
             ) /
             cardsPerPage;
-
 
         cards.forEach(
             function (card) {
 
                 card.style.flex =
-                    "0 0 " +
-                    cardWidth +
-                    "px";
+                    "0 0 " + cardWidth + "px";
 
                 card.style.width =
-                    cardWidth +
-                    "px";
+                    cardWidth + "px";
 
             }
         );
@@ -2275,19 +2244,15 @@ document.addEventListener("DOMContentLoaded", function () {
         const cards =
             getCards();
 
-
         const cardsPerPage =
             getCardsPerPage();
-
 
         if (cards.length === 0) {
             return 0;
         }
 
-
         return Math.ceil(
-            cards.length /
-            cardsPerPage
+            cards.length / cardsPerPage
         );
 
     }
@@ -2301,15 +2266,8 @@ document.addEventListener("DOMContentLoaded", function () {
 
         dotsContainer.innerHTML = "";
 
-
         const totalPages =
             getTotalPages();
-
-
-        /*
-         * If only one page,
-         * no dots are required.
-         */
 
         if (totalPages <= 1) {
 
@@ -2319,10 +2277,8 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
-
         dotsContainer.style.display =
             "flex";
-
 
         for (
             let i = 0;
@@ -2331,23 +2287,17 @@ document.addEventListener("DOMContentLoaded", function () {
         ) {
 
             const dot =
-                document.createElement(
-                    "button"
-                );
-
+                document.createElement("button");
 
             dot.type = "button";
 
             dot.className =
                 "success-slider-dot";
 
-
             dot.setAttribute(
                 "aria-label",
-                "Go to success stories slide " +
-                (i + 1)
+                "Go to success stories slide " + (i + 1)
             );
-
 
             dot.addEventListener(
                 "click",
@@ -2360,12 +2310,54 @@ document.addEventListener("DOMContentLoaded", function () {
                 }
             );
 
-
-            dotsContainer.appendChild(
-                dot
-            );
+            dotsContainer.appendChild(dot);
 
         }
+
+    }
+
+
+    /* =====================================================
+       OFFSET OF CURRENT PAGE (gap included)
+       ===================================================== */
+
+    function getOffset() {
+
+        const cards =
+            getCards();
+
+        if (cards.length === 0) {
+            return 0;
+        }
+
+        const cardsPerPage =
+            getCardsPerPage();
+
+        const cardWidth =
+            cards[0].getBoundingClientRect().width;
+
+        const gap =
+            parseFloat(
+                window.getComputedStyle(track).gap
+            ) || 0;
+
+        const sliderWidth =
+            slider.getBoundingClientRect().width;
+
+        /* first card of this page */
+        const wanted =
+            currentPage *
+            cardsPerPage *
+            (cardWidth + gap);
+
+        /* last page should never scroll beyond the end */
+        const maxOffset =
+            Math.max(
+                0,
+                track.scrollWidth - sliderWidth
+            );
+
+        return Math.min(wanted, maxOffset);
 
     }
 
@@ -2379,288 +2371,70 @@ document.addEventListener("DOMContentLoaded", function () {
         const totalPages =
             getTotalPages();
 
-
-        if (totalPages <= 0) {
-            return;
+        if (currentPage > totalPages - 1) {
+            currentPage = totalPages - 1;
         }
 
-
-        /*
-         * Keep current page valid.
-         */
-
-        if (
-            currentPage >= totalPages
-        ) {
-
-            currentPage =
-                totalPages - 1;
-
-        }
-
-
-        if (
-            currentPage < 0
-        ) {
-
+        if (currentPage < 0) {
             currentPage = 0;
-
         }
-
-
-        /*
-         * Move exactly one viewport.
-         *
-         * Page 0:
-         * Card 1 + Card 2 + Card 3
-         *
-         * Page 1:
-         * Card 4 + Card 5 + Card 6
-         */
-
-        const sliderWidth =
-            slider.getBoundingClientRect().width;
-
 
         track.style.transform =
-            "translate3d(" +
-            (
-                -(currentPage * sliderWidth)
-            ) +
-            "px, 0, 0)";
-
-
-        /* =================================================
-           ACTIVE DOT
-           ================================================= */
+            "translateX(-" + getOffset() + "px)";
 
         const dots =
             dotsContainer.querySelectorAll(
                 ".success-slider-dot"
             );
 
-
-        dots.forEach(
-            function (dot, index) {
-
-                dot.classList.toggle(
-                    "active",
-                    index === currentPage
-                );
-
-            }
-        );
-
-
-        /* =================================================
-           BUTTON STATES
-           ================================================= */
+        dots.forEach(function (dot, index) {
+            dot.classList.toggle(
+                "active",
+                index === currentPage
+            );
+        });
 
         prevButton.disabled =
             currentPage === 0;
 
-
         nextButton.disabled =
-            currentPage ===
-            totalPages - 1;
+            currentPage >= totalPages - 1;
 
     }
 
 
     /* =====================================================
-       NEXT BUTTON
+       PREVIOUS / NEXT
        ===================================================== */
 
-    nextButton.addEventListener(
-        "click",
-        function () {
+    prevButton.addEventListener("click", function () {
+        currentPage--;
+        updateSlider();
+    });
 
-            const totalPages =
-                getTotalPages();
-
-
-            if (
-                currentPage <
-                totalPages - 1
-            ) {
-
-                currentPage++;
-
-                updateSlider();
-
-            }
-
-        }
-    );
-
-
-    /* =====================================================
-       PREVIOUS BUTTON
-       ===================================================== */
-
-    prevButton.addEventListener(
-        "click",
-        function () {
-
-            if (
-                currentPage > 0
-            ) {
-
-                currentPage--;
-
-                updateSlider();
-
-            }
-
-        }
-    );
-
-
-    /* =====================================================
-       TOUCH SWIPE
-       ===================================================== */
-
-    let touchStartX = 0;
-
-    let touchEndX = 0;
-
-
-    slider.addEventListener(
-        "touchstart",
-        function (event) {
-
-            touchStartX =
-                event.touches[0].clientX;
-
-        },
-        {
-            passive: true
-        }
-    );
-
-
-    slider.addEventListener(
-        "touchend",
-        function (event) {
-
-            touchEndX =
-                event.changedTouches[0].clientX;
-
-
-            const difference =
-                touchStartX -
-                touchEndX;
-
-
-            /*
-             * Swipe left
-             */
-
-            if (
-                difference > 50
-            ) {
-
-                const totalPages =
-                    getTotalPages();
-
-
-                if (
-                    currentPage <
-                    totalPages - 1
-                ) {
-
-                    currentPage++;
-
-                    updateSlider();
-
-                }
-
-            }
-
-
-            /*
-             * Swipe right
-             */
-
-            if (
-                difference < -50
-            ) {
-
-                if (
-                    currentPage > 0
-                ) {
-
-                    currentPage--;
-
-                    updateSlider();
-
-                }
-
-            }
-
-        },
-        {
-            passive: true
-        }
-    );
+    nextButton.addEventListener("click", function () {
+        currentPage++;
+        updateSlider();
+    });
 
 
     /* =====================================================
        RESIZE
        ===================================================== */
 
-    let resizeTimer;
-
-
-    window.addEventListener(
-        "resize",
-        function () {
-
-            clearTimeout(
-                resizeTimer
-            );
-
-
-            resizeTimer =
-                setTimeout(
-                    function () {
-
-                        /*
-                         * Recalculate card width
-                         */
-
-                        setCardWidths();
-
-
-                        /*
-                         * Recalculate dots
-                         */
-
-                        createDots();
-
-
-                        /*
-                         * Reposition slider
-                         */
-
-                        updateSlider();
-
-                    },
-                    150
-                );
-
-        }
-    );
+    window.addEventListener("resize", function () {
+        setCardWidths();
+        createDots();
+        updateSlider();
+    });
 
 
     /* =====================================================
-       INITIALIZE
+       INIT
        ===================================================== */
 
     setCardWidths();
-
     createDots();
-
     updateSlider();
 
 });
