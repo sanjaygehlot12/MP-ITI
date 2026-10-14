@@ -16502,7 +16502,7 @@ body {
         font-size: 10px;
         line-height: 1.4;
         display: -webkit-box;
-        -webkit-line-clamp: 4;
+        line-clamp: 4;
         -webkit-box-orient: vertical;
         overflow: hidden;
     }
@@ -16542,5 +16542,50 @@ body {
     .success-join-link {
         font-size: 10px;
         padding: 7px 5px;
+    }
+}
+/* =================================================
+   SUCCESS CTA CARD: TABLET FIX (701px - 1100px)
+   ================================================= */
+
+@media (min-width: 701px) and (max-width: 1100px) {
+
+    .success-story-card.success-join-card {
+        padding: 16px 12px;
+        overflow: hidden;
+    }
+
+    .success-join-inner {
+        gap: 8px;
+        max-width: 100%;
+    }
+
+    .success-join-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+        flex-shrink: 0;
+    }
+
+    .success-join-title {
+        font-size: 19px;
+        line-height: 1.2;
+    }
+
+    .success-join-text {
+        font-size: 12px;
+        line-height: 1.45;
+        display: -webkit-box;
+        line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .success-join-link {
+        margin-top: 2px;
+        padding: 10px 18px;
+        font-size: 12.5px;
+        gap: 6px;
+        white-space: nowrap;
     }
 }
