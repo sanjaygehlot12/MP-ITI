@@ -3285,3 +3285,111 @@ document.addEventListener("DOMContentLoaded", function () {
         });
     }
 });
+/* Diwali banner */
+(() => {
+    "use strict";
+
+    const isHomePage =
+        window.location.pathname === "/" ||
+        window.location.pathname.endsWith("/index.html");
+
+    if (!isHomePage) return;
+
+    if (document.getElementById("diwaliPopupOverlay")) return;
+
+    const overlay = document.createElement("div");
+
+    overlay.id = "diwaliPopupOverlay";
+
+    overlay.innerHTML = `
+        <div class="diwali-popup-box">
+            <button class="diwali-popup-close"
+                    type="button"
+                    aria-label="Close popup">&times;</button>
+
+            <img src="/images/diwali-banner.webp"
+                alt="Diwali wishes from Maharana Pratap Private ITI Sehore">
+        </div>
+    `;
+
+    const style = document.createElement("style");
+
+    style.textContent = `
+        #diwaliPopupOverlay {
+            position: fixed;
+            inset: 0;
+            z-index: 999999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            background: rgba(0,0,0,.78);
+            opacity: 0;
+            visibility: hidden;
+            transition: .3s ease;
+        }
+
+        #diwaliPopupOverlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .diwali-popup-box {
+            position: relative;
+            width: min(900px, 95vw);
+        }
+
+        .diwali-popup-box img {
+            display: block;
+            width: 100%;
+            max-height: 85vh;
+            object-fit: contain;
+            border-radius: 12px;
+        }
+
+        .diwali-popup-close {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            width: 42px;
+            height: 42px;
+            border: none;
+            border-radius: 50%;
+            background: white;
+            color: #222;
+            font-size: 30px;
+            cursor: pointer;
+            z-index: 2;
+        }
+
+        @media(max-width:600px) {
+            .diwali-popup-box {
+                width: 96vw;
+            }
+        }
+    `;
+
+    document.head.appendChild(style);
+    document.body.appendChild(overlay);
+
+    const closeButton = overlay.querySelector(".diwali-popup-close");
+
+    let autoClose;
+
+    function closePopup() {
+        overlay.classList.remove("active");
+        clearTimeout(autoClose);
+    }
+
+    closeButton.addEventListener("click", closePopup);
+
+    document.addEventListener("keydown", event => {
+        if (event.key === "Escape") closePopup();
+    });
+
+    setTimeout(() => {
+        overlay.classList.add("active");
+        autoClose = setTimeout(closePopup, 6000);
+    }, 1000);
+
+})();
