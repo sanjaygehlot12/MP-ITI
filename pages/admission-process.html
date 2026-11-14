@@ -85,12 +85,52 @@
     >
 
     <!-- SAME MAIN CSS -->
-    <link rel="stylesheet" href="../style.css?v=4.9">
+    <link rel="stylesheet" href="../style.css?v=5.0">
     <script
   src="https://challenges.cloudflare.com/turnstile/v0/api.js"
   async
   defer>
 </script>
+
+
+    <!-- Consent checkbox layout fix -->
+    <style>
+        #privacyConsentSection .consent-checkbox-label {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            width: 100%;
+            line-height: 1.5;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        #privacyConsentSection .consent-checkbox-label input[type="checkbox"] {
+            appearance: auto;
+            -webkit-appearance: checkbox;
+            flex: 0 0 16px;
+            width: 16px !important;
+            min-width: 16px;
+            max-width: 16px;
+            height: 16px;
+            margin: 3px 0 0;
+            padding: 0;
+            box-shadow: none;
+            accent-color: #174a8b;
+        }
+        #privacyConsentSection .admission-form-group {
+            margin-bottom: 14px;
+        }
+        #privacyConsentSection p {
+            line-height: 1.55;
+        }
+    </style>
+
+
+<style>
+#privacyConsentSection [hidden] {
+    display: none !important;
+}
+</style>
 
 </head>
 
@@ -643,7 +683,7 @@
                 <div class="admission-step-content">
 
                     <h3>
-                        Fill Admission Form
+                        Fill Enquiry Form
                     </h3>
 
                     <p>
@@ -668,12 +708,11 @@
                 <div class="admission-step-content">
 
                     <h3>
-                        Upload Documents
+                        Visit Institute for Document Verification
                     </h3>
 
                     <p>
-                        आवश्यक दस्तावेजों की स्पष्ट प्रतियां
-                        अपलोड करें।
+                        संस्थान में आकर दस्तावेजों का सत्यापन करवाएँ।
                     </p>
 
                 </div>
@@ -693,12 +732,11 @@
                 <div class="admission-step-content">
 
                     <h3>
-                        Pay Admission Fee
+                        Pay Fees at Institute
                     </h3>
 
                     <p>
-                        निर्धारित प्रवेश शुल्क का
-                        ऑनलाइन भुगतान करें।
+                        संस्थान में आकर शुल्क जमा करें।
                     </p>
 
                 </div>
@@ -780,7 +818,7 @@
                 </span>
 
                 <h2>
-                    Admission Form
+                    Admission Enquiry
                 </h2>
 
             </div>
@@ -790,13 +828,10 @@
 
         </div>
 
-
-
         <!-- FORM -->
 
         <form
             id="admissionForm"
-            enctype="multipart/form-data"
         >
 
 
@@ -1046,290 +1081,83 @@
                 </div>
 
             </div>
-
-
-<!-- ================= UPLOAD DOCUMENTS ================= -->
-
-<section class="upload-documents-section">
-
-    <div class="section-heading">
-        <i class="fa-solid fa-file-arrow-up"></i>
-        <h2>Upload Documents</h2>
-    </div>
-
-    <p class="upload-note">
-        Please upload the required documents. Accepted formats: PDF, JPG, JPEG or PNG.
-    </p>
-
-
-    <div class="documents-grid">
-
-        <!-- 1. 10th Marksheet -->
-        <div class="document-item">
-
-            <div class="document-title">
-                10th Marksheet <span style="color: red;">*</span>
-            </div>
-
-            <label for="marksheet10" class="choose-file-btn">
-                <i class="fa-solid fa-folder-open"></i>
-                Choose File
-            </label>
-
-            <input
-                type="file"
-                id="marksheet10"
-                name="marksheet10"
-                accept=".pdf,.jpg,.jpeg,.png"
-                required
-            >
-
-            <small id="marksheet10Name" class="selected-file">
-                No file chosen
-            </small>
-
-        </div>
-
-
-        <!-- 2. Aadhaar Card -->
-        <div class="document-item">
-
-            <div class="document-title">
-                Aadhaar Card <span style="color: red;">*</span>
-            </div>
-
-            <label for="aadhaar" class="choose-file-btn">
-                <i class="fa-solid fa-folder-open"></i>
-                Choose File
-            </label>
-
-            <input
-                type="file"
-                id="aadhaar"
-                name="aadhaar"
-                accept=".pdf,.jpg,.jpeg,.png"
-            >
-
-            <small id="aadhaarName" class="selected-file">
-                No file chosen
-            </small>
-
-        </div>
-
-       <!-- 3. Singature -->
-        <div class="document-item">
-
-            <div class="document-title">
-                Signature <span style="color: red;">*</span>
-            </div>
-
-            <label for="signature" class="choose-file-btn">
-                <i class="fa-solid fa-folder-open"></i>
-                Choose Files
-            </label>
-
-            <input
-                type="file"
-                id="signature"
-                name="signature"
-                accept=".jpg,.jpeg,.png"
-                multiple
-            >
-
-            <small id="signatureName" class="selected-file">
-                No files chosen
-            </small>
-
-        </div>
-
-        <!-- 4. Passport Photos -->
-        <div class="document-item">
-
-            <div class="document-title">
-                Passport Photos <span style="color: red;">*</span>
-            </div>
-
-            <label for="photographs" class="choose-file-btn">
-                <i class="fa-solid fa-folder-open"></i>
-                Choose Files
-            </label>
-
-            <input
-                type="file"
-                id="photographs"
-                name="photographs[]"
-                accept=".jpg,.jpeg,.png"
-                multiple
-            >
-
-            <small id="photographsName" class="selected-file">
-                No files chosen
-            </small>
-
-        </div>
-
-
-        <!-- 5. Domicile Certificate -->
-        <div class="document-item">
-
-            <div class="document-title">
-                Domicile Certificate
-            </div>
-
-            <label for="domicile" class="choose-file-btn">
-                <i class="fa-solid fa-folder-open"></i>
-                Choose File
-            </label>
-
-            <input
-                type="file"
-                id="domicile"
-                name="domicile"
-                accept=".pdf,.jpg,.jpeg,.png"
-            >
-
-            <small id="domicileName" class="selected-file">
-                No file chosen
-            </small>
-
-        </div>
-
-
-        <!-- 6. Caste Certificate -->
-        <div class="document-item">
-
-            <div class="document-title">
-                Caste Certificate
-            </div>
-
-            <label for="caste" class="choose-file-btn">
-                <i class="fa-solid fa-folder-open"></i>
-                Choose File
-            </label>
-
-            <input
-                type="file"
-                id="caste"
-                name="caste"
-                accept=".pdf,.jpg,.jpeg,.png"
-            >
-
-            <small id="casteName" class="selected-file">
-                No file chosen
-            </small>
-
-        </div>
-
-
-        <!-- 7. Income Certificate -->
-        <div class="document-item">
-
-            <div class="document-title">
-                Income Certificate
-            </div>
-
-            <label for="income" class="choose-file-btn">
-                <i class="fa-solid fa-folder-open"></i>
-                Choose File
-            </label>
-
-            <input
-                type="file"
-                id="income"
-                name="income"
-                accept=".pdf,.jpg,.jpeg,.png"
-            >
-
-            <small id="incomeName" class="selected-file">
-                No file chosen
-            </small>
-
-        </div>
-
-         <!-- 8. Samagra ID -->
-        <div class="document-item">
-
-            <div class="document-title">
-                Samagra ID
-            </div>
-
-            <label for="samagra" class="choose-file-btn">
-                <i class="fa-solid fa-folder-open"></i>
-                Choose File
-            </label>
-
-            <input
-                type="file"
-                id="samagra"
-                name="samagra"
-                accept=".pdf,.jpg,.jpeg,.png"
-            >
-
-            <small id="samagraName" class="selected-file">
-                No file chosen
-            </small>
-
-        </div>
-
-    </div>
-
-    <div id="uploadStatus" class="upload-status"></div>
-
-</section>
-            <!-- PAYMENT -->
-
-            <div class="admission-form-section">
-
+            <!-- PRIVACY NOTICE & CONSENT -->
+            <div class="admission-form-section" id="privacyConsentSection">
                 <h3>
-                    <i class="fa-solid fa-credit-card"></i>
-                    Payment
+                    <i class="fa-solid fa-shield-halved"></i>
+                    Privacy Notice & Consent
                 </h3>
 
-
-                <div class="admission-payment-box">
-
-
-                    <div class="payment-details">
-
-                        <div class="payment-icon">
-
-                            <i class="fa-solid fa-indian-rupee-sign"></i>
-
-                        </div>
-
-
-                        <div>
-
-                            <strong>
-                                Admission Fee
-                            </strong>
-
-                            <p>
-                                Online payment facility
-                            </p>
-
-                        </div>
-
-                    </div>
-                    <button
-    type="button"
-    class="admission-pay-button"
-    id="payAdmissionFeeBtn">
-
-    <i class="fa-solid fa-credit-card"></i>
-    Pay Admission Fee
-
-</button>
-    </div>
-
-                <p class="payment-information">
-
-                    <i class="fa-solid fa-circle-info"></i>
-                    For any payment-related queries, please contact support at +91 8319337572
+                <p>
+                    Please read our
+                    <a href="#privacyPolicyModal" id="openPrivacyPolicyModal" role="button" aria-haspopup="dialog">
+                        Privacy Policy
+                    </a>
+                    before submitting this enquiry. Information provided may be used
+                    to process the admission enquiry and, where required, for institute,
+                    DGT/NCVT and other applicable government admission records.
                 </p>
 
+                <div class="admission-form-group" id="adultConsentDetails" hidden>
+                    <label class="consent-checkbox-label">
+                        <input type="checkbox" id="studentPrivacyConsent"
+                               name="studentPrivacyConsent" value="yes">
+                        I am 18 years of age or older and consent to the collection and
+                        use of my personal information as explained in the Privacy Policy.
+                    </label>
+                </div>
+
+                <div class="admission-form-group" id="guardianConsentDetails" hidden>
+                    <h4>For applicants below 18 years of age</h4>
+                    <p>
+                        A parent or legal guardian should provide the details below and
+                        review the Privacy Policy before giving consent.
+                    </p>
+
+                    <div class="admission-form-grid">
+                        <div class="admission-form-group">
+                            <label for="guardianName">Parent / Guardian Name</label>
+                            <input type="text" id="guardianName" name="guardianName"
+                                   placeholder="Enter parent / guardian name" autocomplete="name">
+                        </div>
+
+                        <div class="admission-form-group">
+                            <label for="guardianRelationship">Relationship with Student</label>
+                            <select id="guardianRelationship" name="guardianRelationship">
+                                <option value="">Select relationship</option>
+                                <option value="father">Father</option>
+                                <option value="mother">Mother</option>
+                                <option value="legal_guardian">Legal Guardian</option>
+                            </select>
+                        </div>
+
+                        <div class="admission-form-group">
+                            <label for="guardianMobile">Parent / Guardian Mobile Number</label>
+                            <input type="tel" id="guardianMobile" name="guardianMobile"
+                                   placeholder="Enter 10-digit mobile number" maxlength="10"
+                                   pattern="[0-9]{10}" inputmode="numeric" autocomplete="tel">
+                        </div>
+                    </div>
+
+                    <div class="admission-form-group">
+                        <label class="consent-checkbox-label">
+                            <input type="checkbox" id="guardianPrivacyConsent"
+                                   name="guardianPrivacyConsent" value="yes">
+                            I am the applicant's parent or legal guardian. I have read the
+                            Privacy Policy and provide consent for the applicant's personal
+                            information to be processed for the admission enquiry and
+                            related lawful institute/government admission purposes.
+                        </label>
+                    </div>
+                </div>
+
+                <p>
+                    Consent details will be recorded with the application. Submitting this
+                    form does not by itself confirm admission.
+                </p>
             </div>
-            <!-- Cloudflare Turnstile Security -->
+
+            <!-- Cloudflare Turnstile Security Verification -->
 <div class="turnstile-container">
     <div
         class="cf-turnstile"
@@ -1337,6 +1165,7 @@
         data-theme="light">
     </div>
 </div>
+
             <!-- SUBMIT -->
 
             <div class="admission-submit-area">
@@ -1348,14 +1177,14 @@
 
                     <i class="fa-solid fa-paper-plane"></i>
 
-                    Submit Application
+                    Submit Enquiry
 
                 </button>
 
 
                 <p>
                     Please check all details before submitting
-                    the application.
+                    the Enquiry.
                 </p>
 
             </div>
@@ -1364,204 +1193,6 @@
         </form>
 
     </section>
-   <!-- ================= PAYMENT MODAL ================= -->
-
-<div class="payment-modal-overlay" id="paymentModal">
-
-    <div class="payment-modal payment-modal-updated">
-
-        <!-- Close Button -->
-<button
-    type="button"
-    class="payment-modal-close"
-    id="closePaymentModal"
-    aria-label="Close payment">
-    &times;
-</button>
-
-        <!-- Icon -->
-        <div class="payment-modal-icon">
-            <i class="fa-solid fa-wallet"></i>
-        </div>
-
-        <span class="payment-modal-label">ADMISSION FEE PAYMENT</span>
-
-        <h2>Choose Payment Method</h2>
-
-        <p class="payment-modal-description">
-            Select QR / UPI or Bank Transfer to view payment details.
-        </p>
-        <input
-    type="hidden"
-    id="paymentMethod"
-    name="paymentMethod"
-    form="admissionForm"
-    value=""
->
-        <!-- Payment Method Options -->
-        <div class="payment-options">
-
-            <!-- QR / UPI -->
-<button
-    type="button"
-    class="payment-method-card"
-    id="qrPaymentOption">
-
-    <div class="payment-method-icon">
-        <i class="fa-solid fa-qrcode"></i>
-    </div>
-
-    <div class="payment-method-content">
-        <strong>QR / UPI Payment</strong>
-        <span>Scan QR code or pay using UPI</span>
-    </div>
-
-    <i class="fa-solid fa-chevron-right payment-method-arrow"></i>
-</button>
-
-        <!-- Bank Transfer -->
-<button
-    type="button"
-    class="payment-method-card"
-    id="bankPaymentOption">
-
-    <div class="payment-method-icon">
-        <i class="fa-solid fa-building-columns"></i>
-    </div>
-
-    <div class="payment-method-content">
-        <strong>Bank Transfer</strong>
-        <span>Pay directly to the institute bank account</span>
-    </div>
-
-    <i class="fa-solid fa-chevron-right payment-method-arrow"></i>
-</button>
-
-        </div>
-
-        <!-- QR / UPI Details -->
-        <div class="payment-details-panel" id="upiPaymentDetails" hidden>
-
-            <h3><i class="fa-solid fa-qrcode"></i> QR / UPI Payment</h3>
-
-            <div class="payment-qr-wrapper">
-                <img
-                    src="/images/payment-qr.webp"
-                    alt="Institute admission fee payment QR code"
-                    class="payment-qr-image"
-                    loading="lazy">
-            </div>
-
-            <p class="payment-detail-note">
-                Scan the QR code using your UPI application and complete the payment.
-            </p>
-
-            <div class="payment-detail-row">
-                <span>UPI ID</span>
-                <strong id="instituteUpiId">8319337572@hdfc</strong>
-            </div>
-
-        </div>
-
-        <!-- Bank Details -->
-        <div class="payment-details-panel" id="bankPaymentDetails" hidden>
-
-            <h3><i class="fa-solid fa-building-columns"></i> Bank Transfer</h3>
-
-            <div class="payment-detail-row">
-                <span>Account Holder</span>
-                <strong id="bankAccountHolder">MAHARANA PRATAP PRIVATE ITI</strong>
-            </div>
-
-            <div class="payment-detail-row">
-                <span>Bank Name</span>
-                <strong id="bankName">HDFC BANK</strong>
-            </div>
-
-            <div class="payment-detail-row">
-                <span>Account Number</span>
-                <strong id="bankAccountNumber">50200102839568</strong>
-            </div>
-
-            <div class="payment-detail-row">
-                <span>IFSC Code</span>
-                <strong id="bankIfsc">HDFC0001776</strong>
-            </div>
-
-            <div class="payment-detail-row">
-                <span>Branch</span>
-                <strong id="bankBranch">SEHORE</strong>
-            </div>
-
-        </div>
-        <!-- ============ PAYMENT PROOF SECTION ============ -->
-
-<div class="payment-proof-section" id="paymentProofSection">
-
-    <h3>Payment Verification</h3>
-
-    <p class="payment-proof-note">
-        After completing your payment, enter the transaction details
-        and upload your payment screenshot.
-    </p>
-
-    <!-- UTR / Transaction ID -->
-    <div class="payment-proof-field">
-        <label for="paymentUTR">
-            UTR / Transaction ID <span>*</span>
-        </label>
-
-        <input
-            type="text"
-            id="paymentUTR"
-            name="paymentUTR"
-            form="admissionForm"
-            placeholder="Enter UTR / Transaction ID"
-            maxlength="50"
-            autocomplete="off"
-            required>
-    </div>
-
-    <!-- Payment Screenshot -->
-    <div class="payment-proof-field">
-        <label for="paymentScreenshot">
-            Payment Screenshot <span>*</span>
-        </label>
-
-        <input
-            type="file"
-            id="paymentScreenshot"
-            name="paymentScreenshot"
-            form="admissionForm"
-            accept=".pdf,.jpg,.jpeg,.png,application/pdf,image/jpeg,image/png"
-    required>
-
-        <small>Maximum file size: 2 MB. JPG, JPEG, PNG or PDF.</small>
-    </div>
-
-</div>
-
-<!-- ============ END PAYMENT PROOF SECTION ============ -->
-
-        <!-- Secure Note -->
-        <div class="payment-secure-note">
-            <i class="fa-solid fa-shield-halved"></i>
-            <span>Verify the payment details before transferring money.</span>
-        </div>
-
-        <!-- Close / Cancel Button -->
-<button
-    type="button"
-    class="payment-cancel-btn"
-    id="cancelPaymentModal">
-    Submit
-</button>
-
-    </div>
-
-</div>
-
-<!-- ================= END PAYMENT MODAL ================= -->
 
 </main>
 
@@ -1929,10 +1560,547 @@
 <!-- =====================================================
      JAVASCRIPT
 ====================================================== -->
+
+<!-- PRIVACY POLICY MODAL -->
+<div class="privacy-policy-modal" id="privacyPolicyModal" aria-hidden="true" hidden>
+    <div class="privacy-policy-modal__backdrop" data-close-privacy-modal></div>
+    <section class="privacy-policy-modal__dialog"
+             role="dialog"
+             aria-modal="true"
+             aria-labelledby="privacyPolicyModalTitle">
+        <header class="privacy-policy-modal__header">
+            <div>
+                <span class="privacy-policy-modal__eyebrow">MAHARANA PRATAP PVT ITI SEHORE</span>
+                <h2 id="privacyPolicyModalTitle">Privacy Policy</h2>
+                <p>Please review how your admission enquiry information is handled.</p>
+            </div>
+            <button type="button" class="privacy-policy-modal__close"
+                    id="closePrivacyPolicyModal" aria-label="Close privacy policy">
+                &times;
+            </button>
+        </header>
+        <div class="privacy-policy-modal__body">
+            <div class="privacy-policy-modal__content">
+<section class="legal-page-section">
+
+        <div class="legal-page-container">
+
+            <!-- PAGE HEADING -->
+            <div class="legal-page-heading">
+
+                <h1>Privacy Policy</h1>
+
+                <div class="legal-title-line"></div>
+
+                <p>
+                    Your privacy is important to us. This Privacy Policy
+                    explains how Maharana Pratap Pvt ITI Sehore collects,
+                    uses and protects information provided through this website.
+                </p>
+
+                <span class="legal-updated">
+                    Last Updated: 07 October 2026
+                </span>
+
+            </div>
+
+
+            <!-- 1. INTRODUCTION -->
+            <div class="legal-section">
+
+                <h2>1. Introduction</h2>
+
+                <p>
+                    Maharana Pratap Pvt ITI Sehore respects the privacy of
+                    visitors using this website. This Privacy Policy explains
+                    how information submitted through this website may be
+                    collected, used and protected.
+                </p>
+
+                <p>
+                    By using this website, you acknowledge and agree to the
+                    practices described in this Privacy Policy.
+                </p>
+
+            </div>
+
+
+            <!-- 2. INFORMATION WE COLLECT -->
+            <div class="legal-section">
+
+                <h2>2. Information We Collect</h2>
+
+                <p>
+                    We may collect information that you voluntarily provide
+                    when you use forms, contact services or other features
+                    available on this website.
+                </p>
+
+                <ul>
+                    <li>Name</li>
+                    <li>Father's or Mother's name</li>
+                    <li>Date of birth</li>
+                    <li>Contact number</li>
+                    <li>Email address</li>
+                    <li>Residential address</li>
+                    <li>Educational information</li>
+                    <li>Documents submitted for admission or related services</li>
+                    <li>Other information voluntarily provided by you</li>
+                </ul>
+
+            </div>
+
+
+            <!-- 3. HOW WE USE INFORMATION -->
+            <div class="legal-section">
+
+                <h2>3. How We Use Your Information</h2>
+
+                <p>
+                    Information provided through this website may be used
+                    for legitimate institute-related purposes, including:
+                </p>
+
+                <ul>
+                    <li>Processing admission enquiries and applications</li>
+                    <li>Responding to enquiries and requests</li>
+                    <li>Providing information about courses and training</li>
+                    <li>Communicating important institute updates</li>
+                    <li>Processing documents submitted by applicants</li>
+                    <li>Providing student-related services</li>
+                    <li>Maintaining administrative records</li>
+                </ul>
+
+            </div>
+
+
+            <!-- 4. INFORMATION SECURITY -->
+            <div class="legal-section">
+
+                <h2>4. Information Security</h2>
+
+                <p>
+                    We take reasonable measures to protect information
+                    submitted through this website against unauthorized
+                    access, misuse, alteration or disclosure.
+                </p>
+
+                <p>
+                    However, no method of transmission or electronic storage
+                    can be guaranteed to be completely secure.
+                </p>
+
+            </div>
+
+
+            <!-- 5. SHARING INFORMATION -->
+            <div class="legal-section">
+
+                <h2>5. Sharing of Information</h2>
+
+                <p>
+                    We do not intentionally sell or rent personal information
+                    submitted through this website.
+                </p>
+
+                <p>
+                    Information may be shared with authorized personnel,
+                    service providers or relevant authorities where reasonably
+                    necessary for legitimate institute operations, legal
+                    requirements or applicable government procedures.
+                </p>
+
+            </div>
+
+
+            <!-- 6. COOKIES -->
+            <div class="legal-section">
+
+                <h2>6. Cookies and Website Technologies</h2>
+
+                <p>
+                    This website may use cookies or similar technologies
+                    where required to improve website functionality,
+                    performance and user experience.
+                </p>
+
+                <p>
+                    You may manage cookie preferences through your browser
+                    settings.
+                </p>
+
+            </div>
+
+
+            <!-- 7. THIRD PARTY LINKS -->
+            <div class="legal-section">
+
+                <h2>7. Third-Party Links and Services</h2>
+
+                <p>
+                    This website may contain links to external websites,
+                    government portals, payment services or other third-party
+                    platforms.
+                </p>
+
+                <p>
+                    Maharana Pratap Pvt ITI Sehore is not responsible for
+                    the privacy practices, content or security policies of
+                    external websites. Users should review the privacy
+                    policies of those websites before providing information.
+                </p>
+
+            </div>
+
+
+            <!-- 8. PAYMENT INFORMATION -->
+            <div class="legal-section">
+
+                <h2>8. Payment Information</h2>
+
+                <p>
+                    Where online payment facilities are provided through
+                    third-party payment services, payment transactions may
+                    be processed by the respective payment service provider.
+                </p>
+
+                <p>
+                    Users should review the applicable terms and privacy
+                    policy of the payment provider before completing a
+                    transaction.
+                </p>
+
+            </div>
+
+
+            <!-- 9. STUDENT INFORMATION -->
+            <div class="legal-section">
+
+                <h2>9. Student and Applicant Information</h2>
+
+                <p>
+                    Information submitted by students or applicants may be
+                    used for admission, training, academic, administrative
+                    and other legitimate institute-related purposes.
+                </p>
+
+                <p>
+                    Students and applicants are responsible for ensuring that
+                    the information and documents submitted by them are
+                    accurate and authentic.
+                </p>
+
+            </div>
+
+
+            <!-- 10. CHILDREN'S PRIVACY -->
+            <div class="legal-section">
+
+                <h2>10. Children's Privacy</h2>
+
+                <p>
+                    Users should provide personal information only when
+                    permitted under applicable laws and admission requirements.
+                    Where required, information relating to a minor should
+                    be submitted by or with the involvement of an appropriate
+                    parent or legal guardian.
+                </p>
+
+            </div>
+
+
+            <!-- 11. DATA RETENTION -->
+            <div class="legal-section">
+
+                <h2>11. Data Retention</h2>
+
+                <p>
+                    Information may be retained for as long as reasonably
+                    necessary to fulfil the purpose for which it was collected,
+                    maintain institutional records, comply with applicable
+                    requirements or resolve disputes.
+                </p>
+
+            </div>
+
+
+            <!-- 12. YOUR RIGHTS -->
+            <div class="legal-section">
+
+                <h2>12. Your Rights and Requests</h2>
+
+                <p>
+                    If you believe that information submitted through this
+                    website is inaccurate or if you have a privacy-related
+                    request, you may contact the institute using the contact
+                    details provided on this website.
+                </p>
+
+            </div>
+
+
+            <!-- 13. POLICY CHANGES -->
+            <div class="legal-section">
+
+                <h2>13. Changes to This Privacy Policy</h2>
+
+                <p>
+                    Maharana Pratap Pvt ITI Sehore may update this Privacy
+                    Policy from time to time to reflect changes in website
+                    functionality, institute practices or applicable
+                    requirements.
+                </p>
+
+                <p>
+                    Any updated version will be published on this page with
+                    a revised "Last Updated" date.
+                </p>
+
+            </div>
+
+
+            <!-- 14. CONTACT -->
+            <div class="legal-section legal-contact-section">
+
+                <h2>14. Contact Us</h2>
+
+                <p>
+                    If you have any questions, concerns or requests regarding
+                    this Privacy Policy, please contact Maharana Pratap Pvt
+                    ITI Sehore.
+                </p>
+
+                <div class="legal-contact-box">
+
+                    <strong>
+                        Maharana Pratap Pvt ITI Sehore
+                    </strong>
+
+                    <span>
+                        Krishna Nagar, Shanti Vihar Housing Board Colony,
+                        Sehore - 466001, Madhya Pradesh
+                    </span>
+
+                    <span>
+                        Phone: Please refer to the Contact section of this website.
+                    </span>
+
+                    <span>
+                        Email: Please refer to the Contact section of this website.
+                    </span>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+            </div>
+        </div>
+        <footer class="privacy-policy-modal__footer">
+            <span>Review the policy before providing consent.</span>
+            <button type="button" class="privacy-policy-modal__done"
+                    data-close-privacy-modal>Close</button>
+        </footer>
+    </section>
+</div>
+<!-- END PRIVACY POLICY MODAL -->
+
+<style>
+#privacyPolicyModal[hidden] { display: none !important; }
+.privacy-policy-modal {
+    position: fixed; inset: 0; z-index: 99999;
+    display: flex; align-items: center; justify-content: center;
+    padding: 22px;
+}
+.privacy-policy-modal__backdrop {
+    position: absolute; inset: 0;
+    background: rgba(10, 20, 38, .68);
+    backdrop-filter: blur(5px);
+}
+.privacy-policy-modal__dialog {
+    position: relative; z-index: 1;
+    display: flex; flex-direction: column;
+    width: min(920px, 100%); height: min(86vh, 820px);
+    background: #fff; border-radius: 16px; overflow: hidden;
+    box-shadow: 0 24px 80px rgba(0,0,0,.28);
+}
+.privacy-policy-modal__header {
+    display: flex; justify-content: space-between; gap: 20px;
+    align-items: flex-start; padding: 22px 26px 18px;
+    border-bottom: 1px solid #e8edf4;
+}
+.privacy-policy-modal__eyebrow {
+    display: block; margin-bottom: 6px; color: #64748b;
+    font-size: 11px; font-weight: 700; letter-spacing: .09em;
+}
+.privacy-policy-modal__header h2 {
+    margin: 0 0 5px; color: #153e70; font-size: 24px;
+}
+.privacy-policy-modal__header p {
+    margin: 0; color: #64748b; font-size: 13px;
+}
+.privacy-policy-modal__close {
+    flex: 0 0 38px; width: 38px; height: 38px;
+    border: 0; border-radius: 50%; background: #f1f5f9;
+    color: #334155; font-size: 27px; line-height: 1; cursor: pointer;
+}
+.privacy-policy-modal__body { flex: 1; min-height: 0; background: #f8fafc; }
+.privacy-policy-modal__body {
+    overflow-y: auto;
+    padding: 22px;
+}
+.privacy-policy-modal__content {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+}
+.privacy-policy-modal__content .legal-page-section {
+    padding: 0;
+    margin: 0;
+}
+.privacy-policy-modal__content .legal-page-container {
+    width: 100%;
+    max-width: 100%;
+    margin: 0 auto;
+}
+.privacy-policy-modal__content .legal-page-heading {
+    margin-top: 0;
+}
+.privacy-policy-modal__footer {
+    display: flex; justify-content: space-between; align-items: center;
+    gap: 14px; padding: 13px 22px; border-top: 1px solid #e8edf4;
+    color: #64748b; font-size: 12px;
+}
+.privacy-policy-modal__done {
+    border: 0; border-radius: 8px; padding: 10px 20px;
+    background: #174a8b; color: #fff; font-weight: 600; cursor: pointer;
+}
+body.privacy-policy-modal-open { overflow: hidden; }
+@media (max-width: 600px) {
+    .privacy-policy-modal { padding: 8px; }
+    .privacy-policy-modal__dialog { height: 94vh; border-radius: 12px; }
+    .privacy-policy-modal__header { padding: 17px 16px 14px; }
+    .privacy-policy-modal__header h2 { font-size: 20px; }
+    .privacy-policy-modal__footer { padding: 11px 14px; }
+}
+</style>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    const modal = document.getElementById("privacyPolicyModal");
+    const openButton = document.getElementById("openPrivacyPolicyModal");
+    if (!modal || !openButton) return;
+
+    const closeButtons = modal.querySelectorAll("[data-close-privacy-modal]");
+    const closeX = document.getElementById("closePrivacyPolicyModal");
+
+    function openModal(event) {
+        if (event) event.preventDefault();
+        modal.hidden = false;
+        modal.setAttribute("aria-hidden", "false");
+        document.body.classList.add("privacy-policy-modal-open");
+        if (closeX) closeX.focus();
+    }
+
+    function closeModal() {
+        modal.hidden = true;
+        modal.setAttribute("aria-hidden", "true");
+        document.body.classList.remove("privacy-policy-modal-open");
+        openButton.focus();
+    }
+
+    openButton.addEventListener("click", openModal);
+    closeButtons.forEach(button => button.addEventListener("click", closeModal));
+    if (closeX) closeX.addEventListener("click", closeModal);
+
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && !modal.hidden) closeModal();
+    });
+});
+</script>
+
 <!-- Supabase JavaScript Library -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-<script src="../script.js?v=4.9"></script>
+<script src="../script.js?v=5.0"></script>
+
+<script>
+/* Show the correct consent section automatically from the applicant's DOB. */
+document.addEventListener("DOMContentLoaded", function () {
+    const dobInput = document.getElementById("dob");
+    const adultSection = document.getElementById("adultConsentDetails");
+    const guardianSection = document.getElementById("guardianConsentDetails");
+
+    const adultConsent = document.getElementById("studentPrivacyConsent");
+    const guardianName = document.getElementById("guardianName");
+    const guardianRelationship = document.getElementById("guardianRelationship");
+    const guardianMobile = document.getElementById("guardianMobile");
+    const guardianConsent = document.getElementById("guardianPrivacyConsent");
+
+    if (!dobInput || !adultSection || !guardianSection) return;
+
+    function updateConsentSection() {
+        if (!dobInput.value) {
+            adultSection.hidden = true;
+            guardianSection.hidden = true;
+
+            adultConsent.required = false;
+            guardianName.required = false;
+            guardianRelationship.required = false;
+            guardianMobile.required = false;
+            guardianConsent.required = false;
+            return;
+        }
+
+        const birthDate = new Date(dobInput.value + "T00:00:00");
+        const today = new Date();
+        let age = today.getFullYear() - birthDate.getFullYear();
+        const monthDifference = today.getMonth() - birthDate.getMonth();
+
+        if (
+            monthDifference < 0 ||
+            (monthDifference === 0 && today.getDate() < birthDate.getDate())
+        ) {
+            age--;
+        }
+
+        if (birthDate > today || Number.isNaN(birthDate.getTime())) {
+            adultSection.hidden = true;
+            guardianSection.hidden = true;
+            dobInput.setCustomValidity("Please enter a valid date of birth.");
+            return;
+        }
+
+        dobInput.setCustomValidity("");
+
+        const isAdult = age >= 18;
+        adultSection.hidden = !isAdult;
+        guardianSection.hidden = isAdult;
+
+        adultConsent.required = isAdult;
+        guardianName.required = !isAdult;
+        guardianRelationship.required = !isAdult;
+        guardianMobile.required = !isAdult;
+        guardianConsent.required = !isAdult;
+
+        if (isAdult) {
+            guardianName.value = "";
+            guardianRelationship.value = "";
+            guardianMobile.value = "";
+            guardianConsent.checked = false;
+        } else {
+            adultConsent.checked = false;
+        }
+    }
+
+    dobInput.addEventListener("change", updateConsentSection);
+    dobInput.addEventListener("input", updateConsentSection);
+    updateConsentSection();
+});
+</script>
+
  
 <a href="admission-process.html"
    class="floating-apply-btn"

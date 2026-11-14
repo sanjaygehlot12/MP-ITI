@@ -2440,28 +2440,23 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 /* =========================================================
-   FEEDBACK FORM + SUPABASE + THANK YOU POPUP
+   FEEDBACK FORM + SUPABASE + CONSENT + THANK YOU POPUP
    ========================================================= */
 
 document.addEventListener("DOMContentLoaded", function () {
 
     const feedbackForm = document.getElementById("feedbackForm");
     const feedbackPopup = document.getElementById("feedbackThankYouPopup");
+    const consentCheckbox = document.getElementById("feedbackPrivacyConsent");
 
     if (!feedbackForm || !feedbackPopup) {
         return;
     }
 
-
     feedbackForm.addEventListener("submit", async function (event) {
 
         event.preventDefault();
         event.stopPropagation();
-
-
-        /* =========================================
-           GET FORM DATA
-           ========================================= */
 
         const name = document.getElementById("feedbackName").value.trim();
         const mobile = document.getElementById("feedbackMobile").value.trim();
@@ -2469,22 +2464,18 @@ document.addEventListener("DOMContentLoaded", function () {
         const rating = document.getElementById("feedbackRating").value;
         const message = document.getElementById("feedbackMessage").value.trim();
 
-
-        /* =========================================
-           BASIC VALIDATION
-           ========================================= */
-
+        // Validate required fields
         if (!name || !message) {
-
             alert("Please fill in your Name and Feedback.");
-
             return;
         }
 
-
-        /* =========================================
-           DISABLE BUTTON
-           ========================================= */
+        // Mandatory privacy consent
+        if (!consentCheckbox || !consentCheckbox.checked) {
+            alert("Please read and accept the Privacy Policy before submitting your feedback.");
+            if (consentCheckbox) consentCheckbox.focus();
+            return;
+        }
 
         const submitButton =
             feedbackForm.querySelector(".feedback-submit-btn");
@@ -2492,17 +2483,12 @@ document.addEventListener("DOMContentLoaded", function () {
         const originalButtonText = submitButton.innerHTML;
 
         submitButton.disabled = true;
-
         submitButton.innerHTML =
             '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
 
-
         try {
 
-            /* =========================================
-               SAVE TO SUPABASE
-               ========================================= */
-
+            // Save feedback and consent to Supabase
             const { error } = await feedbackSupabase
                 .from("feedback")
                 .insert([
@@ -2512,75 +2498,47 @@ document.addEventListener("DOMContentLoaded", function () {
                         email: email || null,
                         rating: rating ? Number(rating) : null,
                         message: message,
-                        status: "New"
+                        status: "New",
+
+                        privacy_consent: true,
+                        consent_timestamp: new Date().toISOString(),
+                        policy_version: "2026-11-11"
                     }
                 ]);
 
-
-            /* =========================================
-               CHECK ERROR
-               ========================================= */
-
             if (error) {
-
                 console.error("Feedback submission error:", error);
-
-                alert(
-                    "Unable to submit your feedback right now. Please try again."
-                );
-
-                submitButton.disabled = false;
-
-                submitButton.innerHTML = originalButtonText;
-
+                alert("Unable to submit your feedback right now. Please try again.");
                 return;
             }
 
-
-            /* =========================================
-               SUCCESS
-               ========================================= */
-
+            // Success
             feedbackForm.reset();
 
             const currentScrollPosition = window.scrollY;
 
             feedbackPopup.classList.add("show");
 
-            /*
-             * Keep page at the same position.
-             * It will NOT jump to the top.
-             */
             window.scrollTo(0, currentScrollPosition);
 
-
-            /* =========================================
-               AUTO CLOSE AFTER 3 SECONDS
-               ========================================= */
-
+            // Automatically close popup after 3 seconds
             setTimeout(function () {
 
                 feedbackPopup.classList.remove("show");
 
                 window.scrollTo(0, currentScrollPosition);
 
-                submitButton.disabled = false;
-
-                submitButton.innerHTML = originalButtonText;
-
             }, 3000);
-
 
         } catch (error) {
 
             console.error("Feedback error:", error);
 
-            alert(
-                "Something went wrong. Please try again."
-            );
+            alert("Something went wrong. Please try again.");
+
+        } finally {
 
             submitButton.disabled = false;
-
             submitButton.innerHTML = originalButtonText;
 
         }
@@ -2602,16 +2560,98 @@ const feedbackSupabase = window.supabase.createClient(
 );
 
 /* =========================================================
-   CONTACT ENQUIRY → SUPABASE
+   SECURE CONTACT ENQUIRY → SUPABASE EDGE FUNCTION
    ========================================================= */
 
 document.addEventListener("DOMContentLoaded", function () {
 
     const contactForm = document.getElementById("contactForm");
 
-    if (!contactForm) {
+    if (!contactForm || contactForm.dataset.secureSubmitAttached === "true") {
         return;
     }
+
+    contactForm.dataset.secureSubmitAttached = "true";
+
+    const ENQUIRY_FUNCTION_URL =
+        "https://zxgpekuluewytbxtebvy.supabase.co/functions/v1/submit-enquiry";
+
+    const ENQUIRY_PUBLISHABLE_KEY =
+        "sb_publishable_Xnh5RRUBqQDkBbhNsy8E_Q_l8T_h8LT";
+
+    const consentCheckbox =
+        document.getElementById("enquiryPrivacyConsent");
+
+    /* =====================================================
+       PRIVACY POLICY MODAL (same-page popup)
+       Loads only the main policy content from privacy-policy.html
+       ===================================================== */
+    const privacyModal = document.getElementById("enquiryPrivacyPolicyModal");
+    const privacyModalBody = document.getElementById("enquiryPrivacyPolicyBody");
+    const privacyOpenLink = document.getElementById("openEnquiryPrivacyPolicy");
+    const privacyCloseButton = document.getElementById("closeEnquiryPrivacyPolicy");
+    let privacyPolicyLoaded = false;
+
+    async function openPrivacyPolicyModal() {
+        if (!privacyModal || !privacyModalBody) return;
+
+        privacyModal.hidden = false;
+        privacyModal.style.display = "flex";
+        privacyModal.setAttribute("aria-hidden", "false");
+        document.body.style.overflow = "hidden";
+
+        if (!privacyPolicyLoaded) {
+            try {
+                const policyUrl = new URL("privacy-policy.html", window.location.href);
+                const response = await fetch(policyUrl.toString(), {
+                    headers: { "Accept": "text/html" }
+                });
+                if (!response.ok) throw new Error("Privacy Policy could not be loaded");
+
+                const html = await response.text();
+                const policyDocument = new DOMParser().parseFromString(html, "text/html");
+                const policyMain = policyDocument.querySelector("#main-content") || policyDocument.querySelector("main");
+
+                if (!policyMain) throw new Error("Privacy Policy content was not found");
+
+                privacyModalBody.innerHTML = policyMain.innerHTML;
+                privacyPolicyLoaded = true;
+            } catch (error) {
+                console.error("Privacy Policy modal error:", error);
+                privacyModalBody.innerHTML = '<p style="color:#b42318;">Unable to load the Privacy Policy. Please try again or use the Privacy Policy page link in the footer.</p>';
+            }
+        }
+
+        if (privacyCloseButton) privacyCloseButton.focus();
+    }
+
+    function closePrivacyPolicyModal() {
+        if (!privacyModal) return;
+        privacyModal.style.display = "none";
+        privacyModal.hidden = true;
+        privacyModal.setAttribute("aria-hidden", "true");
+        document.body.style.overflow = "";
+        if (privacyOpenLink) privacyOpenLink.focus();
+    }
+
+    if (privacyOpenLink) {
+        privacyOpenLink.addEventListener("click", function (event) {
+            event.preventDefault();
+            openPrivacyPolicyModal();
+        });
+    }
+
+    if (privacyCloseButton) privacyCloseButton.addEventListener("click", closePrivacyPolicyModal);
+    if (privacyModal) {
+        privacyModal.addEventListener("click", function (event) {
+            if (event.target === privacyModal) closePrivacyPolicyModal();
+        });
+    }
+    document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && privacyModal && !privacyModal.hidden) {
+            closePrivacyPolicyModal();
+        }
+    });
 
     contactForm.addEventListener("submit", async function (event) {
 
@@ -2628,125 +2668,187 @@ document.addEventListener("DOMContentLoaded", function () {
             return;
         }
 
+        // Consent popup appears before submission if checkbox is not selected.
+        if (!consentCheckbox || !consentCheckbox.checked) {
+            showEnquiryConsentPopup();
+            return;
+        }
+
         const submitButton =
             contactForm.querySelector(".contact-submit-button");
 
         const originalButtonText = submitButton.innerHTML;
 
         submitButton.disabled = true;
-
         submitButton.innerHTML =
             '<i class="fa-solid fa-spinner fa-spin"></i> Submitting...';
 
         try {
+            const response = await fetch(ENQUIRY_FUNCTION_URL, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "apikey": ENQUIRY_PUBLISHABLE_KEY,
+                    "Authorization": "Bearer " + ENQUIRY_PUBLISHABLE_KEY
+                },
+                body: JSON.stringify({
+                    name,
+                    mobile,
+                    email,
+                    subject,
+                    message,
+                    privacyConsent: true
+                })
+            });
 
-            const contactSupabase =
-                window.supabase.createClient(
-                    SUPABASE_URL,
-                    SUPABASE_PUBLISHABLE_KEY
-                );
+            const result = await response.json().catch(() => ({}));
 
-            const { error } = await contactSupabase
-                .from("enquiries")
-                .insert([
-                    {
-                        name: name,
-                        mobile: mobile,
-                        email: email || null,
-                        subject: subject,
-                        message: message,
-                        status: "New"
-                    }
-                ]);
-
-            if (error) {
-
-                console.error("Enquiry submission error:", error);
-
-                alert(
-                    "Unable to submit your enquiry right now. Please try again."
-                );
-
-                submitButton.disabled = false;
-                submitButton.innerHTML = originalButtonText;
-
+            if (!response.ok || !result.success) {
+                console.error("Enquiry submission error:", result);
+                alert(result.message || "Unable to submit your enquiry right now. Please try again.");
                 return;
             }
 
-            /* ================= SUCCESS ================= */
-
             contactForm.reset();
-
-            showContactThankYouPopup();
-
-            submitButton.disabled = false;
-            submitButton.innerHTML = originalButtonText;
+            showContactThankYouPopup(result.reference_id);
 
         } catch (error) {
-
             console.error("Contact enquiry error:", error);
-
             alert("Something went wrong. Please try again.");
-
+        } finally {
             submitButton.disabled = false;
             submitButton.innerHTML = originalButtonText;
         }
-
     });
 
-
     /* =====================================================
-       THANK YOU POPUP
+       CONSENT REQUIRED POPUP
        ===================================================== */
 
-    function showContactThankYouPopup() {
-
-        const oldPopup =
-            document.getElementById("contactThankYouPopup");
-
-        if (oldPopup) {
-            oldPopup.remove();
-        }
+    function showEnquiryConsentPopup() {
+        const existing = document.getElementById("enquiryConsentPopup");
+        if (existing) existing.remove();
 
         const popup = document.createElement("div");
+        popup.id = "enquiryConsentPopup";
+        popup.setAttribute("role", "dialog");
+        popup.setAttribute("aria-modal", "true");
+        popup.setAttribute("aria-labelledby", "enquiryConsentPopupTitle");
 
-        popup.id = "contactThankYouPopup";
+        popup.style.cssText = [
+            "position:fixed", "inset:0", "z-index:99999",
+            "display:flex", "align-items:center", "justify-content:center",
+            "padding:20px", "background:rgba(0,0,0,.58)"
+        ].join(";");
 
         popup.innerHTML = `
-            <div class="contact-thankyou-card">
-
-                <div class="contact-thankyou-icon">
-                    <i class="fa-solid fa-check"></i>
+            <div style="width:min(100%,440px);background:#fff;border-radius:14px;padding:26px;box-shadow:0 18px 55px rgba(0,0,0,.25);text-align:center;">
+                <div style="width:54px;height:54px;margin:0 auto 14px;border-radius:50%;background:#fff3cd;color:#9a6700;display:flex;align-items:center;justify-content:center;font-size:24px;">
+                    <i class="fa-solid fa-shield-halved"></i>
                 </div>
-
-                <h2>Thank You!</h2>
-
-                <p>
-                    Your enquiry has been submitted successfully.
-                    We will get back to you soon.
+                <h2 id="enquiryConsentPopupTitle" style="margin:0 0 10px;color:#17365d;font-size:22px;">Privacy Consent Required</h2>
+                <p style="margin:0 0 20px;color:#555;line-height:1.6;">
+                    Please read the Privacy Policy and tick the consent checkbox before submitting your enquiry.
                 </p>
-
+                <a href="#privacy-policy" id="openPrivacyFromConsentPopup" style="display:inline-block;margin-bottom:18px;color:#0b5cab;text-decoration:underline;">View Privacy Policy</a>
+                <div>
+                    <button type="button" id="enquiryConsentPopupClose" style="border:0;border-radius:7px;padding:11px 20px;background:#0b5cab;color:#fff;font-weight:600;cursor:pointer;">
+                        Go Back &amp; Accept
+                    </button>
+                </div>
             </div>
         `;
 
         document.body.appendChild(popup);
 
-        requestAnimationFrame(function () {
-            popup.classList.add("show");
+        const popupPolicyLink = popup.querySelector("#openPrivacyFromConsentPopup");
+        if (popupPolicyLink) {
+            popupPolicyLink.addEventListener("click", function (event) {
+                event.preventDefault();
+                popup.remove();
+                openPrivacyPolicyModal();
+            });
+        }
+
+        function closePopup() {
+            popup.remove();
+            if (consentCheckbox) consentCheckbox.focus();
+        }
+
+        popup.querySelector("#enquiryConsentPopupClose").addEventListener("click", closePopup);
+        popup.addEventListener("click", function (event) {
+            if (event.target === popup) closePopup();
+        });
+    }
+
+    /* =====================================================
+       THANK YOU POPUP WITH REFERENCE ID
+       ===================================================== */
+
+    function showContactThankYouPopup(referenceId) {
+        const oldPopup = document.getElementById("contactThankYouPopup");
+        if (oldPopup) oldPopup.remove();
+
+        const popup = document.createElement("div");
+        popup.id = "contactThankYouPopup";
+        popup.style.cssText = [
+            "position:fixed", "inset:0", "z-index:99998",
+            "display:flex", "align-items:center", "justify-content:center",
+            "padding:20px", "background:rgba(0,0,0,.58)"
+        ].join(";");
+
+        popup.innerHTML = `
+            <div style="width:min(100%,440px);background:#fff;border-radius:14px;padding:28px;box-shadow:0 18px 55px rgba(0,0,0,.25);text-align:center;">
+                <div style="width:58px;height:58px;margin:0 auto 14px;border-radius:50%;background:#e7f7ed;color:#168344;display:flex;align-items:center;justify-content:center;font-size:25px;">
+                    <i class="fa-solid fa-check"></i>
+                </div>
+                <h2 style="margin:0 0 10px;color:#17365d;">Thank You!</h2>
+                <p style="margin:0 0 16px;color:#555;line-height:1.6;">
+                    Your enquiry has been submitted successfully. Our team will connect with you shortly.
+                </p>
+                <p style="margin:0 0 6px;color:#555;">Your Enquiry Reference ID</p>
+                <strong style="display:block;padding:12px;background:#f2f6fb;border:1px dashed #9bb4d1;border-radius:8px;color:#17365d;font-size:18px;letter-spacing:1px;user-select:all;">
+                    ${escapeEnquiryHtml(referenceId || "Not available")}
+                </strong>
+                <p style="margin:12px 0 18px;color:#777;font-size:13px;">
+                    Please save this Reference ID for future communication or consent-withdrawal requests.
+                </p>
+                <button type="button" id="contactThankYouClose" style="border:0;border-radius:7px;padding:11px 24px;background:#0b5cab;color:#fff;font-weight:600;cursor:pointer;">
+                    Close
+                </button>
+            </div>
+        `;
+
+        document.body.appendChild(popup);
+        // Force popup visibility
+popup.style.setProperty("opacity", "1", "important");
+popup.style.setProperty("visibility", "visible", "important");
+popup.style.setProperty("display", "flex", "important");
+popup.style.setProperty("pointer-events", "auto", "important");
+
+        popup.querySelector("#contactThankYouClose").addEventListener("click", function () {
+            popup.remove();
         });
 
-        setTimeout(function () {
+        popup.addEventListener("click", function (event) {
+            if (event.target === popup) popup.remove();
+        });
+    }
 
-            popup.classList.remove("show");
-
-            setTimeout(function () {
-                popup.remove();
-            }, 300);
-
-        }, 3000);
+    function escapeEnquiryHtml(value) {
+        return String(value).replace(/[&<>"']/g, function (character) {
+            return ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#39;"
+            })[character];
+        });
     }
 
 });
+
 function getCurrentSession() {
     const today = new Date();
     const year = today.getFullYear();
@@ -2758,109 +2860,6 @@ function getCurrentSession() {
         return `${year - 1}-${String(year).slice(-2)}`;
     }
 }
-/* =========================================================
-   ADMISSION PAYMENT MODAL
-========================================================= */
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    const paymentModal = document.getElementById("paymentModal");
-    const closeButton = document.getElementById("paymentModalClose");
-    const cancelButton = document.getElementById("paymentModalCancel");
-    const razorpayButton = document.getElementById("razorpayOption");
-
-    if (!paymentModal) {
-        return;
-    }
-
-    /* OPEN MODAL */
-    window.openPaymentModal = function () {
-
-        paymentModal.classList.add("active");
-
-        document.body.style.overflow = "hidden";
-    };
-
-
-    /* CLOSE MODAL */
-    function closePaymentModal() {
-
-        paymentModal.classList.remove("active");
-
-        document.body.style.overflow = "";
-    }
-
-
-    /* CLOSE BUTTON */
-    if (closeButton) {
-
-        closeButton.addEventListener(
-            "click",
-            closePaymentModal
-        );
-    }
-
-
-    /* CANCEL BUTTON */
-    if (cancelButton) {
-
-        cancelButton.addEventListener(
-            "click",
-            closePaymentModal
-        );
-    }
-
-
-    /* CLICK OUTSIDE */
-    paymentModal.addEventListener(
-        "click",
-        function (event) {
-
-            if (event.target === paymentModal) {
-
-                closePaymentModal();
-
-            }
-
-        }
-    );
-
-
-    /* ESC KEY */
-    document.addEventListener(
-        "keydown",
-        function (event) {
-
-            if (
-                event.key === "Escape" &&
-                paymentModal.classList.contains("active")
-            ) {
-
-                closePaymentModal();
-
-            }
-
-        }
-    );
-
-
-    /* RAZORPAY - TEMPORARY */
-    if (razorpayButton) {
-
-        razorpayButton.addEventListener(
-            "click",
-            function () {
-
-                alert(
-                    "Razorpay integration will be connected next."
-                );
-
-            }
-        );
-
-    }
-
-});
 /* ==========================================
    SECURE ADMISSION FORM SUBMISSION
    Maharana Pratap Pvt ITI Sehore
@@ -2939,35 +2938,7 @@ document.addEventListener("DOMContentLoaded", function () {
             }
 
             const formData = new FormData(form);
-            // Validate payment details before submission
-const paymentMethod = document.getElementById("paymentMethod");
-const paymentUTR = document.getElementById("paymentUTR");
-const paymentScreenshot = document.getElementById("paymentScreenshot");
-
-// Check payment method
-if (!paymentMethod || !["upi", "bank"].includes(paymentMethod.value)) {
-    alert("Please select UPI / QR Payment or Bank Transfer.");
-    return;
-}
-
-// Check UTR number
-if (!paymentUTR || !paymentUTR.value.trim()) {
-    alert("Please enter your UTR / Transaction ID.");
-    return;
-}
-
-// Check payment screenshot
-if (!paymentScreenshot || !paymentScreenshot.files.length) {
-    alert("Please upload your payment screenshot.");
-    return;
-}
-
-// Check maximum screenshot size: 2 MB
-if (paymentScreenshot.files[0].size > 2 * 1024 * 1024) {
-    alert("Payment screenshot must be 2 MB or smaller.");
-    return;
-}
-
+            
 // Rebuild FormData after validation
 const validatedFormData = new FormData(form);
 
@@ -3059,85 +3030,7 @@ if (window.turnstile) {
         }
     });
 })();
-/* =========================================
-   ADMISSION PAYMENT METHOD SWITCHER
-========================================= */
 
-window.showPaymentDetails = function (method) {
-
-    const upiDetails = document.getElementById("upiPaymentDetails");
-    const bankDetails = document.getElementById("bankPaymentDetails");
-
-    const upiButton = document.getElementById("qrPaymentOption");
-    const bankButton = document.getElementById("bankPaymentOption");
-
-    if (!upiDetails || !bankDetails || !upiButton || !bankButton) {
-        console.error("Payment modal elements not found.");
-        return;
-    }
-    // Save selected payment method for admission submission
-const paymentMethodInput = document.getElementById("paymentMethod");
-
-if (paymentMethodInput) {
-    paymentMethodInput.value = method;
-}
-
-    // Hide both panels first
-    upiDetails.hidden = true;
-    bankDetails.hidden = true;
-
-    upiButton.classList.remove("selected");
-    bankButton.classList.remove("selected");
-
-    // Show selected method
-    if (method === "upi") {
-        upiDetails.hidden = false;
-        upiButton.classList.add("selected");
-    }
-
-    if (method === "bank") {
-        bankDetails.hidden = false;
-        bankButton.classList.add("selected");
-    }
-};
-/* =========================================
-   RESET PAYMENT DETAILS WHEN MODAL OPENS
-========================================= */
-
-document.addEventListener("DOMContentLoaded", function () {
-
-    const paymentModal = document.getElementById("paymentModal");
-    const upiDetails = document.getElementById("upiPaymentDetails");
-    const bankDetails = document.getElementById("bankPaymentDetails");
-    const upiButton = document.getElementById("qrPaymentOption");
-    const bankButton = document.getElementById("bankPaymentOption");
-
-    if (!paymentModal) return;
-
-    function resetPaymentSelection() {
-
-        if (upiDetails) upiDetails.hidden = true;
-        if (bankDetails) bankDetails.hidden = true;
-
-        if (upiButton) upiButton.classList.remove("selected");
-        if (bankButton) bankButton.classList.remove("selected");
-    }
-
-    // Reset whenever the modal is opened
-    const observer = new MutationObserver(function () {
-
-        if (paymentModal.classList.contains("active")) {
-            resetPaymentSelection();
-        }
-
-    });
-
-    observer.observe(paymentModal, {
-        attributes: true,
-        attributeFilter: ["class"]
-    });
-
-});
 /* ==========================================
    WEBSITE VISITOR COUNTER
    Maharana Pratap Pvt ITI Sehore
@@ -3223,173 +3116,120 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 })();
-/* Secure Payment Modal Button */
+// ==========================================
+// FEEDBACK PRIVACY POLICY MODAL
+// ==========================================
 
 document.addEventListener("DOMContentLoaded", function () {
-    const payButton = document.getElementById("payAdmissionFeeBtn");
-    const paymentModal = document.getElementById("paymentModal");
 
-    if (!payButton || !paymentModal) return;
+    const privacyLink = document.getElementById("openFeedbackPrivacyPolicy");
 
-    payButton.addEventListener("click", function () {
-        paymentModal.classList.add("active");
-    });
-});
-/* Payment Modal Close Button */
-document.addEventListener("DOMContentLoaded", function () {
-    const closeButton = document.getElementById("closePaymentModal");
-    const paymentModal = document.getElementById("paymentModal");
+    if (!privacyLink) return;
 
-    if (closeButton && paymentModal) {
-        closeButton.addEventListener("click", function () {
-            paymentModal.classList.remove("active");
-        });
-    }
-});
-/* QR / UPI Payment Option */
-document.addEventListener("DOMContentLoaded", function () {
-    const qrButton = document.getElementById("qrPaymentOption");
+    // Create modal dynamically
+    const modal = document.createElement("div");
 
-    if (qrButton) {
-        qrButton.addEventListener("click", function () {
-            if (typeof showPaymentDetails === "function") {
-                showPaymentDetails("upi");
-            } else {
-                console.error("showPaymentDetails() function not found.");
-            }
-        });
-    }
-});
-/* Bank Transfer Payment Option */
-document.addEventListener("DOMContentLoaded", function () {
-    const bankButton = document.getElementById("bankPaymentOption");
+    modal.id = "feedbackPrivacyPolicyModal";
+    modal.className = "feedback-privacy-modal";
+    modal.setAttribute("aria-hidden", "true");
 
-    if (bankButton) {
-        bankButton.addEventListener("click", function () {
-            if (typeof showPaymentDetails === "function") {
-                showPaymentDetails("bank");
-            } else {
-                console.error("showPaymentDetails() function not found.");
-            }
-        });
-    }
-});
-/* Payment Modal Cancel Button */
-document.addEventListener("DOMContentLoaded", function () {
-    const cancelButton = document.getElementById("cancelPaymentModal");
-    const paymentModal = document.getElementById("paymentModal");
+    modal.innerHTML = `
+        <div class="feedback-privacy-modal-content">
 
-    if (cancelButton && paymentModal) {
-        cancelButton.addEventListener("click", function () {
-            paymentModal.classList.remove("active");
-        });
-    }
-});
-/* Diwali banner */
-(() => {
-    "use strict";
+            <div class="feedback-privacy-modal-header">
+                <h2>Privacy Policy</h2>
 
-    const isHomePage =
-        window.location.pathname === "/" ||
-        window.location.pathname.endsWith("/index.html");
+                <button type="button"
+                    id="closeFeedbackPrivacyPolicy"
+                    aria-label="Close">&times;</button>
+            </div>
 
-    if (!isHomePage) return;
+            <div id="feedbackPrivacyPolicyBody"
+                class="feedback-privacy-modal-body">
+                <p>Loading Privacy Policy...</p>
+            </div>
 
-    if (document.getElementById("diwaliPopupOverlay")) return;
-
-    const overlay = document.createElement("div");
-
-    overlay.id = "diwaliPopupOverlay";
-
-    overlay.innerHTML = `
-        <div class="diwali-popup-box">
-            <button class="diwali-popup-close"
-                    type="button"
-                    aria-label="Close popup">&times;</button>
-
-            <img src="/images/diwali-banner.webp"
-                alt="Diwali wishes from Maharana Pratap Private ITI Sehore">
         </div>
     `;
 
-    const style = document.createElement("style");
+    document.body.appendChild(modal);
 
-    style.textContent = `
-        #diwaliPopupOverlay {
-            position: fixed;
-            inset: 0;
-            z-index: 999999;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-            background: rgba(0,0,0,.78);
-            opacity: 0;
-            visibility: hidden;
-            transition: .3s ease;
-        }
+    const modalBody = document.getElementById("feedbackPrivacyPolicyBody");
+    const closeButton = document.getElementById("closeFeedbackPrivacyPolicy");
 
-        #diwaliPopupOverlay.active {
-            opacity: 1;
-            visibility: visible;
-        }
+    let previousOverflow = "";
 
-        .diwali-popup-box {
-            position: relative;
-            width: min(900px, 95vw);
-        }
+    async function openPrivacyModal() {
 
-        .diwali-popup-box img {
-            display: block;
-            width: 100%;
-            max-height: 85vh;
-            object-fit: contain;
-            border-radius: 12px;
-        }
+        modal.classList.add("active");
+        modal.setAttribute("aria-hidden", "false");
 
-        .diwali-popup-close {
-            position: absolute;
-            top: -12px;
-            right: -12px;
-            width: 42px;
-            height: 42px;
-            border: none;
-            border-radius: 50%;
-            background: white;
-            color: #222;
-            font-size: 30px;
-            cursor: pointer;
-            z-index: 2;
-        }
+        previousOverflow = document.body.style.overflow;
+        document.body.style.overflow = "hidden";
 
-        @media(max-width:600px) {
-            .diwali-popup-box {
-                width: 96vw;
+        modalBody.innerHTML = "<p>Loading Privacy Policy...</p>";
+
+        try {
+            const response = await fetch("privacy-policy.html");
+
+            if (!response.ok) {
+                throw new Error("Privacy Policy page not found");
             }
+
+            const html = await response.text();
+
+            const parser = new DOMParser();
+            const doc = parser.parseFromString(html, "text/html");
+
+            const policyContent =
+                doc.querySelector("#main-content") ||
+                doc.querySelector("main");
+
+            if (policyContent) {
+                modalBody.innerHTML = policyContent.innerHTML;
+            } else {
+                modalBody.innerHTML =
+                    "<p>Privacy Policy content could not be loaded.</p>";
+            }
+
+        } catch (error) {
+            console.error("Privacy Policy Error:", error);
+
+            modalBody.innerHTML =
+                "<p>Unable to load Privacy Policy. Please try again.</p>";
         }
-    `;
-
-    document.head.appendChild(style);
-    document.body.appendChild(overlay);
-
-    const closeButton = overlay.querySelector(".diwali-popup-close");
-
-    let autoClose;
-
-    function closePopup() {
-        overlay.classList.remove("active");
-        clearTimeout(autoClose);
     }
 
-    closeButton.addEventListener("click", closePopup);
+    function closePrivacyModal() {
 
-    document.addEventListener("keydown", event => {
-        if (event.key === "Escape") closePopup();
+        modal.classList.remove("active");
+        modal.setAttribute("aria-hidden", "true");
+
+        document.body.style.overflow = previousOverflow;
+    }
+
+    privacyLink.addEventListener("click", function (event) {
+        event.preventDefault();
+        openPrivacyModal();
     });
 
-    setTimeout(() => {
-        overlay.classList.add("active");
-        autoClose = setTimeout(closePopup, 6000);
-    }, 1000);
+    closeButton.addEventListener("click", closePrivacyModal);
 
-})();
+    // Close when clicking outside modal
+    modal.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            closePrivacyModal();
+        }
+    });
+
+    // Close with Escape key
+    document.addEventListener("keydown", function (event) {
+        if (
+            event.key === "Escape" &&
+            modal.classList.contains("active")
+        ) {
+            closePrivacyModal();
+        }
+    });
+
+});

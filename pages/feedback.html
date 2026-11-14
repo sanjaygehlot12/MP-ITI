@@ -83,7 +83,7 @@
     >
 
     <!-- Main CSS -->
-    <link rel="stylesheet" href="../style.css?v=4.9">
+    <link rel="stylesheet" href="../style.css?v=5.0">
 </head>
 
 
@@ -717,21 +717,37 @@
 
                 </div>
 
+                <!-- FEEDBACK INFORMATION -->
 
-                <!-- CONSENT -->
+<div class="feedback-note">
+    <i class="fa-solid fa-circle-info"></i>
+    <span>
+        Your feedback will be used only for improving
+        the institute's training, facilities and services.
+    </span>
+</div>
 
-                <div class="feedback-note">
+<!-- MANDATORY PRIVACY CONSENT -->
 
-                    <i class="fa-solid fa-circle-info"></i>
+<div class="feedback-consent">
+    <label for="feedbackPrivacyConsent">
+        <input
+            type="checkbox"
+            id="feedbackPrivacyConsent"
+            name="privacy_consent"
+            required
+        >
 
-                    <span>
-                        Your feedback will be used only for improving
-                        the institute's training, facilities and services.
-                    </span>
-
-                </div>
-
-
+        <span>
+            I voluntarily agree to provide my personal information
+            and feedback to Maharana Pratap Pvt ITI Sehore for
+            improving the institute's training, facilities and services.
+            I have read and understood the
+            <a href="#" id="openFeedbackPrivacyPolicy">
+            Privacy Policy</a>.
+        </span>
+    </label>
+</div>
                 <!-- SUBMIT -->
 
                 <div class="feedback-submit">
@@ -1110,7 +1126,7 @@
 <!-- links -->
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../script.js?v=4.9"></script>
+<script src="../script.js?v=5.0"></script>
  
 <a href="admission-process.html"
    class="floating-apply-btn"

@@ -83,7 +83,7 @@
     >
 
     <!-- Main CSS -->
-    <link rel="stylesheet" href="../style.css?v=4.9">
+    <link rel="stylesheet" href="../style.css?v=5.0">
 
 </head>
 
@@ -790,6 +790,28 @@
                         </div>
 
 
+                        <!-- PRIVACY CONSENT -->
+                        <div class="contact-form-group contact-form-full" style="margin-top: 4px;">
+                            <label for="enquiryPrivacyConsent" style="display:flex; align-items:flex-start; gap:10px; font-weight:400; line-height:1.6; cursor:pointer;">
+                                <input
+                                    type="checkbox"
+                                    id="enquiryPrivacyConsent"
+                                    name="privacyConsent"
+                                    value="yes"
+                                    style="width:18px; min-width:18px; height:18px; margin-top:4px;"
+                                >
+                                <span>
+                                    I have read the
+                                    <a href="#privacy-policy" id="openEnquiryPrivacyPolicy" style="color:#0b5cab; text-decoration:underline;">Privacy Policy</a>
+                                    and consent to Maharana Pratap Private ITI Sehore using the information provided above to respond to my enquiry.
+                                    <span style="color:#d93025;">*</span>
+                                </span>
+                            </label>
+                            <small style="display:block; margin:6px 0 0 28px; color:#666;">
+                                For privacy-related requests, please contact the institute using the contact details on this website.
+                            </small>
+                        </div>
+
                         <!-- SUBMIT -->
                         <div class="contact-form-submit">
 
@@ -865,6 +887,22 @@
     </section>
 
 </main>
+
+
+
+<!-- PRIVACY POLICY MODAL: loads only the policy page main content -->
+<div id="enquiryPrivacyPolicyModal" hidden aria-hidden="true" style="position:fixed;inset:0;z-index:100000;background:rgba(10,20,35,.68);padding:18px;display:none;align-items:center;justify-content:center;">
+    <section role="dialog" aria-modal="true" aria-labelledby="enquiryPrivacyPolicyTitle" style="width:min(100%,900px);max-height:90vh;background:#fff;border-radius:14px;box-shadow:0 20px 60px rgba(0,0,0,.3);display:flex;flex-direction:column;overflow:hidden;">
+        <header style="display:flex;align-items:center;justify-content:space-between;gap:15px;padding:16px 22px;border-bottom:1px solid #e5eaf0;">
+            <h2 id="enquiryPrivacyPolicyTitle" style="margin:0;color:#17365d;font-size:21px;">Privacy Policy</h2>
+            <button type="button" id="closeEnquiryPrivacyPolicy" aria-label="Close Privacy Policy" style="border:0;background:#f0f3f7;color:#26384a;border-radius:50%;width:38px;height:38px;font-size:25px;line-height:1;cursor:pointer;">&times;</button>
+        </header>
+        <div id="enquiryPrivacyPolicyBody" class="privacy-modal-body" style="overflow:auto;padding:10px 22px 24px;">
+            <p style="color:#555;">Loading Privacy Policy...</p>
+        </div>
+    </section>
+</div>
+<!-- END PRIVACY POLICY MODAL -->
 
     <!-- ==================== FOOTER ==================== -->
 
@@ -1147,7 +1185,7 @@
     <!-- Links -->
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="../script.js?v=4.9"></script>
+    <script src="../script.js?v=5.0"></script>
      
 <a href="admission-process.html"
    class="floating-apply-btn"
