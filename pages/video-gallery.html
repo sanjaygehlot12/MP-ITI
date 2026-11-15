@@ -84,8 +84,10 @@
     >
 
     <!-- Main CSS -->
-    <link rel="stylesheet" href="../style.css?v=5.0">
+    <link rel="stylesheet" href="../style.css?v=5.1">
 
+    <link rel="stylesheet" href="/cookie-consent.css?v=1.0">
+    <link rel="stylesheet" href="/external-media.css?v=1.0">
 </head>
 
 <body>
@@ -508,7 +510,7 @@
     <div class="video-frame">
 
         <iframe
-            src="https://www.youtube.com/embed/-WTQbdP7hzs?enablejsapi=1&mute=1&playsinline=1&rel=0"
+            data-src="https://www.youtube-nocookie.com/embed/-WTQbdP7hzs?rel=0"
             title="ITI Video 1"
             allow="autoplay; encrypted-media; picture-in-picture"
             allowfullscreen>
@@ -529,7 +531,7 @@
             <div class="video-frame">
 
                 <iframe
-    src="https://www.youtube.com/embed//puS008qXbCs?enablejsapi=1&mute=1&playsinline=1&rel=0"
+    data-src="https://www.youtube-nocookie.com/embed/puS008qXbCs?rel=0"
     title="ITI Video 2"
     allow="autoplay; encrypted-media; picture-in-picture"
     allowfullscreen>
@@ -550,7 +552,7 @@
             <div class="video-frame">
 
                 <iframe
-                    src="https://www.youtube.com/embed/JAAlj2btRIU?enablejsapi=1&mute=1&playsinline=1&rel=0"
+                    data-src="https://www.youtube-nocookie.com/embed/JAAlj2btRIU?rel=0"
                     title="ITI Video 3"
                     allow="autoplay; encrypted-media; picture-in-picture"
                     allowfullscreen>
@@ -571,7 +573,7 @@
             <div class="video-frame">
 
                 <iframe
-                    src="https://www.youtube.com/embed/G9stZJXC2hQ?enablejsapi=1&mute=0&playsinline=1&rel=0"
+                    data-src="https://www.youtube-nocookie.com/embed/G9stZJXC2hQ?rel=0"
                     title="ITI Video 4"
                     allow="autoplay; encrypted-media; picture-in-picture"
                     allowfullscreen>
@@ -647,7 +649,7 @@
 
     <p class="footer-stat-item">
         <strong>Site Last Updated On:</strong>
-        <span>02-11-2026</span>
+        <span>15-11-2026</span>
     </p>
 
 </div>
@@ -899,7 +901,11 @@
             Design And Develop By SRIT
         </p>
 
-    </div>
+    
+            <p class="footer-cookie-settings-wrap">
+                <button type="button" class="footer-cookie-settings" data-cookie-settings>Cookie Settings</button>
+            </p>
+        </div>
 
 </footer>
 
@@ -908,7 +914,9 @@
 ====================================================== -->
 <!-- Supabase JS Library -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script src="../script.js?v=5.0"></script>
+<script src="/cookie-consent.js?v=1.0"></script>
+<script src="/external-media.js?v=1.0"></script>
+    <script src="../script.js?v=5.1"></script>
  
 <a href="admission-process.html"
    class="floating-apply-btn"

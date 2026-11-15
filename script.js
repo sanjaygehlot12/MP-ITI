@@ -2025,76 +2025,7 @@ document.addEventListener("DOMContentLoaded", function () {
     }
 
 });
-/* =========================================
-   VIDEO GALLERY - ONE BY ONE AUTOPLAY
-========================================= */
-
-let videoPlayers = [];
-
-function onYouTubeIframeAPIReady() {
-
-    const iframes = document.querySelectorAll(".video-frame iframe");
-
-    if (!iframes.length) return;
-
-    iframes.forEach(function (iframe, index) {
-
-        videoPlayers[index] = new YT.Player(iframe, {
-
-            events: {
-
-                onReady: function (event) {
-
-                    // Sirf first video automatically start
-                    if (index === 0) {
-                        event.target.mute();
-                        event.target.playVideo();
-                    }
-
-                },
-
-                onStateChange: function (event) {
-
-                    // Video complete hone par next video
-                    if (event.data === YT.PlayerState.ENDED) {
-
-                        const nextPlayer = videoPlayers[index + 1];
-
-                        if (nextPlayer) {
-                            nextPlayer.mute();
-                            nextPlayer.playVideo();
-                        }
-
-                    }
-
-                }
-
-            }
-
-        });
-
-    });
-}
-
-
-/* YouTube API load karo */
-(function () {
-
-    const iframes = document.querySelectorAll(".video-frame iframe");
-
-    if (!iframes.length) return;
-
-    if (!window.YT) {
-
-        const tag = document.createElement("script");
-
-        tag.src = "https://www.youtube.com/iframe_api";
-
-        document.head.appendChild(tag);
-
-    }
-
-})();
+/* YouTube embeds are consent-gated by external-media.js on the video gallery page. */
 
 /*gallery hower*/
 
@@ -3032,89 +2963,73 @@ if (window.turnstile) {
 })();
 
 /* ==========================================
-   WEBSITE VISITOR COUNTER
-   Maharana Pratap Pvt ITI Sehore
-   Supabase Edge Function
+   WEBSITE VISITOR COUNTER - CONSENT GATED
+   Only records a visit after Analytics consent.
 ========================================== */
-
 (() => {
     "use strict";
 
+    const COUNTER_CACHE_KEY = "site_visitor_count_cache";
+
     const updateVisitorCount = async () => {
         const counterElement = document.getElementById("visitorCount");
-
-        // Counter element nahi hai toh function stop
         if (!counterElement) return;
 
+        const consentApi = window.MPITIConsent;
+        const analyticsAllowed = !!consentApi && consentApi.hasConsent("analytics");
+
+        // Keep the counter area visible, but do not create/send an ID without consent.
+        if (!analyticsAllowed) {
+            localStorage.removeItem("site_visitor_id");
+            const cachedCount = localStorage.getItem(COUNTER_CACHE_KEY);
+            if (cachedCount && /^\d+$/.test(cachedCount)) {
+                counterElement.textContent = cachedCount.padStart(6, "0");
+            }
+            return;
+        }
+
         try {
-            // Browser se existing Visitor ID check karo
             let visitorId = localStorage.getItem("site_visitor_id");
-
-            // First visit par unique ID create karo
             if (!visitorId) {
-                if (!window.crypto?.randomUUID) {
-                    throw new Error("Secure UUID generation unavailable");
-                }
-
+                if (!window.crypto?.randomUUID) throw new Error("Secure UUID generation unavailable");
                 visitorId = crypto.randomUUID();
-
                 localStorage.setItem("site_visitor_id", visitorId);
             }
 
-            // Supabase configuration
             const SUPABASE_URL = "https://zxgpekuluewytbxtebvy.supabase.co";
             const SUPABASE_KEY = "sb_publishable_Xnh5RRUBqQDkBbhNsy8E_Q_l8T_h8LT";
-
-            // Edge Function request
-            const response = await fetch(
-                `${SUPABASE_URL}/functions/v1/visitor-counter`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                        "apikey": SUPABASE_KEY,
-                        "Authorization": `Bearer ${SUPABASE_KEY}`
-                    },
-                    body: JSON.stringify({
-                        visitor_id: visitorId
-                    })
-                }
-            );
-
-            if (!response.ok) {
-                throw new Error(
-                    `Visitor counter request failed: ${response.status}`
-                );
-            }
+            const response = await fetch(`${SUPABASE_URL}/functions/v1/visitor-counter`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                    "apikey": SUPABASE_KEY,
+                    "Authorization": `Bearer ${SUPABASE_KEY}`
+                },
+                body: JSON.stringify({ visitor_id: visitorId })
+            });
+            if (!response.ok) throw new Error(`Visitor counter request failed: ${response.status}`);
 
             const result = await response.json();
-
-            // Counter display update
-            if (
-                result.visitors !== undefined &&
-                result.visitors !== null &&
-                /^\d+$/.test(String(result.visitors))
-            ) {
-                counterElement.textContent = String(result.visitors)
-                    .padStart(6, "0");
+            if (result.visitors !== undefined && result.visitors !== null && /^\d+$/.test(String(result.visitors))) {
+                const count = String(result.visitors);
+                counterElement.textContent = count.padStart(6, "0");
+                localStorage.setItem(COUNTER_CACHE_KEY, count);
             }
-
         } catch (error) {
             console.error("Visitor counter error:", error);
         }
     };
 
-    // Page load hone ke baad counter update karo
-    if (document.readyState === "loading") {
-        document.addEventListener(
-            "DOMContentLoaded",
-            updateVisitorCount,
-            { once: true }
-        );
-    } else {
-        updateVisitorCount();
-    }
-
+    // Initial run handles previously saved consent; event handles later choices.
+    const run = () => {
+        if (document.readyState === "loading") {
+            document.addEventListener("DOMContentLoaded", updateVisitorCount, { once: true });
+        } else {
+            updateVisitorCount();
+        }
+    };
+    run();
+    window.addEventListener("mpiti:consentchange", updateVisitorCount);
 })();
 // ==========================================
 // FEEDBACK PRIVACY POLICY MODAL
