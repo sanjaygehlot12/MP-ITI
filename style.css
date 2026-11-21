@@ -17059,3 +17059,368 @@ body {
     .legal-section p, .legal-section li { font-size: 14px; line-height: 1.75; }
     .legal-contact-box { padding: 15px; }
 }
+/* ==========================================
+   PLACEMENT PAGE
+========================================== */
+
+.placement-page {
+    width: 100%;
+    background: #f5f8fc;
+}
+
+.placement-section {
+    padding: 65px 20px;
+}
+
+.placement-container {
+    width: 100%;
+    max-width: 1150px;
+    margin: auto;
+}
+
+
+/* Section Heading */
+
+.placement-heading {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.placement-tag {
+    display: inline-block;
+    padding: 7px 17px;
+    border-radius: 30px;
+
+    color: #1454a1;
+    background: #e6f0ff;
+
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 1.2px;
+}
+
+.placement-heading h1 {
+    margin: 16px 0 10px;
+
+    color: #102b50;
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 800;
+}
+
+.placement-heading p {
+    max-width: 650px;
+    margin: auto;
+
+    color: #64748b;
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+
+/* Vacancy Card */
+
+.vacancy-card {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: 35px;
+
+    padding: 28px;
+
+    background: #ffffff;
+
+    border: 1px solid #e3eaf3;
+    border-radius: 20px;
+
+    box-shadow: 0 10px 35px rgba(15, 40, 75, 0.07);
+}
+
+
+/* Poster Image */
+
+.vacancy-image {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    min-width: 0;
+    background: #f5f8fc;
+
+    border-radius: 14px;
+    overflow: hidden;
+}
+
+.vacancy-image img {
+    display: block;
+
+    width: 100%;
+    height: auto;
+
+    object-fit: contain;
+}
+
+
+/* Vacancy Content */
+
+.vacancy-content {
+    min-width: 0;
+    padding: 8px 0;
+}
+
+.vacancy-status {
+    display: inline-flex;
+    align-items: center;
+    gap: 9px;
+
+    padding: 8px 13px;
+
+    color: red;
+    background: #e9f9f0;
+
+    border-radius: 30px;
+
+    font-size: 12px;
+    font-weight: 800;
+}
+
+.status-dot {
+    width: 8px;
+    height: 8px;
+
+    background: red;
+    border-radius: 50%;
+}
+
+.vacancy-content h2 {
+    margin: 18px 0 8px;
+
+    color: #102b50;
+    font-size: clamp(22px, 3vw, 30px);
+    line-height: 1.3;
+}
+
+.vacancy-description {
+    margin-bottom: 22px;
+
+    color: #64748b;
+    font-size: 15px;
+    line-height: 1.6;
+}
+
+
+/* Details */
+
+.vacancy-details {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+}
+
+.vacancy-detail {
+    padding: 14px;
+
+    background: #f5f8fc;
+
+    border: 1px solid #e8edf5;
+    border-radius: 11px;
+}
+
+.detail-label {
+    display: block;
+    margin-bottom: 6px;
+
+    color: #718096;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.vacancy-detail strong {
+    display: block;
+
+    color: #16375f;
+    font-size: 14px;
+    line-height: 1.5;
+
+    overflow-wrap: anywhere;
+}
+
+
+/* Buttons */
+
+.vacancy-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+
+    margin-top: 24px;
+}
+
+.vacancy-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    min-height: 46px;
+    padding: 12px 19px;
+
+    border-radius: 9px;
+
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: 700;
+
+    transition: 0.25s ease;
+}
+
+.vacancy-btn-primary {
+    color: #ffffff;
+    background: #124c94;
+}
+
+.vacancy-btn-primary:hover {
+    background: #0b3265;
+    transform: translateY(-2px);
+}
+
+.vacancy-btn-secondary {
+    color: #1454a1;
+    background: #e9f1fc;
+    border: 1px solid #cdddf2;
+}
+
+.vacancy-btn-secondary:hover {
+    background: #dceaff;
+}
+
+.vacancy-note {
+    margin-top: 16px;
+
+    color: #7b8798;
+    font-size: 12px;
+    line-height: 1.6;
+}
+
+
+/* Full Poster */
+
+.vacancy-poster {
+    margin-top: 45px;
+    padding: 25px;
+
+    text-align: center;
+
+    background: #ffffff;
+    border: 1px solid #e3eaf3;
+    border-radius: 18px;
+}
+
+.poster-heading h2 {
+    margin-bottom: 7px;
+
+    color: #102b50;
+    font-size: 24px;
+}
+
+.poster-heading p {
+    margin-bottom: 22px;
+
+    color: #718096;
+    font-size: 14px;
+}
+
+.vacancy-poster img {
+    display: block;
+
+    width: 100%;
+    max-width: 550px;
+    height: auto;
+
+    margin: auto;
+
+    object-fit: contain;
+    border-radius: 10px;
+}
+
+
+/* Tablet */
+
+@media (max-width: 850px) {
+
+    .vacancy-card {
+        grid-template-columns: 1fr;
+        gap: 25px;
+    }
+
+    .vacancy-image {
+        max-width: 500px;
+        margin: auto;
+    }
+
+}
+
+
+/* Mobile */
+
+@media (max-width: 600px) {
+
+    .placement-section {
+        padding: 40px 14px;
+    }
+
+    .placement-heading {
+        margin-bottom: 25px;
+    }
+
+    .vacancy-card {
+        padding: 15px;
+        gap: 20px;
+        border-radius: 15px;
+    }
+
+    .vacancy-details {
+        grid-template-columns: 1fr;
+        gap: 9px;
+    }
+
+    .vacancy-detail {
+        padding: 12px;
+    }
+
+    .vacancy-actions {
+        flex-direction: column;
+    }
+
+    .vacancy-btn {
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .vacancy-poster {
+        padding: 13px;
+        margin-top: 25px;
+    }
+
+    .poster-heading h2 {
+        font-size: 20px;
+    }
+
+}
+/* Expired Vacancy */
+
+.vacancy-status.vacancy-expired {
+    color: #dc2626;
+    background: #fee2e2;
+    border: 1px solid #fecaca;
+}
+
+.vacancy-status.vacancy-expired .status-dot {
+    background: red;
+}
+
+.vacancy-btn.vacancy-disabled {
+    color: #ffffff;
+    background: #dc2626;
+    border-color: #dc2626;
+    cursor: not-allowed;
+    pointer-events: none;
+    opacity: 1;
+}

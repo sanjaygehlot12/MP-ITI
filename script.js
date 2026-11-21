@@ -3148,3 +3148,146 @@ document.addEventListener("DOMContentLoaded", function () {
     });
 
 });
+/* ==========================================
+   CG POWER APPRENTICESHIP ANNOUNCEMENT
+   Auto Close: 10 Seconds
+   Homepage Only
+========================================== */
+
+(function () {
+
+    "use strict";
+
+    function initCGAnnouncement() {
+
+        // Only show on homepage
+        var path = window.location.pathname;
+
+        var isHomePage =
+            path === "/" ||
+            /\/index\.html$/i.test(path);
+
+        if (!isHomePage) return;
+
+        // Prevent duplicate popup
+        if (document.getElementById("cgAnnouncementPopup")) {
+            return;
+        }
+
+        // Create Popup
+        var overlay = document.createElement("div");
+
+        overlay.id = "cgAnnouncementPopup";
+        overlay.className = "cg-announcement-overlay";
+
+        overlay.setAttribute("role", "dialog");
+        overlay.setAttribute("aria-modal", "true");
+
+        overlay.setAttribute(
+            "aria-label",
+            "CG Power apprenticeship vacancy announcement"
+        );
+
+        overlay.innerHTML = `
+
+            <div class="cg-announcement-dialog">
+
+                <button
+                    type="button"
+                    class="cg-announcement-close"
+                    aria-label="Close announcement">
+                    &times;
+                </button>
+
+                <img
+                    class="cg-announcement-image"
+                    src="/images/CG%20power.webp"
+                    alt="CG Power Apprenticeship Vacancy"
+                    fetchpriority="high">
+
+            </div>
+
+        `;
+
+        document.body.appendChild(overlay);
+
+        var closeButton = overlay.querySelector(
+            ".cg-announcement-close"
+        );
+
+        var timer;
+
+        // Close Popup Function
+        function closePopup() {
+
+            if (!overlay.isConnected) return;
+
+            clearTimeout(timer);
+
+            overlay.remove();
+
+            document.body.style.overflow = "";
+
+            window.removeEventListener(
+                "keydown",
+                onKeyDown
+            );
+        }
+
+        // ESC Key Close
+        function onKeyDown(event) {
+
+            if (event.key === "Escape") {
+                closePopup();
+            }
+
+        }
+
+        // Close Button
+        closeButton.addEventListener(
+            "click",
+            closePopup
+        );
+
+        // Outside Click Close
+        overlay.addEventListener("click", function (event) {
+
+            if (event.target === overlay) {
+                closePopup();
+            }
+
+        });
+
+        window.addEventListener(
+            "keydown",
+            onKeyDown
+        );
+
+        // Prevent Background Scroll
+        document.body.style.overflow = "hidden";
+
+        // Auto Close After 20 Seconds
+        timer = setTimeout(function () {
+
+            closePopup();
+
+        }, 20000);
+
+    }
+
+    // Initialize After DOM Loads
+    if (document.readyState === "loading") {
+
+        document.addEventListener(
+            "DOMContentLoaded",
+            initCGAnnouncement,
+            { once: true }
+        );
+
+    } else {
+
+        initCGAnnouncement();
+
+    }
+
+})();
